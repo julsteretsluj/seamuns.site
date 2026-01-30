@@ -149,10 +149,48 @@
         <div class="container">
             <section class="content-section">
                 <h2>👤 My Profile</h2>
-                <p>Your profile lets you track which conferences you plan to attend or have attended. Log in with your account to see your saved conferences and update your preferences.</p>
-                <p>Use the main conference list (<a href="../index.html">Upcoming & Previous MUNs</a>) to browse and mark conferences; your choices are stored on this device. For full sync across devices, log in with the same account.</p>
-                <p>If you need to change your email or password, use the account settings in the login menu (click your profile icon when logged in). For general support, see <a href="about.html">About & Contact</a>.</p>
+                <p>Your profile lets you track which conferences you plan to attend or have attended. Log in to see your saved conferences below.</p>
             </section>
+
+            <!-- Shown when not logged in -->
+            <div id="profileNotLoggedIn" class="content-section" style="display: none;">
+                <p>Please log in to view your attending and attended conferences.</p>
+                <p>Use the main conference list (<a href="../index.html">Upcoming & Previous MUNs</a>) to browse and mark conferences. For full sync across devices, log in with the same account.</p>
+            </div>
+
+            <!-- Shown when logged in -->
+            <div id="profileContent" class="profile-content-wrapper" style="display: none;">
+                <section class="content-section profile-header-section">
+                    <div class="profile-banner preset-banner-1"></div>
+                    <div class="profile-info" style="margin-top: 1rem;">
+                        <h3 id="profileName" class="profile-name"></h3>
+                        <p id="profilePronouns" class="profile-pronouns" style="display: none;"></p>
+                        <p id="profileEmail" class="profile-email"><i class="fas fa-envelope"></i> <span></span></p>
+                    </div>
+                </section>
+                <section class="content-section profile-stats">
+                    <h3>📊 Your conference stats</h3>
+                    <div class="profile-stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-top: 0.75rem;">
+                        <div class="stat-item"><span id="totalConferencesCount">0</span> <span class="stat-label">Total</span></div>
+                        <div class="stat-item"><span id="attendedConferencesCount">0</span> <span class="stat-label">Attended</span></div>
+                        <div class="stat-item"><span id="totalAwardsCount">0</span> <span class="stat-label">Awards</span></div>
+                    </div>
+                </section>
+                <section class="content-section">
+                    <h3>🎫 Attending</h3>
+                    <p class="text-secondary" style="margin-bottom: 1rem;">Conferences you’re registered for (upcoming).</p>
+                    <div id="attendingConferencesContainer" class="profile-conferences-grid"></div>
+                </section>
+                <section class="content-section">
+                    <h3>🏆 Attended</h3>
+                    <p class="text-secondary" style="margin-bottom: 1rem;">Conferences you’ve already attended.</p>
+                    <div id="attendedConferencesContainer" class="profile-conferences-grid"></div>
+                </section>
+                <section class="content-section">
+                    <h3>🏅 Awards</h3>
+                    <div id="awardsContainer"></div>
+                </section>
+            </div>
         </div>
     </main>
 
@@ -162,5 +200,6 @@
     <script src="../env.js"></script>
     <script src="../js/firebase-config.js"></script>
     <script src="../js/script.js"></script>
+    <script src="../js/profile.js"></script>
 </body>
 </html>

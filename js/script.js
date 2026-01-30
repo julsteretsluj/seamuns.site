@@ -1498,6 +1498,7 @@ class MUNTracker {
                                 conference.attendanceStatus = userStatus;
                             }
                         });
+                        this.saveConferences(); // so profile page and detail page see user attendance
                         console.log('User attendance loaded from Firebase');
                         return;
                     }
@@ -1513,6 +1514,7 @@ class MUNTracker {
                         conference.attendanceStatus = userStatus;
                     }
                 });
+                this.saveConferences(); // so profile page and detail page see user attendance
                 console.log('User attendance loaded from localStorage');
             }
         } catch (error) {
@@ -1552,6 +1554,18 @@ class MUNTracker {
             case 'not-attending':
             default:
                 return 'Not Attending';
+        }
+    }
+
+    getAttendanceIcon(status) {
+        switch (status) {
+            case 'attending':
+                return 'fa-user-check';
+            case 'attended':
+                return 'fa-trophy';
+            case 'not-attending':
+            default:
+                return 'fa-calendar-plus';
         }
     }
 
@@ -2247,7 +2261,7 @@ class MUNTracker {
                     </div>
                     <div class="status-badges">
                         <span class="conference-status ${conference.status}">${this.getStatusLabel(conference.status)}</span>
-                        <span class="attendance-status ${conference.attendanceStatus || 'not-attending'}">${this.getAttendanceLabel(conference.attendanceStatus || 'not-attending')}</span>
+                        <span class="attendance-status ${conference.attendanceStatus || 'not-attending'}"><i class="fas ${this.getAttendanceIcon(conference.attendanceStatus || 'not-attending')}" aria-hidden="true"></i> ${this.getAttendanceLabel(conference.attendanceStatus || 'not-attending')}</span>
                     </div>
                 </div>
                 

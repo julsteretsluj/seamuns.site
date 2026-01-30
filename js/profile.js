@@ -128,6 +128,7 @@ function loadUserProfile(user) {
         profileBanner.className = 'profile-banner preset-banner-1';
         profileBanner.innerHTML = '';
     }
+    }
     
     // Profile icon is now static in HTML, no need to set picture
     
@@ -334,8 +335,9 @@ function getAwardIcon(type) {
 
 function displayConferences(containerId, conferences) {
     const container = document.getElementById(containerId);
-    
-    if (conferences.length === 0) {
+    if (!container) return;
+
+    if (!conferences || conferences.length === 0) {
         container.innerHTML = '<p class="empty-message">No conferences in this category.</p>';
         return;
     }
@@ -416,8 +418,8 @@ function displayConferences(containerId, conferences) {
                     
                     <div class="conference-card-footer">
                         <span class="attendance-status">
-                            <i class="fas ${actualStatus === 'attending' ? 'fa-check-circle' : 'fa-star'}"></i>
-                            ${actualStatus === 'attending' ? 'Registered' : 'Attended'}
+                            <i class="fas ${actualStatus === 'attending' ? 'fa-user-check' : 'fa-trophy'}"></i>
+                            ${actualStatus === 'attending' ? 'Attending' : 'Attended'}
                         </span>
                         <a href="conference-template.html?id=${conf.id}" class="btn btn-sm btn-primary">
                             <i class="fas fa-arrow-right"></i> View Details
