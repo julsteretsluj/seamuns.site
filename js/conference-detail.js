@@ -1866,22 +1866,22 @@ function showTempMessage(message) {
     }, 3000);
 }
 
-// Setup Award Button
+// Setup Award Button (only if award UI exists on this page)
 function setupAwardButton(conference) {
     const addAwardBtn = document.getElementById('addAwardBtn');
-    const currentUser = JSON.parse(localStorage.getItem('munCurrentUser'));
-    
-    if (currentUser) {
-        // Show the button for logged-in users
-        addAwardBtn.style.display = 'flex';
-        
-        // Add click handler
-        addAwardBtn.addEventListener('click', () => {
-            openAwardModal(conference);
-        });
-    } else {
-        // Hide for non-logged-in users
-        addAwardBtn.style.display = 'none';
+    if (!addAwardBtn) return;
+    try {
+        const currentUser = JSON.parse(localStorage.getItem('munCurrentUser'));
+        if (currentUser) {
+            addAwardBtn.style.display = 'flex';
+            addAwardBtn.addEventListener('click', () => {
+                openAwardModal(conference);
+            });
+        } else {
+            addAwardBtn.style.display = 'none';
+        }
+    } catch (e) {
+        console.warn('setupAwardButton:', e);
     }
 }
 
@@ -1889,20 +1889,14 @@ function setupAwardButton(conference) {
 function openAwardModal(conference) {
     const awardModal = document.getElementById('awardModal');
     const awardForm = document.getElementById('awardForm');
-    
-    // Reset form
+    if (!awardModal || !awardForm) return;
     awardForm.reset();
-    
-    // Pre-fill conference name (readonly)
     const awardConference = document.getElementById('awardConference');
     const awardDate = document.getElementById('awardDate');
     const otherAwardTypeGroup = document.getElementById('otherAwardTypeGroup');
-    
     if (awardConference) awardConference.value = conference.name;
     if (awardDate) awardDate.value = conference.startDate;
     if (otherAwardTypeGroup) otherAwardTypeGroup.style.display = 'none';
-    
-    // Show modal
     awardModal.classList.add('show');
 }
 

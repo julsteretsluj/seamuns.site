@@ -2074,8 +2074,10 @@ class MUNTracker {
         
         const container = document.getElementById('conferencesList');
         if (!container) {
-            console.error('Container #conferencesList not found!');
-            // Retry after a short delay in case DOM isn't ready
+            // Expected on conference detail page; only log on pages that should have the list
+            if (!document.getElementById('conferenceName') || !document.getElementById('location')) {
+                console.warn('Container #conferencesList not found.');
+            }
             setTimeout(() => {
                 const retryContainer = document.getElementById('conferencesList');
                 if (retryContainer) {
