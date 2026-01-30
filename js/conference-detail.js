@@ -1209,11 +1209,31 @@ function loadConferenceDetail() {
         return;
     }
 
-    // Get conference data from localStorage - try multiple times with delay if needed
+    // Ensure we have conference data: use localStorage, or load sample data via MUNTracker if script.js ran
+    function ensureConferencesInStorage() {
+        if (localStorage.getItem('munConferences')) return true;
+        if (typeof MUNTracker !== 'undefined') {
+            try {
+                const tracker = new MUNTracker();
+                tracker.loadSampleData();
+                tracker.saveConferences();
+                return !!localStorage.getItem('munConferences');
+            } catch (e) {
+                console.warn('Could not load sample data via MUNTracker:', e);
+            }
+        }
+        return false;
+    }
+
     let savedConferences = localStorage.getItem('munConferences');
+    if (!savedConferences) {
+        ensureConferencesInStorage();
+        savedConferences = localStorage.getItem('munConferences');
+    }
     if (!savedConferences) {
         // Wait a bit and try again (in case script.js is still loading)
         setTimeout(() => {
+            ensureConferencesInStorage();
             savedConferences = localStorage.getItem('munConferences');
             if (!savedConferences) {
                 // No conferences in localStorage - show error message
@@ -1256,12 +1276,19 @@ function loadConferenceDetail() {
         conferences = JSON.parse(savedConferences);
     } catch (error) {
         console.error('Error parsing conference data:', error);
-        conferenceNameEl.textContent = 'Error Loading Conference';
-        const detailsContainer = document.querySelector('.conference-detail-main');
-        if (detailsContainer) {
-            detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>Error Loading Conference</h2><p>There was an error loading the conference data. Please try again later.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
+        // Corrupt localStorage – try to load fresh sample data and retry
+        ensureConferencesInStorage();
+        savedConferences = localStorage.getItem('munConferences');
+        try {
+            conferences = savedConferences ? JSON.parse(savedConferences) : [];
+        } catch (e2) {
+            conferenceNameEl.textContent = 'Error Loading Conference';
+            const detailsContainer = document.querySelector('.conference-detail-main');
+            if (detailsContainer) {
+                detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>Error Loading Conference</h2><p>There was an error loading the conference data. Please try again later.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
+            }
+            return;
         }
-        return;
     }
     
     const conference = conferences.find(c => c.id == conferenceId);

@@ -986,6 +986,13 @@ class MUNTracker {
     }
 
     loadSampleData() {
+        // Use reference data file when available (js/conferences-data.js)
+        if (typeof window.MUN_CONFERENCES_DATA !== 'undefined' && Array.isArray(window.MUN_CONFERENCES_DATA) && window.MUN_CONFERENCES_DATA.length > 0) {
+            this.conferences = JSON.parse(JSON.stringify(window.MUN_CONFERENCES_DATA));
+            this.saveConferences();
+            return;
+        }
+        // Fallback: inline data
         this.conferences = [
             {
                 id: 1,

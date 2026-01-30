@@ -53,8 +53,10 @@ A modern web app for tracking Model United Nations (MUN) conferences across **So
 
 ### Data & tech
 - **Persistence**: Firebase (when configured) and/or browser localStorage
-- **Sample data**: 7 pre-loaded conferences (MUN07 IV, STAMUN XI, THAIMUN XIII, TSIMUN 2026, KMIDSMUN II, HISMUN VI, Newton MUN I)
-- **Add conference**: Via Add Conference flow when available
+- **Conference data**: Single reference file with all conferences and their info:
+  - **`js/conferences-data.js`** — used by the app; edit to add or update conferences.
+  - **`data/conferences.json`** — same data in JSON (human-readable reference).
+- **Pre-loaded**: 7 conferences (MUN07 IV, STAMUN XI, THAIMUN XIII, TSIMUN 2026, KMIDSMUN II, HISMUN VI, Newton MUN I)
 
 ## Getting started
 
@@ -89,7 +91,10 @@ mun-tracker/
 │   ├── resolutions.html, crisis.html, ga.html, position-papers.html
 │   ├── examples.html, awards.html, templates.html
 │   └── ...
+├── data/                    # Reference data
+│   └── conferences.json     # All conferences and their info (JSON reference)
 ├── js/                      # Scripts
+│   ├── conferences-data.js  # All conferences and their info (used by app; edit for reference)
 │   ├── script.js            # Conference list, filters, tabs, sample data
 │   ├── conference-detail.js  # Conference detail page logic
 │   ├── profile.js           # Profile page logic
