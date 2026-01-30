@@ -200,11 +200,82 @@
                 </section>
                 <section class="content-section">
                     <h3>🏅 Awards</h3>
+                    <p class="text-secondary" style="margin-bottom: 1rem;">Track your MUN awards by conference and committee.</p>
+                    <button type="button" class="btn btn-primary" id="addAwardBtn" style="margin-bottom: 1rem;">
+                        <i class="fas fa-plus"></i> Add Award
+                    </button>
                     <div id="awardsContainer"></div>
                 </section>
             </div>
         </div>
     </main>
+
+    <!-- Add/Edit Award Modal -->
+    <div id="awardModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="awardModalTitle">Add Award</h2>
+                <button type="button" class="close-btn" id="closeAwardModal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="awardForm">
+                <div class="form-group">
+                    <label for="awardConference">Conference *</label>
+                    <input type="text" id="awardConference" required placeholder="e.g. SEAMUN 2025">
+                </div>
+                <div class="form-group">
+                    <label for="awardType">Award type *</label>
+                    <select id="awardType" required>
+                        <option value="">— Select type —</option>
+                        <optgroup label="Delegate awards">
+                            <option value="Best Delegate (Overall)">Best Delegate (Overall)</option>
+                            <option value="Best Delegate (Committee)">Best Delegate (Committee)</option>
+                            <option value="Outstanding Delegate">Outstanding Delegate</option>
+                            <option value="Honorable Delegate Mention">Honorable Delegate Mention</option>
+                            <option value="Honorable Mention">Honorable Mention</option>
+                            <option value="Verbal Commendation">Verbal Commendation</option>
+                        </optgroup>
+                        <optgroup label="Position paper & research">
+                            <option value="Best Position Paper">Best Position Paper</option>
+                            <option value="Best Position Paper (Committee)">Best Position Paper (Committee)</option>
+                        </optgroup>
+                        <optgroup label="Chair awards">
+                            <option value="Best Chair">Best Chair</option>
+                            <option value="Best Chair (Overall)">Best Chair (Overall)</option>
+                            <option value="Honorable Chair Mention">Honorable Chair Mention</option>
+                        </optgroup>
+                        <optgroup label="Delegation & committee">
+                            <option value="Best Delegation">Best Delegation</option>
+                            <option value="Outstanding Delegation">Outstanding Delegation</option>
+                            <option value="Best Committee">Best Committee</option>
+                        </optgroup>
+                        <option value="Other">Other (specify below)</option>
+                    </select>
+                </div>
+                <div class="form-group" id="otherAwardTypeGroup" style="display: none;">
+                    <label for="awardTypeOther">Other award type</label>
+                    <input type="text" id="awardTypeOther" placeholder="e.g. Best Crisis Delegate">
+                </div>
+                <div class="form-group">
+                    <label for="awardCommittee">Committee *</label>
+                    <input type="text" id="awardCommittee" required placeholder="e.g. UNSC, GA, SPECPOL">
+                </div>
+                <div class="form-group">
+                    <label for="awardDate">Date *</label>
+                    <input type="date" id="awardDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="awardNotes">Notes (optional)</label>
+                    <textarea id="awardNotes" rows="2" placeholder="Any extra details"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelAwardBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Award</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Login Modal -->
     <div id="loginModal" class="modal">

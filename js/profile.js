@@ -573,7 +573,10 @@ function openAddAwardModal() {
     if (awardModalTitle) awardModalTitle.textContent = 'Add Award';
     if (awardForm) awardForm.reset();
     if (otherAwardTypeGroup) otherAwardTypeGroup.style.display = 'none';
-    if (awardModal) awardModal.classList.add('show');
+    if (awardModal) {
+        awardModal.classList.add('show');
+        awardModal.style.display = 'flex';
+    }
 }
 
 function openEditAwardModal(awardId) {
@@ -600,9 +603,14 @@ function openEditAwardModal(awardId) {
     if (awardDate) awardDate.value = award.date;
     if (awardNotes) awardNotes.value = award.notes || '';
     
-    // Handle award type
-    const standardTypes = ['Best Delegate', 'Outstanding Delegate', 'Honorable Mention', 'Verbal Commendation', 'Best Position Paper', 'Best Delegation', 'Outstanding Delegation'];
-    
+    // Handle award type (must match preset options in profile.html)
+    const standardTypes = [
+        'Best Delegate (Overall)', 'Best Delegate (Committee)', 'Outstanding Delegate',
+        'Honorable Delegate Mention', 'Honorable Mention', 'Verbal Commendation',
+        'Best Position Paper', 'Best Position Paper (Committee)',
+        'Best Chair', 'Best Chair (Overall)', 'Honorable Chair Mention',
+        'Best Delegation', 'Outstanding Delegation', 'Best Committee'
+    ];
     if (awardTypeSelect) {
         if (standardTypes.includes(award.type)) {
             awardTypeSelect.value = award.type;
@@ -613,8 +621,10 @@ function openEditAwardModal(awardId) {
             if (otherAwardTypeGroup) otherAwardTypeGroup.style.display = 'block';
         }
     }
-    
-    if (awardModal) awardModal.classList.add('show');
+    if (awardModal) {
+        awardModal.classList.add('show');
+        awardModal.style.display = 'flex';
+    }
 }
 
 function closeAwardModalFunc() {
