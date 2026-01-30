@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Google Sign-In</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 12px 24px;
+            margin: 10px 5px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-google {
+            background: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Google Sign-In Test Page</h1>
+    
+    <div class="test-section">
+        <h2>1. Firebase SDK Check</h2>
+        <div id="sdkStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Firebase Initialization</h2>
+        <div id="initStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Test Google Sign-In</h2>
+        <button id="testGoogleBtn" class="btn-google">
+            <svg width="18" height="18" viewBox="0 0 18 18">
+                <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+                <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+                <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707 0-.593.102-1.17.282-1.709V4.958H.957C.347 6.173 0 7.548 0 9c0 1.452.348 2.827.957 4.042l3.007-2.335z"/>
+                <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+            </svg>
+            Test Google Sign-In
+        </button>
+        <div id="signInStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Console Logs</h2>
+        <div id="consoleLogs"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Environment Configuration (gitignored) -->
+    <script src="env.js"></script>
+
+    <!-- Firebase Configuration -->
+    <script src="firebase-config.js"></script>
+    
+    <script>
+        // Override console.log to capture logs
+        const originalLog = console.log;
+        const originalError = console.error;
+        const logs = [];
+        
+        function addLog(type, ...args) {
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' ');
+            
+            logs.push({ type, message, time: new Date().toLocaleTimeString() });
+            updateConsoleLogs();
+            
+            // Call original
+            if (type === 'error') {
+                originalError.apply(console, args);
+            } else {
+                originalLog.apply(console, args);
+            }
+        }
+        
+        console.log = (...args) => addLog('log', ...args);
+        console.error = (...args) => addLog('error', ...args);
+        
+        function updateConsoleLogs() {
+            const container = document.getElementById('consoleLogs');
+            container.innerHTML = '<pre>' + logs.map(log => 
+                `[${log.time}] ${log.type.toUpperCase()}: ${log.message}`
+            ).join('\n') + '</pre>';
+        }
+        
+        // Check Firebase SDK
+        function checkSDK() {
+            const status = document.getElementById('sdkStatus');
+            if (typeof firebase === 'undefined') {
+                status.innerHTML = '<div class="status error">❌ Firebase SDK not loaded</div>';
+                return false;
+            }
+            status.innerHTML = '<div class="status success">✅ Firebase SDK loaded</div>';
+            return true;
+        }
+        
+        // Check Firebase initialization
+        function checkInit() {
+            const status = document.getElementById('initStatus');
+            let html = '';
+            
+            if (typeof auth !== 'undefined' && auth) {
+                html += '<div class="status success">✅ Firebase Auth initialized</div>';
+            } else {
+                html += '<div class="status error">❌ Firebase Auth NOT initialized</div>';
+            }
+            
+            if (typeof db !== 'undefined' && db) {
+                html += '<div class="status success">✅ Firestore initialized</div>';
+            } else {
+                html += '<div class="status error">❌ Firestore NOT initialized</div>';
+            }
+            
+            if (typeof FirebaseAuth !== 'undefined') {
+                html += '<div class="status success">✅ FirebaseAuth helper available</div>';
+            } else {
+                html += '<div class="status error">❌ FirebaseAuth helper NOT available</div>';
+            }
+            
+            status.innerHTML = html;
+        }
+        
+        // Test Google Sign-In
+        async function testGoogleSignIn() {
+            const status = document.getElementById('signInStatus');
+            status.innerHTML = '<div class="status info">⏳ Attempting sign-in...</div>';
+            
+            try {
+                console.log('🔵 Test button clicked');
+                
+                if (typeof FirebaseAuth === 'undefined' || !FirebaseAuth.signInWithGoogle) {
+                    throw new Error('FirebaseAuth.signInWithGoogle not available');
+                }
+                
+                const result = await FirebaseAuth.signInWithGoogle();
+                
+                if (result.success) {
+                    status.innerHTML = `
+                        <div class="status success">
+                            ✅ Sign-in successful!<br>
+                            User: ${result.user.email}<br>
+                            Name: ${result.user.displayName}<br>
+                            New user: ${result.isNewUser}
+                        </div>
+                    `;
+                } else {
+                    status.innerHTML = `<div class="status error">❌ Sign-in failed: ${result.error}</div>`;
+                }
+            } catch (error) {
+                status.innerHTML = `<div class="status error">❌ Error: ${error.message}</div>`;
+                console.error('Test error:', error);
+            }
+        }
+        
+        // Run checks on load
+        window.addEventListener('load', () => {
+            checkSDK();
+            setTimeout(() => {
+                checkInit();
+            }, 500);
+        });
+        
+        // Bind test button
+        document.getElementById('testGoogleBtn').addEventListener('click', testGoogleSignIn);
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test</title>
+</head>
+<body>
+    <h1>Testing Conference Load</h1>
+    <div id="output"></div>
+    
+    <script>
+        // Clear everything first
+        localStorage.clear();
+        
+        // Manually set the conference data
+        const conferences = [
+            {
+                id: 1,
+                name: "MUN07 IV",
+                organization: "St Andrews International School, Sukhumvit 107",
+                location: "Bangkok, Thailand",
+                countryCode: "TH",
+                startDate: "2026-03-07",
+                endDate: "2026-03-07",
+                description: "The fourth annual MUN07 conference",
+                status: "upcoming",
+                size: "250+ attendees",
+                generalEmail: "mun07sta@gmail.com",
+                pricePerDelegate: "900 THB",
+                attendanceStatus: "not-attending"
+            }
+        ];
+        
+        // Save to localStorage
+        localStorage.setItem('munConferences', JSON.stringify(conferences));
+        localStorage.setItem('munDataVersion', '22');
+        
+        // Display result
+        const output = document.getElementById('output');
+        output.innerHTML = `
+            <h2>✅ Data Saved to LocalStorage</h2>
+            <pre>${JSON.stringify(conferences, null, 2)}</pre>
+            <p><strong>Now go to <a href="index.html">index.html</a> and it should show!</strong></p>
+        `;
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

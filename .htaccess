@@ -1,0 +1,11 @@
+# Ensure PDF files are served with correct MIME type
+<IfModule mod_mime.c>
+    AddType application/pdf .pdf
+</IfModule>
+
+# Force download for PDFs (optional - remove if you want PDFs to open in browser)
+# <FilesMatch "\.pdf$">
+#     ForceType application/pdf
+#     Header set Content-Disposition "attachment"
+# </FilesMatch>
+

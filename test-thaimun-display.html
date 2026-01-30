@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THAIMUN Display Test - SEAMUNs</title>
+    <style>
+        body { 
+            font-family: system-ui, -apple-system, sans-serif; 
+            padding: 20px; 
+            background: #f5f5f5; 
+            margin: 0;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .committee-item {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .committee-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .committee-icon {
+            font-size: 1.5em;
+        }
+        .committee-name {
+            font-size: 1.1em;
+            color: #212529;
+            font-weight: bold;
+        }
+        .committee-full-name {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        .topics-section {
+            margin: 8px 0;
+        }
+        .topics-title {
+            color: #007bff;
+            font-size: 0.95em;
+            font-weight: bold;
+        }
+        .topics-list {
+            margin: 4px 0 0 0;
+            padding-left: 20px;
+            color: #007bff;
+            font-size: 0.95em;
+        }
+        .chairs-section {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #dee2e6;
+            color: #28a745;
+            font-size: 0.9em;
+        }
+        .chairs-title {
+            font-weight: bold;
+        }
+        .test-title {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 class="test-title">THAIMUN XIII Committee Display Test</h1>
+        <p>This test shows how THAIMUN committees will be displayed with proper topic and chair separation.</p>
+        
+        <div id="committees"></div>
+    </div>
+
+    <script>
+        // Test data simulating the actual format (string format with topics and chairs)
+        const testConference = {
+            id: 1,
+            name: "THAIMUN XIII",
+            committees: [
+                "WHO (World Health Organization) - The Question of Human Challenge Trials as a Means of Accelerating Vaccine Development | The Question of Addressing the 2025 Cholera Outbreak | Chairs: TBD",
+                "UNSC (Security Council) - The Question of Addressing the Red Sea Crisis in Yemen | The Question of Addressing the Rise of Terrorist Insurgencies in West Africa | Chairs: TBD",
+                "ECOSOC (Economic and Social Council) - The Question of Addressing the Consequences of the Global Shift Towards Cashless Economies | The Question of Addressing Aid Dependency in Developing States | Chairs: TBD",
+                "Arab League (Arab League) - The Question of Addressing the Geopolitical Consequences of New Trade Corridors in the Arab League | The Question of Addressing the US Military Presence in the Arab League | Chairs: TBD"
+            ]
+        };
+
+        // Committee descriptions (simplified version)
+        function getCommitteeDescription(committee) {
+            const descriptions = {
+                'WHO': {
+                    name: 'World Health Organization',
+                    icon: '❤️',
+                    type: 'traditional',
+                    description: 'The UN agency responsible for international public health.',
+                    focus: 'Global health issues, pandemic response, healthcare access, and disease prevention.'
+                },
+                'UNSC': {
+                    name: 'Security Council',
+                    icon: '🛡️',
+                    type: 'traditional',
+                    description: 'Responsible for maintaining international peace and security.',
+                    focus: 'Armed conflicts, peacekeeping, sanctions, and security threats.'
+                },
+                'ECOSOC': {
+                    name: 'Economic and Social Council',
+                    icon: '📈',
+                    type: 'traditional',
+                    description: 'Coordinates economic and social work, focusing on sustainable development.',
+                    focus: 'Economic development, social issues, human rights, and environment.'
+                },
+                'Arab League': {
+                    name: 'Arab League',
+                    icon: '🌙',
+                    type: 'traditional',
+                    description: 'A regional organization of Arab states promoting economic, cultural, and political cooperation.',
+                    focus: 'Arab unity, regional cooperation, economic integration, and political coordination.'
+                }
+            };
+            
+            return descriptions[committee] || {
+                name: committee,
+                icon: '📋',
+                description: 'A specialized committee focusing on specific international issues.',
+                focus: 'Varies based on committee mandate and topic.'
+            };
+        }
+
+        // Updated parsing logic (same as in conference-detail.js)
+        function renderCommittees(conf) {
+            if (conf.committees && conf.committees.length > 0) {
+                const committeeItems = conf.committees.map(c => {
+                    // Handle both object format (from database) and string format (legacy)
+                    let committeeName, committeeTopic, chairInfo;
+                    
+                    if (typeof c === 'object' && c !== null) {
+                        // Database format: object with separate fields
+                        committeeName = c.committee_name || c.name || '';
+                        committeeTopic = c.topic || '';
+                        // Get chair info from any possible field name
+                        chairInfo = c.chairs_info || c.chair_info || c.chairInfo || '';
+                        
+                        // Parse multiple topics separated by " | "
+                        const topics = committeeTopic ? committeeTopic.split(' | ').map(t => t.trim().replace(/\|$/, '')).filter(t => t) : [];
+                        committeeTopic = topics;
+                    } else {
+                        // Legacy string format: parse the string
+                        committeeName = c;
+                        committeeTopic = '';
+                        chairInfo = '';
+                        
+                        // Check if it contains "Chairs:" to identify chair info
+                        if (c.includes('Chairs:')) {
+                            // Split by "Chairs:" to separate content from chair info
+                            const parts = c.split('Chairs:');
+                            const mainContent = parts[0].trim();
+                            chairInfo = 'Chairs: ' + parts.slice(1).join('Chairs:').trim();
+                            
+                    // Now parse the main content for committee name and topics
+                    if (mainContent.includes(' - ')) {
+                        const nameTopicParts = mainContent.split(' - ');
+                        let rawCommitteeName = nameTopicParts[0].trim();
+                        // Extract abbreviation from committee name (remove anything in parentheses)
+                        committeeName = rawCommitteeName.split(' (')[0].trim();
+                        const topicString = nameTopicParts.slice(1).join(' - ').trim();
+                                
+                        // Parse multiple topics separated by " | "
+                        const topics = topicString ? topicString.split(' | ').map(t => t.trim().replace(/\|$/, '')).filter(t => t) : [];
+                                committeeTopic = topics;
+                            } else {
+                                committeeName = mainContent;
+                            }
+                        } else if (c.includes(' | ')) {
+                            // No chair info, but has topic separators
+                            const mainParts = c.split(' | ');
+                            const mainContent = mainParts[0].trim();
+                            
+                    // Check if main content has committee name and topic separator
+                    if (mainContent.includes(' - ')) {
+                        const parts = mainContent.split(' - ');
+                        let rawCommitteeName = parts[0].trim();
+                        // Extract abbreviation from committee name (remove anything in parentheses)
+                        committeeName = rawCommitteeName.split(' (')[0].trim();
+                        const topicString = parts.slice(1).join(' - ').trim();
+                                
+                        // Parse multiple topics separated by " | "
+                        const topics = topicString ? topicString.split(' | ').map(t => t.trim().replace(/\|$/, '')).filter(t => t) : [];
+                                committeeTopic = topics;
+                            } else {
+                                committeeName = mainContent;
+                                // Parse remaining parts as topics
+                                const topics = mainParts.slice(1).map(t => t.trim()).filter(t => t);
+                                committeeTopic = topics;
+                            }
+                        } else if (c.includes(' - ')) {
+                            // Simple format: Committee Name - Single Topic
+                            const parts = c.split(' - ');
+                            let rawCommitteeName = parts[0].trim();
+                            // Extract abbreviation from committee name (remove anything in parentheses)
+                            committeeName = rawCommitteeName.split(' (')[0].trim();
+                            committeeTopic = parts.slice(1).join(' - ').trim();
+                        }
+                    }
+                    
+                    const desc = getCommitteeDescription(committeeName);
+                    
+                    return `
+                        <div class="committee-item">
+                            <div class="committee-header">
+                                <span class="committee-icon">${desc.icon}</span>
+                                <div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                        <div class="committee-name">${committeeName}</div>
+                                        ${desc.type ? `<span style="font-size: 0.7em; padding: 2px 6px; border-radius: 10px; font-weight: bold; text-transform: uppercase; ${desc.type === 'traditional' ? 'background: #e3f2fd; color: #1976d2; border: 1px solid #bbdefb;' : 'background: #f3e5f5; color: #7b1fa2; border: 1px solid #ce93d8;'}">${desc.type === 'traditional' ? '🏛️ Traditional' : '⭐ Specialized'}</span>` : ''}
+                                    </div>
+                                    <div class="committee-full-name">(${desc.name})</div>
+                                </div>
+                            </div>
+                            ${Array.isArray(committeeTopic) && committeeTopic.length > 0 ? `
+                                <div class="topics-section">
+                                    <div class="topics-title">Topics:</div>
+                                    <ul class="topics-list">
+                                        ${committeeTopic.map((topic, index) => `<li><strong>Topic ${index + 1}:</strong> ${topic}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : committeeTopic ? `<div class="topics-section"><div class="topics-title">Topic:</div> ${committeeTopic}</div>` : ''}
+                            <p style="margin: 8px 0; color: #6c757d; font-size: 0.95em;">${desc.description}</p>
+                            <p style="margin: 4px 0 0 0; color: #6c757d; font-size: 0.9em;"><strong>Focus:</strong> ${desc.focus}</p>
+                            <div class="chairs-section">
+                                <span class="chairs-title">👔 Chairs:</span> ${chairInfo && chairInfo.trim() ? chairInfo : 'TBD'}
+                                ${formatChairInfoWithCopyButtonsForTest(chairInfo)}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                document.getElementById('committees').innerHTML = committeeItems;
+            } else {
+                document.getElementById('committees').innerHTML = '<p>Committee information coming soon.</p>';
+            }
+        }
+
+        // Format chair info with copy buttons for Instagram handles (for test page)
+        function formatChairInfoWithCopyButtonsForTest(chairInfo) {
+            if (!chairInfo || !chairInfo.trim()) return '';
+            
+            let processedInfo = chairInfo.replace(/^(Chairs?:\s*)/i, '').trim();
+            
+            // First, find and mark all email addresses to exclude them
+            // Email pattern: something@domain.com (or similar)
+            const emailPattern = /[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,}/g;
+            const emailRanges = [];
+            let emailMatch;
+            while ((emailMatch = emailPattern.exec(processedInfo)) !== null) {
+                emailRanges.push({
+                    start: emailMatch.index,
+                    end: emailMatch.index + emailMatch[0].length
+                });
+            }
+            
+            // Find all Instagram handles (exclude email addresses)
+            const instagramPattern = /@([a-zA-Z0-9._]+)/g;
+            const handles = [];
+            let match;
+            
+            while ((match = instagramPattern.exec(processedInfo)) !== null) {
+                // Check if this @ is inside an email address
+                const atIndex = match.index;
+                const isInEmail = emailRanges.some(range => atIndex >= range.start && atIndex < range.end);
+                
+                if (!isInEmail) {
+                    // Also check if it's followed by a domain (additional safety check)
+                    const afterAt = processedInfo.substring(atIndex + match[0].length, atIndex + match[0].length + 20);
+                    const hasDomainAfter = /^[a-zA-Z0-9._-]*\.[a-zA-Z]{2,}/.test(afterAt.trim()) ||
+                                          /^gmail\.com|yahoo\.com|hotmail\.com|outlook\.com|icloud\.com|student\.[a-zA-Z]+\.ac\.[a-zA-Z]+/i.test(afterAt.trim());
+                    
+                    // If it's followed by a domain, it's likely an email (even if not caught by email pattern)
+                    if (!hasDomainAfter) {
+                        handles.push({
+                            full: match[0],
+                            username: match[1],
+                            index: match.index
+                        });
+                    }
+                }
+            }
+            
+            if (handles.length === 0) return '';
+            
+            const buttons = handles.map((handle, idx) => {
+                const buttonId = `copy-btn-test-${Date.now()}-${idx}`;
+                return `
+                    <span style="display: inline-flex; align-items: center; gap: 4px; margin: 2px 4px 2px 0; padding: 2px 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 0.8em;">
+                        <span style="color: #4CAF50;">${handle.full}</span>
+                        <button 
+                            id="${buttonId}"
+                            onclick="window.copyInstagramHandle('${handle.username}', '${buttonId}')"
+                            style="
+                                background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+                                border: none;
+                                color: white;
+                                padding: 2px 6px;
+                                border-radius: 6px;
+                                cursor: pointer;
+                                font-size: 0.75em;
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 3px;
+                            "
+                            title="Copy ${handle.username}"
+                        >
+                            <i class="fas fa-copy" style="font-size: 0.7em;"></i>
+                        </button>
+                    </span>
+                `;
+            }).join('');
+            
+            return `<div style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px;">${buttons}</div>`;
+        }
+
+        // Make copyInstagramHandle available globally for test page
+        if (typeof window.copyInstagramHandle === 'undefined') {
+            window.copyInstagramHandle = function(username, buttonId) {
+                const showSuccess = () => {
+                    const button = document.getElementById(buttonId);
+                    if (button) {
+                        const originalHTML = button.innerHTML;
+                        button.innerHTML = '<i class="fas fa-check" style="font-size: 0.7em;"></i>';
+                        button.style.background = '#4CAF50';
+                        setTimeout(() => {
+                            button.innerHTML = originalHTML;
+                            button.style.background = 'linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)';
+                        }, 2000);
+                    }
+                };
+                
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(username).then(showSuccess).catch(() => {
+                        const textArea = document.createElement('textarea');
+                        textArea.value = username;
+                        textArea.style.position = 'fixed';
+                        textArea.style.left = '-999999px';
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        try {
+                            document.execCommand('copy');
+                            showSuccess();
+                        } catch (err) {
+                            console.error('Copy failed:', err);
+                        } finally {
+                            document.body.removeChild(textArea);
+                        }
+                    });
+                } else {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = username;
+                    textArea.style.position = 'fixed';
+                    textArea.style.left = '-999999px';
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        showSuccess();
+                    } catch (err) {
+                        console.error('Copy failed:', err);
+                    } finally {
+                        document.body.removeChild(textArea);
+                    }
+                }
+            };
+        }
+
+        // Render the test data
+        renderCommittees(testConference);
+    </script>
+</body>
+</html>

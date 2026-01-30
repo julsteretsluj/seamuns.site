@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - SEAMUNs</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #00ff00;
+        }
+        .section {
+            background: #2d2d2d;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #00ff00;
+        }
+        h2 { color: #ffd700; margin: 0 0 10px 0; }
+        pre { 
+            background: #1a1a1a; 
+            padding: 10px; 
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+        .error { color: #ff6b6b; }
+        .success { color: #51cf66; }
+    </style>
+</head>
+<body>
+    <h1>🔍 SEAMUNs Debug Information</h1>
+    
+    <div class="section">
+        <h2>1. LocalStorage Data</h2>
+        <pre id="localStorage"></pre>
+    </div>
+    
+    <div class="section">
+        <h2>2. Conference Data</h2>
+        <pre id="conferenceData"></pre>
+    </div>
+    
+    <div class="section">
+        <h2>3. Data Version</h2>
+        <pre id="dataVersion"></pre>
+    </div>
+    
+    <div class="section">
+        <h2>4. MUN Tracker Instance</h2>
+        <pre id="trackerInfo"></pre>
+    </div>
+
+    <div class="section">
+        <h2>5. Actions</h2>
+        <button onclick="forceClear()" style="padding: 10px 20px; margin: 5px; cursor: pointer;">Force Clear & Reload</button>
+        <button onclick="location.href='index.html'" style="padding: 10px 20px; margin: 5px; cursor: pointer;">Go to Main Page</button>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Display localStorage contents
+        const localStorageDiv = document.getElementById('localStorage');
+        const munConferences = localStorage.getItem('munConferences');
+        const munDataVersion = localStorage.getItem('munDataVersion');
+        
+        localStorageDiv.innerHTML = `
+munDataVersion: ${munDataVersion || 'NOT SET'}
+munConferences: ${munConferences ? 'EXISTS (' + JSON.parse(munConferences).length + ' conferences)' : 'NOT SET'}
+        `.trim();
+
+        // Display conference data
+        const conferenceDataDiv = document.getElementById('conferenceData');
+        if (munConferences) {
+            const conferences = JSON.parse(munConferences);
+            conferenceDataDiv.innerHTML = JSON.stringify(conferences, null, 2);
+        } else {
+            conferenceDataDiv.innerHTML = '<span class="error">No conference data found in localStorage</span>';
+        }
+
+        // Display data version
+        const dataVersionDiv = document.getElementById('dataVersion');
+        dataVersionDiv.innerHTML = `
+Stored Version: ${munDataVersion || 'NONE'}
+Expected Version: 22
+Match: ${munDataVersion === '22' ? '<span class="success">YES ✓</span>' : '<span class="error">NO ✗</span>'}
+        `;
+
+        // Try to access MUN Tracker
+        const trackerDiv = document.getElementById('trackerInfo');
+        setTimeout(() => {
+            if (typeof munTracker !== 'undefined') {
+                trackerDiv.innerHTML = `
+MUN Tracker Instance: <span class="success">FOUND ✓</span>
+Conferences Count: ${munTracker.conferences.length}
+Data Version: ${munTracker.DATA_VERSION}
+                `;
+            } else {
+                trackerDiv.innerHTML = '<span class="error">MUN Tracker instance not found</span>';
+            }
+        }, 500);
+
+        function forceClear() {
+            localStorage.clear();
+            alert('All localStorage cleared! Reloading...');
+            location.reload();
+        }
+    </script>
+</body>
+</html>
+
+
+

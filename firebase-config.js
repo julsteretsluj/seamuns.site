@@ -1,0 +1,359 @@
+// Firebase Configuration
+// 
+// Secrets are now loaded from an environment file (env.js)
+// so that confidential information is not stored in the repo.
+// See FIREBASE_SETUP.md for instructions.
+
+function getEnvValue(keys) {
+    const envSource = (typeof window !== 'undefined' && window.__ENV__) || {};
+    const nodeEnv = (typeof process !== 'undefined' && process.env) || {};
+    for (const key of keys) {
+        if (envSource[key]) {
+            return envSource[key];
+        }
+        if (nodeEnv[key]) {
+            return nodeEnv[key];
+        }
+    }
+    return '';
+}
+
+const firebaseConfig = {
+    apiKey: getEnvValue(['FIREBASE_API_KEY', 'VITE_FIREBASE_API_KEY', 'NEXT_PUBLIC_FIREBASE_API_KEY']),
+    authDomain: getEnvValue(['FIREBASE_AUTH_DOMAIN']),
+    projectId: getEnvValue(['FIREBASE_PROJECT_ID']),
+    storageBucket: getEnvValue(['FIREBASE_STORAGE_BUCKET']),
+    messagingSenderId: getEnvValue(['FIREBASE_MESSAGING_SENDER_ID']),
+    appId: getEnvValue(['FIREBASE_APP_ID']),
+    measurementId: getEnvValue(['FIREBASE_MEASUREMENT_ID'])
+};
+
+function validateFirebaseConfig(config) {
+    const missing = Object.entries(config)
+        .filter(([, value]) => !value)
+        .map(([key]) => key);
+    if (missing.length) {
+        console.error('❌ Firebase configuration is incomplete. Missing:', missing.join(', '));
+        console.error('💡 Copy env.example.js to env.js and set your Firebase credentials.');
+        return false;
+    }
+    return true;
+}
+
+// Initialize Firebase
+let auth, db;
+try {
+    // Check if Firebase SDK is loaded
+    if (typeof firebase === 'undefined') {
+        console.warn('⚠️ Firebase SDK not loaded. Using local storage fallback.');
+    } else if (validateFirebaseConfig(firebaseConfig)) {
+        const app = firebase.initializeApp(firebaseConfig);
+        auth = firebase.auth();
+        db = firebase.firestore();
+        console.log('✅ Firebase initialized successfully');
+        console.log('📦 Project:', firebaseConfig.projectId);
+        console.log('🔐 Auth ready:', !!auth);
+        console.log('💾 Firestore ready:', !!db);
+    }
+} catch (error) {
+    console.error('❌ Firebase initialization error:', error);
+    console.error('💡 Tip: Make sure Authentication and Firestore are enabled in Firebase Console');
+    console.error('📖 See FIREBASE_QUICK_START.md for setup instructions');
+}
+
+// Firebase Authentication Helper Functions
+const FirebaseAuth = {
+    // Sign up new user with email/password
+    async signup(email, password, userData) {
+        try {
+            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+            const user = userCredential.user;
+            
+            // Store additional user data in Firestore
+            await db.collection('users').doc(user.uid).set({
+                email: email,
+                name: userData.name || email.split('@')[0],
+                pronouns: userData.pronouns || '',
+                profilePicture: userData.profilePicture || user.photoURL || '',
+                banner: userData.banner || '',
+                awards: [],
+                authProvider: 'email',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            console.log('✅ User signed up:', user.uid);
+            return { success: true, user };
+        } catch (error) {
+            console.error('❌ Signup error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Log in existing user with email/password
+    async login(email, password) {
+        try {
+            const userCredential = await auth.signInWithEmailAndPassword(email, password);
+            console.log('✅ User logged in:', userCredential.user.uid);
+            return { success: true, user: userCredential.user };
+        } catch (error) {
+            console.error('❌ Login error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Sign in with Google
+    async signInWithGoogle() {
+        console.log('🔵 FirebaseAuth.signInWithGoogle() called');
+        
+        try {
+            // Check if Firebase SDK is loaded
+            if (typeof firebase === 'undefined') {
+                console.error('❌ Firebase SDK is not loaded');
+                return { success: false, error: 'Firebase SDK is not loaded. Please refresh the page.' };
+            }
+            
+            if (!auth) {
+                console.error('❌ Auth object is null');
+                console.error('💡 Make sure Firebase is initialized and Google Sign-In is enabled in Firebase Console');
+                return { success: false, error: 'Authentication not initialized. Please check Firebase configuration.' };
+            }
+
+            if (!db) {
+                console.error('❌ Firestore object is null');
+                return { success: false, error: 'Database not initialized' };
+            }
+
+            console.log('🔵 Creating GoogleAuthProvider...');
+            const provider = new firebase.auth.GoogleAuthProvider();
+            
+            // Optional: Add scopes if needed
+            // provider.addScope('https://www.googleapis.com/auth/userinfo.profile');
+            
+            console.log('🔵 Opening Google sign-in popup...');
+            console.log('💡 If popup is blocked, check browser popup settings');
+            
+            // Try popup first, with better error handling
+            let result;
+            try {
+                result = await auth.signInWithPopup(provider);
+            console.log('✅ Popup sign-in successful');
+            } catch (popupError) {
+                console.error('❌ Popup sign-in failed:', popupError);
+                // Re-throw to be handled by outer catch
+                throw popupError;
+            }
+            
+            if (!result || !result.user) {
+                throw new Error('Sign-in result is missing user data');
+            }
+            
+            const user = result.user;
+            console.log('🔵 User from Google:', {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName
+            });
+            
+            // Check if this is a new user
+            console.log('🔵 Checking if user exists in Firestore...');
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            
+            if (!userDoc.exists) {
+                console.log('🔵 Creating new user profile in Firestore...');
+                // Create user profile for new Google sign-in users
+                await db.collection('users').doc(user.uid).set({
+                    email: user.email,
+                    name: user.displayName || user.email.split('@')[0],
+                    pronouns: '',
+                    profilePicture: user.photoURL || '',
+                    banner: '',
+                    awards: [],
+                    authProvider: 'google',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                console.log('✅ New Google user profile created:', user.uid);
+            } else {
+                console.log('✅ Existing Google user logged in:', user.uid);
+            }
+            
+            return { success: true, user, isNewUser: !userDoc.exists };
+        } catch (error) {
+            console.error('❌ Google sign-in error:', error);
+            console.error('❌ Error code:', error.code);
+            console.error('❌ Error message:', error.message);
+            
+            // Handle specific error cases
+            if (error.code === 'auth/popup-closed-by-user') {
+                return { success: false, error: 'Sign-in popup was closed. Please try again.' };
+            } else if (error.code === 'auth/popup-blocked') {
+                return { success: false, error: 'Pop-up was blocked by your browser. Please enable pop-ups and try again.' };
+            } else if (error.code === 'auth/cancelled-popup-request') {
+                return { success: false, error: 'Sign-in was cancelled.' };
+            } else if (error.code === 'auth/unauthorized-domain') {
+                return { success: false, error: 'This domain is not authorized for Google Sign-In. Please add it in Firebase Console.' };
+            }
+            
+            return { success: false, error: error.message || 'Unknown error occurred' };
+        }
+    },
+
+    // Log out current user
+    async logout() {
+        try {
+            await auth.signOut();
+            console.log('✅ User logged out');
+            return { success: true };
+        } catch (error) {
+            console.error('❌ Logout error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Get current user
+    getCurrentUser() {
+        return auth.currentUser;
+    },
+
+    // Listen for auth state changes
+    onAuthStateChanged(callback) {
+        return auth.onAuthStateChanged(callback);
+    }
+};
+
+// Firestore Database Helper Functions
+const FirebaseDB = {
+    // Get user profile data
+    async getUserProfile(userId) {
+        try {
+            const doc = await db.collection('users').doc(userId).get();
+            if (doc.exists) {
+                return { success: true, data: { id: userId, ...doc.data() } };
+            } else {
+                return { success: false, error: 'User profile not found' };
+            }
+        } catch (error) {
+            console.error('❌ Get profile error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Update user profile data
+    async updateUserProfile(userId, data) {
+        try {
+            await db.collection('users').doc(userId).update(data);
+            console.log('✅ Profile updated');
+            return { success: true };
+        } catch (error) {
+            console.error('❌ Update profile error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Save conference attendance for user
+    async saveAttendance(userId, conferenceId, attendanceStatus) {
+        try {
+            await db.collection('attendance').doc(`${userId}_${conferenceId}`).set({
+                userId,
+                conferenceId,
+                status: attendanceStatus,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            console.log('✅ Attendance saved');
+            return { success: true };
+        } catch (error) {
+            console.error('❌ Save attendance error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Get all attendance records for user
+    async getUserAttendanceData(userId) {
+        try {
+            const snapshot = await db.collection('attendance')
+                .where('userId', '==', userId)
+                .get();
+            
+            const attendance = {};
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                attendance[data.conferenceId] = data.status;
+            });
+            
+            return { success: true, data: attendance };
+        } catch (error) {
+            console.error('❌ Get attendance error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Get specific conference attendance for user
+    async getUserAttendance(userId, conferenceId) {
+        try {
+            const snapshot = await db.collection('attendance')
+                .where('userId', '==', userId)
+                .where('conferenceId', '==', conferenceId)
+                .get();
+            
+            if (snapshot.empty) {
+                return { success: true, data: null };
+            }
+            
+            const doc = snapshot.docs[0];
+            return { success: true, data: doc.data() };
+        } catch (error) {
+            console.error('❌ Get specific attendance error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Save user attendance for specific conference
+    async saveUserAttendance(userId, conferenceId, status) {
+        try {
+            const attendanceData = {
+                userId: userId,
+                conferenceId: conferenceId,
+                status: status,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            await db.collection('attendance')
+                .doc(`${userId}_${conferenceId}`)
+                .set(attendanceData, { merge: true });
+            
+            console.log('✅ Attendance saved to Firebase');
+            return { success: true };
+        } catch (error) {
+            console.error('❌ Save attendance error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Add award to user profile
+    async addAward(userId, award) {
+        try {
+            await db.collection('users').doc(userId).update({
+                awards: firebase.firestore.FieldValue.arrayUnion(award)
+            });
+            console.log('✅ Award added');
+            return { success: true };
+        } catch (error) {
+            console.error('❌ Add award error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Update award in user profile
+    async updateAward(userId, awards) {
+        try {
+            await db.collection('users').doc(userId).update({
+                awards: awards
+            });
+            console.log('✅ Awards updated');
+            return { success: true };
+        } catch (error) {
+            console.error('❌ Update award error:', error);
+            return { success: false, error: error.message };
+        }
+    }
+};
+

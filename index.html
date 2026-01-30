@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://*.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://www.gstatic.com https://*.firebaseio.com https://*.cloudfunctions.net https://*.firebaseapp.com wss://*.firebaseio.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' https: data: blob:;">
+    <title>SEAMUNs</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=3">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Theme Controls Container -->
+    <div class="theme-controls">
+        <!-- Dark Mode Toggle -->
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode" type="button">
+            <i class="fas fa-moon" id="themeIcon"></i>
+        </button>
+
+        <!-- Theme Color Selector -->
+        <div class="theme-selector" id="themeSelector">
+            <span class="theme-selector-label">Theme</span>
+            <div class="color-swatch" data-color="red" title="Red Theme"></div>
+            <div class="color-swatch" data-color="orange" title="Orange Theme"></div>
+            <div class="color-swatch" data-color="yellow" title="Yellow Theme"></div>
+            <div class="color-swatch" data-color="green" title="Green Theme"></div>
+            <div class="color-swatch active" data-color="blue" title="Blue Theme"></div>
+            <div class="color-swatch" data-color="purple" title="Purple Theme"></div>
+            <div class="color-swatch" data-color="pink" title="Pink Theme"></div>
+            <div class="color-swatch" data-color="grey" title="Grey Theme"></div>
+            <div class="color-swatch" data-color="mono" title="Monochrome Theme"></div>
+        </div>
+    </div>
+
+    <!-- User Menu -->
+    <div class="user-menu" id="userMenu" style="display: none;">
+        <div class="user-info">
+            <img id="userProfileImg" src="" alt="Profile" style="width: 36px; height: 36px; border-radius: 50%; margin-right: 8px; object-fit: cover;">
+            <span id="userEmail"></span>
+        </div>
+        <button class="edit-profile-btn" id="editProfileBtn" title="Edit Profile">
+            <i class="fas fa-user-edit"></i>
+        </button>
+        <button class="logout-btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </button>
+    </div>
+
+    <!-- Auth Buttons -->
+    <div class="auth-buttons" id="authButtons">
+        <button class="btn btn-secondary" id="loginBtn">
+            <i class="fas fa-sign-in-alt"></i>
+            Login
+        </button>
+        <button class="btn btn-primary" id="signupBtn">
+            <i class="fas fa-user-plus"></i>
+            Sign Up
+        </button>
+    </div>
+
+    <header class="header">
+        <div class="container">
+            <h1 style="display: flex; align-items: center; justify-content: center; gap: 12px;"><img src="logo.png" alt="SEAMUNs Logo" style="height: 60px; width: auto;"><span>SEAMUNs</span></h1>
+            <p>Track upcoming and previous Model United Nations conferences across South East Asia</p>
+            <div class="current-datetime" id="currentDateTime">
+                <i class="fas fa-clock"></i>
+                <span id="dateTimeDisplay"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Menu -->
+    <nav class="main-nav">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="nav-item dropdown">
+                    <button class="nav-link"><i class="fas fa-calendar-alt"></i> Conferences <i class="fas fa-chevron-down"></i></button>
+                    <div class="dropdown-content">
+                        <a href="index.html"><i class="fas fa-check-circle"></i> Upcoming & Previous MUNs</a>
+                        <a href="prospective-muns.html"><i class="fas fa-hourglass-half"></i> Prospective MUNs</a>
+                        <a href="how-to-host.html"><i class="fas fa-building"></i> How to Host an MUN</a>
+                    </div>
+                </div>
+
+                <div class="nav-item dropdown">
+                    <button class="nav-link"><i class="fas fa-school"></i> Schools & Advisors <i class="fas fa-chevron-down"></i></button>
+                    <div class="dropdown-content">
+                        <a href="participating-schools.html"><i class="fas fa-graduation-cap"></i> Participating Schools</a>
+                        <a href="become-participating-school.html"><i class="fas fa-handshake"></i> How to Become a Participating School</a>
+                        <a href="advisor-guide.html"><i class="fas fa-chalkboard-teacher"></i> Advisor Guide</a>
+                    </div>
+                </div>
+
+                <div class="nav-item dropdown">
+                    <button class="nav-link"><i class="fas fa-users"></i> Delegates & Chairs <i class="fas fa-chevron-down"></i></button>
+                    <div class="dropdown-content">
+                        <a href="delegate-signup.html"><i class="fas fa-user-plus"></i> How to Sign Up (Delegate Guide)</a>
+                        <a href="individual-delegates.html"><i class="fas fa-user"></i> Individual Delegates</a>
+                        <a href="chair-guide.html"><i class="fas fa-gavel"></i> Chair Guide</a>
+                        <a href="chair-superlatives.html"><i class="fas fa-award"></i> Chair Superlatives</a>
+                        <a href="mun-guide.html"><i class="fas fa-book"></i> MUN Guide</a>
+                        <a href="how-to-prep.html"><i class="fas fa-clipboard-list"></i> How to Prep</a>
+                        <a href="stand-out.html"><i class="fas fa-star"></i> How to Stand Out</a>
+                        <a href="confidence.html"><i class="fas fa-heart"></i> Confidence Building</a>
+                        <a href="support.html"><i class="fas fa-hands-helping"></i> Support at Conferences</a>
+                    </div>
+                </div>
+
+                <div class="nav-item dropdown">
+                    <button class="nav-link"><i class="fas fa-folder-open"></i> Resources <i class="fas fa-chevron-down"></i></button>
+                    <div class="dropdown-content">
+                        <a href="points.html"><i class="fas fa-list-ol"></i> Points</a>
+                        <a href="motions.html"><i class="fas fa-hand-paper"></i> Motions</a>
+                        <a href="committees.html"><i class="fas fa-users-cog"></i> Committees</a>
+                        <a href="committees.html#traditional" class="sub-item"><i class="fas fa-landmark"></i> Traditional Committees</a>
+                        <a href="committees.html#special" class="sub-item"><i class="fas fa-star"></i> Special Committees</a>
+                        <a href="conduct.html"><i class="fas fa-balance-scale"></i> Conduct</a>
+                        <a href="speeches.html"><i class="fas fa-microphone"></i> Speeches</a>
+                        <a href="resolutions.html"><i class="fas fa-file-alt"></i> Resolutions</a>
+                        <a href="crisis.html"><i class="fas fa-exclamation-triangle"></i> Crisis</a>
+                        <a href="ga.html"><i class="fas fa-globe-americas"></i> General Assembly</a>
+                        <a href="position-papers.html"><i class="fas fa-file-word"></i> Position Papers</a>
+                        <a href="chair-superlatives.html"><i class="fas fa-award"></i> Chair Superlatives</a>
+                        <a href="examples.html"><i class="fas fa-lightbulb"></i> Examples</a>
+                        <a href="awards.html"><i class="fas fa-trophy"></i> Awards</a>
+                        <a href="templates.html"><i class="fas fa-file-download"></i> Templates</a>
+                        <a href="https://munsimulation.seamuns.site" target="_blank" rel="noopener noreferrer"><i class="fas fa-gamepad"></i> MUN Simulation Game</a>
+                    </div>
+                </div>
+
+                <div class="nav-item">
+                    <a href="https://munsimulation.seamuns.site" target="_blank" rel="noopener noreferrer" class="nav-link"><i class="fas fa-gamepad"></i> MUN Simulation</a>
+                </div>
+
+                <div class="nav-item">
+                    <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> My Profile</a>
+                </div>
+
+                <div class="nav-item">
+                    <a href="about.html" class="nav-link"><i class="fas fa-info-circle"></i> About & Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main">
+        <div class="container">
+            <!-- Controls Section -->
+            <section class="controls">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <label for="searchInput" class="sr-only">Search conferences</label>
+                    <input type="text" id="searchInput" placeholder="Search conferences by name, location, or organization..." aria-label="Search conferences by name, location, or organization">
+                </div>
+                
+                <div class="filters">
+                    <label for="statusFilter" class="sr-only">Filter by status</label>
+                    <select id="statusFilter" aria-label="Filter conferences by status">
+                        <option value="all">All Conferences</option>
+                        <option value="upcoming">Upcoming</option>
+                        <option value="previous">Previous</option>
+                    </select>
+                    
+                    <label for="locationFilter" class="sr-only">Filter by location</label>
+                    <select id="locationFilter" aria-label="Filter conferences by location">
+                        <option value="all">All Locations</option>
+                    </select>
+                </div>
+                
+                <div class="committee-filter-container">
+                    <label for="committeeFilter" class="committee-filter-label">
+                        <i class="fas fa-users-cog"></i> Filter by Committees
+                    </label>
+                    <div class="committee-filter" id="committeeFilter">
+                        <div class="committee-filter-header">
+                            <span class="committee-filter-text">Select committees...</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="committee-filter-dropdown" id="committeeFilterDropdown" style="display: none;">
+                            <div class="committee-filter-search">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="committeeSearchInput" placeholder="Search committees..." aria-label="Search committees">
+                            </div>
+                            <div class="committee-filter-actions">
+                                <button type="button" class="btn-select-all" id="selectAllCommittees">Select All</button>
+                                <button type="button" class="btn-clear-all" id="clearAllCommittees">Clear All</button>
+                            </div>
+                            <div class="committee-checkboxes" id="committeeCheckboxes">
+                                <!-- Committee checkboxes will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section class="stats">
+                <div class="stat-card">
+                    <div class="stat-icon upcoming">
+                        <i class="fas fa-calendar-plus"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="upcomingCount">0</h3>
+                        <p>Upcoming</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon previous">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="previousCount">0</h3>
+                        <p>Previous</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon total">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalCount">0</h3>
+                        <p>Total</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab Navigation -->
+            <section class="tab-navigation" id="upcoming-registered">
+                <div class="tab-container">
+                    <button class="tab-btn active" data-tab="all">
+                        <i class="fas fa-check-circle"></i>
+                        <span>All Registered MUNs</span>
+                        <div class="tab-count" id="allCount">0</div>
+                    </button>
+                    <button class="tab-btn" data-tab="upcoming">
+                        <i class="fas fa-calendar-plus"></i>
+                        <span>Upcoming</span>
+                        <div class="tab-count" id="upcomingTabCount">0</div>
+                    </button>
+                    <button class="tab-btn" data-tab="previous">
+                        <i class="fas fa-history"></i>
+                        <span>Previous</span>
+                        <div class="tab-count" id="previousTabCount">0</div>
+                    </button>
+                    <button class="tab-btn" data-tab="attending">
+                        <i class="fas fa-user-check"></i>
+                        <span>Attending</span>
+                        <div class="tab-count" id="attendingTabCount">0</div>
+                    </button>
+                    <button class="tab-btn" data-tab="attended">
+                        <i class="fas fa-trophy"></i>
+                        <span>Attended</span>
+                        <div class="tab-count" id="attendedTabCount">0</div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Conferences List -->
+            <section class="conferences">
+                <div id="conferencesList" class="conferences-grid">
+                    <!-- Conferences will be dynamically loaded here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Add/Edit Conference Modal removed -->
+
+    <!-- Conference Details Modal -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="detailsTitle">Conference Details</h2>
+                <button class="close-btn" id="closeDetailsModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="conferenceDetails">
+                <!-- Conference details will be loaded here -->
+            </div>
+            
+            <div class="modal-actions">
+                <div id="loginPrompt" style="display: none; width: 100%; text-align: center; padding: 12px; color: var(--text-secondary); font-size: 15px;">
+                    <i class="fas fa-lock"></i> Please log in to mark your attendance
+                </div>
+                <button class="btn btn-primary" id="toggleAttendanceBtn">
+                    <i class="fas fa-user-check"></i> <span id="attendanceToggleText">Mark as Attending</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Login</h2>
+                <button class="close-btn" id="closeLoginModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email *</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Password *</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelLoginBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+
+            <!-- Divider -->
+            <div style="display: flex; align-items: center; margin: 24px 0; gap: 16px;">
+                <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+                <span style="color: var(--text-secondary); font-size: 14px;">OR</span>
+                <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+            </div>
+
+            <!-- Google Sign-In Button -->
+            <button type="button" id="googleLoginBtn" class="btn-google">
+                <svg width="18" height="18" viewBox="0 0 18 18" style="margin-right: 12px;">
+                    <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+                    <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+                    <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707 0-.593.102-1.17.282-1.709V4.958H.957C.347 6.173 0 7.548 0 9c0 1.452.348 2.827.957 4.042l3.007-2.335z"/>
+                    <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+                </svg>
+                Sign in with Google
+            </button>
+        </div>
+    </div>
+
+    <!-- Sign Up Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Sign Up</h2>
+                <button class="close-btn" id="closeSignupModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">Full Name *</label>
+                    <input type="text" id="signupName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signupPronouns">Pronouns (Optional)</label>
+                    <input type="text" id="signupPronouns" placeholder="e.g., she/her, he/him, they/them">
+                </div>
+                
+                <div class="form-group">
+                    <label for="signupEmail">Email *</label>
+                    <input type="email" id="signupEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signupPassword">Password *</label>
+                    <input type="password" id="signupPassword" required minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password *</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signupProfilePicture">Profile Picture (Optional)</label>
+                    <input type="file" id="signupProfilePicture" accept="image/*" aria-label="Upload profile picture">
+                    <div id="profilePreview" style="margin-top: 12px; display: none;">
+                        <img id="profilePreviewImg" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color);" alt="Profile Preview">
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelSignupBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                </div>
+            </form>
+
+            <!-- Divider -->
+            <div style="display: flex; align-items: center; margin: 24px 0; gap: 16px;">
+                <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+                <span style="color: var(--text-secondary); font-size: 14px;">OR</span>
+                <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+            </div>
+
+            <!-- Google Sign-In Button -->
+            <button type="button" id="googleSignupBtn" class="btn-google">
+                <svg width="18" height="18" viewBox="0 0 18 18" style="margin-right: 12px;">
+                    <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+                    <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+                    <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707 0-.593.102-1.17.282-1.709V4.958H.957C.347 6.173 0 7.548 0 9c0 1.452.348 2.827.957 4.042l3.007-2.335z"/>
+                    <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+                </svg>
+                Sign up with Google
+            </button>
+        </div>
+    </div>
+
+    <!-- Profile Edit Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-edit"></i> Edit Profile</h2>
+                <button class="close-btn" id="closeProfileModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="profileForm">
+                <!-- Banner Selection -->
+                <div class="form-group banner-selection">
+                    <label for="editBannerPicture">Profile Banner</label>
+                    <div class="banner-tabs">
+                        <button type="button" class="banner-tab active" data-tab="preset">Preset Designs</button>
+                        <button type="button" class="banner-tab" data-tab="custom">Custom Image</button>
+                    </div>
+                    
+                    <!-- Preset Banners -->
+                    <div class="banner-tab-content active" id="presetBannerTab">
+                        <div class="preset-banners">
+                            <div class="preset-banner preset-banner-1" data-banner="preset-1"></div>
+                            <div class="preset-banner preset-banner-2" data-banner="preset-2"></div>
+                            <div class="preset-banner preset-banner-3" data-banner="preset-3"></div>
+                            <div class="preset-banner preset-banner-4" data-banner="preset-4"></div>
+                            <div class="preset-banner preset-banner-5" data-banner="preset-5"></div>
+                            <div class="preset-banner preset-banner-6" data-banner="preset-6"></div>
+                            <div class="preset-banner preset-banner-7" data-banner="preset-7"></div>
+                            <div class="preset-banner preset-banner-8" data-banner="preset-8"></div>
+                            <div class="preset-banner preset-banner-9" data-banner="preset-9"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Custom Banner Upload -->
+                    <div class="banner-tab-content" id="customBannerTab">
+                        <div class="custom-banner-upload">
+                            <div class="banner-preview">
+                                <img id="customBannerPreview" style="display: none;" alt="Banner Preview">
+                                <span class="banner-preview-placeholder">No banner uploaded</span>
+                            </div>
+                            <label for="editBannerPicture" class="btn btn-secondary" style="cursor: pointer;">
+                                <i class="fas fa-image"></i> Upload Banner Image
+                            </label>
+                            <input type="file" id="editBannerPicture" accept="image/*" style="display: none;" aria-label="Upload banner image">
+                            <p style="font-size: 12px; color: var(--text-tertiary); margin-top: 8px;">
+                                Recommended: 1200x60px or any wide format, Max 2MB
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Profile Picture -->
+                <div class="form-group" style="text-align: center;">
+                    <label>Profile Picture</label>
+                    <div style="margin-bottom: 16px;">
+                        <img id="editProfilePreviewImg" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent-blue);" alt="Current Profile">
+                    </div>
+                    <label for="editProfilePicture" class="btn btn-secondary" style="cursor: pointer;">
+                        <i class="fas fa-camera"></i> Change Picture
+                    </label>
+                    <input type="file" id="editProfilePicture" accept="image/*" style="display: none;" aria-label="Upload profile picture">
+                </div>
+                
+                <div class="form-group">
+                    <label for="editProfileName">Full Name *</label>
+                    <input type="text" id="editProfileName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editProfilePronouns">Pronouns</label>
+                    <input type="text" id="editProfilePronouns" placeholder="e.g., she/her, he/him, they/them">
+                </div>
+                
+                <div class="form-group">
+                    <label for="editProfileEmail">Email</label>
+                    <input type="email" id="editProfileEmail" disabled style="opacity: 0.6; cursor: not-allowed;">
+                    <small style="color: var(--text-secondary); font-size: 0.85em;">Email cannot be changed</small>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelProfileBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Environment Configuration (gitignored) -->
+    <script src="env.js"></script>
+
+    <!-- Firebase Configuration -->
+    <script src="firebase-config.js"></script>
+    
+    <!-- Main Application Script -->
+    <script src="script.js?v=68"></script>
+</body>
+</html>

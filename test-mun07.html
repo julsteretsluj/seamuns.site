@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test MUN07</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .info {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success { color: green; }
+        .error { color: red; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            background: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover { background: #357ABD; }
+        pre {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 MUN07 IV Diagnostic Test</h1>
+    
+    <div class="info">
+        <h2>Step 1: Clear Everything</h2>
+        <button onclick="clearAll()">Clear LocalStorage & Reload</button>
+    </div>
+    
+    <div class="info">
+        <h2>Step 2: LocalStorage Status</h2>
+        <div id="storageStatus"></div>
+    </div>
+    
+    <div class="info">
+        <h2>Step 3: Conference Data</h2>
+        <div id="conferenceData"></div>
+    </div>
+    
+    <div class="info">
+        <h2>Step 4: Go to Site</h2>
+        <button onclick="window.location.href='index.html'">Open Main Site</button>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function clearAll() {
+            localStorage.clear();
+            alert('All data cleared! Page will reload...');
+            location.reload();
+        }
+        
+        function checkStorage() {
+            const statusDiv = document.getElementById('storageStatus');
+            const munConferences = localStorage.getItem('munConferences');
+            const munDataVersion = localStorage.getItem('munDataVersion');
+            
+            statusDiv.innerHTML = `
+                <p><strong>munDataVersion:</strong> ${munDataVersion || '<span class="error">NOT SET</span>'}</p>
+                <p><strong>munConferences:</strong> ${munConferences ? '<span class="success">EXISTS</span>' : '<span class="error">NOT SET</span>'}</p>
+            `;
+        }
+        
+        function checkConferences() {
+            const dataDiv = document.getElementById('conferenceData');
+            const munConferences = localStorage.getItem('munConferences');
+            
+            if (!munConferences) {
+                dataDiv.innerHTML = '<p class="error">No conference data in localStorage!</p><p>The MUN Tracker should create this automatically. Let me trigger it...</p>';
+                
+                // Try to initialize the tracker
+                setTimeout(() => {
+                    if (typeof munTracker !== 'undefined') {
+                        dataDiv.innerHTML += '<p class="success">MUN Tracker found! Conferences: ' + munTracker.conferences.length + '</p>';
+                        if (munTracker.conferences.length > 0) {
+                            dataDiv.innerHTML += '<pre>' + JSON.stringify(munTracker.conferences[0], null, 2) + '</pre>';
+                        }
+                    } else {
+                        dataDiv.innerHTML += '<p class="error">MUN Tracker not initialized!</p>';
+                    }
+                }, 1000);
+            } else {
+                const conferences = JSON.parse(munConferences);
+                dataDiv.innerHTML = `
+                    <p class="success">Found ${conferences.length} conference(s)</p>
+                    ${conferences.length > 0 ? '<pre>' + JSON.stringify(conferences[0], null, 2) + '</pre>' : '<p class="error">Array is empty!</p>'}
+                `;
+            }
+        }
+        
+        // Run checks on load
+        setTimeout(() => {
+            checkStorage();
+            checkConferences();
+        }, 500);
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
