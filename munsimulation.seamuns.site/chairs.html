@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chair's Role — MUN Simulation</title>
+    <link rel="icon" type="image/png" href="logo.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="chairs.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="header-brand">
+        <a href="index.html" class="site-logo-link">
+          <img src="logo.png" alt="MUN Simulation" class="site-logo" />
+        </a>
+        <div>
+          <h1>Chair's Role</h1>
+        <p class="subtitle">Procedure practice — run the committee | <a href="https://seamuns.site" target="_blank" class="site-link">seamuns.site</a></p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="index.html" class="primary link-as-button">Delegate Sim</a>
+        <div class="chair-meta">
+          <span class="label">Question</span>
+          <span id="questionProgress" class="value">1 / 5</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-layout chairs-layout">
+      <section class="room-panel chair-panel">
+        <div class="chair-session-header">
+          <h2>Committee Session</h2>
+          <p id="sessionPhase" class="session-phase">Roll call</p>
+          <div class="progress progress-large">
+            <div id="sessionProgressBar" class="progress-bar"></div>
+          </div>
+        </div>
+
+        <div id="scenarioBlock" class="scenario-block chair-content-block">
+          <h3>Scenario</h3>
+          <p id="scenarioText" class="scenario-text"></p>
+          <p class="prompt-label">💭 What do you do?</p>
+          <div id="optionsList" class="options-list"></div>
+        </div>
+
+        <div id="feedbackBlock" class="feedback-block hidden chair-content-block">
+          <div id="feedbackHeader" class="feedback-header">
+            <span id="feedbackIcon" class="feedback-icon"></span>
+            <span id="feedbackTitle" class="feedback-title"></span>
+          </div>
+          <p id="feedbackBody" class="feedback-body"></p>
+          <div id="correctAnswerBox" class="correct-answer-box hidden">
+            <p class="correct-label">✅ Correct answer</p>
+            <p id="correctAnswerText" class="correct-answer-text"></p>
+          </div>
+          <p id="narrativeOutcome" class="narrative-outcome"></p>
+          <button id="continueBtn" class="primary continue-btn">Continue</button>
+        </div>
+      </section>
+
+      <aside class="chair-sidebar">
+        <div class="panel-section">
+          <h3>Score</h3>
+          <p id="scoreDisplay" class="score-display">0 / 0</p>
+        </div>
+        <div class="panel-section fun-facts-section chair-fun-facts">
+          <h3>Did You Know? <span class="help" title="Procedure &amp; crisis committee facts.">?</span></h3>
+          <div id="chairFunFact" class="fun-fact chair-fun-fact">
+            <p class="fun-fact-text chair-fun-fact-text">Loading…</p>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <div id="welcomeOverlay" class="welcome-overlay">
+      <div class="welcome-card">
+        <h2>Chair's Procedure Practice</h2>
+        <p>You will run a short committee session. At each step, choose how you would handle the situation. You'll get feedback on procedure — the simulation continues either way.</p>
+        <label class="chair-question-count-label">
+          Number of questions
+          <select id="questionCountSelect" class="chair-question-count-select" title="Choose how many procedure questions (5–50) for this session.">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="30">30</option>
+            <option value="35">35</option>
+            <option value="40">40</option>
+            <option value="45">45</option>
+            <option value="50" selected>50</option>
+          </select>
+        </label>
+        <button id="startChairSession" class="primary">Begin Session</button>
+      </div>
+    </div>
+
+    <div id="endOverlay" class="welcome-overlay hidden">
+      <div class="welcome-card">
+        <h2>Session Complete</h2>
+        <p id="endMessage" class="end-message"></p>
+        <p id="endNote" class="end-note" aria-live="polite"></p>
+        <div class="end-actions">
+          <button id="restartChairSession" class="secondary">Practice Again</button>
+          <a href="index.html" class="primary link-as-button">Back to Delegate Sim</a>
+        </div>
+      </div>
+    </div>
+
+    <footer class="app-footer procedure-links-footer">
+      <h3>Official procedure resources</h3>
+      <ul class="procedure-links-list">
+        <li><a href="https://www.nmun.org/assets/documents/nmun-rules.pdf" target="_blank" rel="noopener noreferrer">NMUN Rules of Procedure (PDF)</a></li>
+        <li><a href="https://www.un.org/en/model-united-nations/rules-procedure" target="_blank" rel="noopener noreferrer">UN Model UN — Rules of Procedure</a></li>
+        <li><a href="https://bestdelegate.com/un4mun/" target="_blank" rel="noopener noreferrer">UN4MUN procedure (Best Delegate)</a></li>
+      </ul>
+    </footer>
+
+    <script src="chairs.js"></script>
+  </body>
+</html>

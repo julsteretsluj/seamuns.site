@@ -99,6 +99,13 @@ mun-tracker/
 ├── env.example.js           # Example env (Firebase keys)
 ├── README.md
 ├── database-schema.sql      # API database schema reference
+├── munsimulation.seamuns.site/   # MUN Simulation Game (munsimulation.seamuns.site)
+│   ├── index.html           # Delegate simulation entry
+│   ├── chairs.html          # Chair's Role procedure practice
+│   ├── script.js            # Delegate sim logic
+│   ├── chairs.js            # Chair sim logic
+│   ├── styles.css, chairs.css, logo.png
+│   └── README.md
 ├── pages/                   # All other HTML pages
 │   ├── conference-template.html  # Conference detail page
 │   ├── profile.html             # My Profile (attending / attended)

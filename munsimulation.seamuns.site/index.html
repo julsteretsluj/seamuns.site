@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MUN Simulation Game</title>
+    <link rel="icon" type="image/png" href="logo.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="header-brand">
+        <img src="logo.png" alt="MUN Simulation Game" class="site-logo" />
+        <div>
+          <h1>MUN Simulation Game</h1>
+        <p class="subtitle">Single-player committee flow simulator | <a href="https://seamuns.site" target="_blank" class="site-link">seamuns.site</a></p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="chairs.html" class="secondary link-as-button" title="Practice chair procedure.">Chair's Role</a>
+        <button
+          id="startSimulation"
+          class="primary"
+          title="Begin the committee flow."
+        >
+          Start Simulation
+        </button>
+        <button id="resetSimulation" title="Reset all progress.">Reset</button>
+      </div>
+    </header>
+
+    <main class="app-layout">
+      <section class="room-panel">
+        <div class="room-header">
+          <div>
+            <h2>Committee Room</h2>
+            <p id="committeeUniverse" class="universe-label hidden"></p>
+            <p id="committeeTopic" class="topic"></p>
+            <a id="ropLink" href="#" target="_blank" class="rop-link" style="display: none;">View Rules of Procedure</a>
+          </div>
+          <div class="room-meta">
+            <div>
+              <span class="label">Stage</span>
+              <span id="stageLabel" class="value">Waiting</span>
+            </div>
+            <div>
+              <span class="label">Round</span>
+              <span id="roundLabel" class="value">0 / 5</span>
+            </div>
+            <div class="points-display">
+              <span class="label">Points</span>
+              <span id="pointsValue" class="value points-value">0</span>
+            </div>
+          </div>
+        </div>
+        <div class="conference-progress">
+          <div class="progress-meta">
+            <span class="label">Conference Progress</span>
+            <span id="conferenceProgressLabel" class="value">0%</span>
+          </div>
+          <div class="progress progress-large">
+            <div id="conferenceProgressBar" class="progress-bar"></div>
+          </div>
+        </div>
+
+        <div class="setup-bar panel-section">
+          <h3>Committee Setup</h3>
+          <label class="field" title="Pick a starting committee.">
+            Committee
+            <select id="committeeSelect"></select>
+          </label>
+          <label class="field" title="Choose your delegation for the run.">
+            Your Delegation
+            <select id="delegationSelect"></select>
+          </label>
+          <div class="subissues is-hidden">
+            <p class="label">Sub-issues</p>
+            <ul id="subIssueList"></ul>
+          </div>
+          <div class="setup-actions">
+            <button type="button" id="shuffleAllocations" class="secondary" title="Randomize the order of delegations on screen.">Shuffle allocations</button>
+            <button type="button" id="shuffleTopic" class="secondary" title="Draw a new topic; for fantasy committees, also draws a new universe.">Shuffle topic / universe</button>
+          </div>
+        </div>
+
+        <div class="room-layout">
+          <div class="room">
+            <div class="chair-row">
+              <div class="chair seat chair-seat" data-seat="Chair 1">
+                <div class="seat-label">Chair</div>
+                <div class="gavel-pair">
+                  <span class="gavel"></span>
+                  <span class="gavel"></span>
+                </div>
+              </div>
+              <div class="chair seat chair-seat" data-seat="Chair 2">
+                <div class="seat-label">Chair</div>
+                <div class="gavel-pair">
+                  <span class="gavel"></span>
+                  <span class="gavel"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="podium" id="podium">
+              <div class="podium-label">Podium</div>
+            </div>
+
+            <div class="delegate-ring" id="delegateRing"></div>
+
+            <div class="chair-bubble" id="chairBubble">Welcome delegates.</div>
+            <div id="speechAddress" class="speech-address hidden">
+              <p class="speech-address-text"></p>
+            </div>
+          </div>
+
+          <div class="control-panel actions-panel">
+            <div class="panel-section">
+              <h3>
+                Controls
+                <span class="help" data-tooltip="Use these buttons to drive the simulation forward.">?</span>
+              </h3>
+              <div class="button-grid">
+                <button id="raisePlacard" title="Raise your placard for points or motions.">
+                  Raise Placard
+                </button>
+                <button id="raiseMotion" title="Propose a motion when the floor is open.">
+                  Raise Motion
+                </button>
+                <button id="waitButton" title="Let the chair proceed without you.">
+                  Wait
+                </button>
+                <button id="skipButton" class="secondary" title="Skip the current timer.">
+                  Skip
+                </button>
+                <button
+                  id="adjournButton"
+                  class="danger"
+                  title="End the committee session."
+                >
+                  Adjourn
+                </button>
+              </div>
+              <div class="status-card">
+                <p class="label">
+                  Now Speaking
+                  <span
+                    class="help"
+                    data-tooltip="The podium highlights the current speaker."
+                    >?</span
+                  >
+                </p>
+                <p id="currentSpeaker">None</p>
+                <div class="progress">
+                  <div id="progressBar" class="progress-bar"></div>
+                </div>
+                <p id="progressLabel" class="progress-label">No active timer.</p>
+              </div>
+            </div>
+
+            <div class="panel-section">
+              <h3>
+                Points
+                <span
+                  class="help"
+                  data-tooltip="Points are raised from your placard. No POIs or POCs in this simulation."
+                  >?</span
+                >
+              </h3>
+              <p class="muted">No POIs or POCs.</p>
+              <div class="point-grid">
+                <button class="point-button" data-point="Point of Personal Privilege: Aircon temperature change.">
+                  Point of Personal Privilege: Aircon temp change
+                </button>
+                <button class="point-button" data-point="Point of Personal Privilege: Bathroom trip.">
+                  Point of Personal Privilege: Bathroom trip
+                </button>
+                <button class="point-button" data-point="Point of Personal Privilege: Water bottle refill.">
+                  Point of Personal Privilege: Water bottle refill
+                </button>
+                <button class="point-button" data-point="Point of Personal Privilege: Charger, getting up to plug in a device.">
+                  Point of Personal Privilege: Charger
+                </button>
+                <button id="parliamentaryInquiry" class="secondary">
+                  Point of Parliamentary Inquiry
+                </button>
+            <select id="parliamentaryInquirySelect" class="point-select"></select>
+              </div>
+            </div>
+
+            <div class="panel-section">
+              <h3>
+                Notes to Pass
+                <span class="help" data-tooltip="Send notes to build blocs and signal alignment.">?</span>
+              </h3>
+          <label class="field">
+            Send to
+            <select id="noteRecipientSelect"></select>
+          </label>
+              <div class="button-stack">
+                <button
+                  class="note-button"
+                  data-note="Let's form a bloc!"
+                  title="Pass a bloc-building note."
+                >
+                  "Let's form a bloc!"
+                </button>
+                <button
+                  class="note-button"
+                  data-note="Awesome speech, seems like we have a lot of the same stances on sub-issues"
+                  title="Send a compliment to find allies."
+                >
+                  "Awesome speech, seems like we have a lot of the same stances on sub-issues"
+                </button>
+                <button
+                  class="note-button"
+                  data-note="I can't wait for break"
+                  title="Share a light-hearted note."
+                >
+                  "I can't wait for break"
+                </button>
+              </div>
+          <p id="noteNotification" class="note-notification muted"></p>
+            </div>
+
+            <div class="panel-section">
+              <h3>
+                Event Log
+                <span class="help" data-tooltip="The chair's narration and actions show here.">?</span>
+              </h3>
+              <div id="log" class="log"></div>
+            </div>
+
+            <div class="panel-section fun-facts-section">
+              <h3>
+                Did You Know?
+                <span class="help" data-tooltip="Interesting facts about Model UN and international relations.">?</span>
+              </h3>
+              <div id="funFact" class="fun-fact">
+                <p class="fun-fact-text">Loading fun fact...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="control-panel setup-panel"></section>
+    </main>
+
+    <footer class="app-footer procedure-links-footer">
+      <h3>Official procedure resources</h3>
+      <ul class="procedure-links-list">
+        <li><a href="https://www.nmun.org/assets/documents/nmun-rules.pdf" target="_blank" rel="noopener noreferrer">NMUN Rules of Procedure (PDF)</a></li>
+        <li><a href="https://www.un.org/en/model-united-nations/rules-procedure" target="_blank" rel="noopener noreferrer">UN Model UN — Rules of Procedure</a></li>
+        <li><a href="https://bestdelegate.com/un4mun/" target="_blank" rel="noopener noreferrer">UN4MUN procedure (Best Delegate)</a></li>
+      </ul>
+    </footer>
+
+    <div id="modal" class="modal hidden">
+      <div class="modal-content">
+        <h3 id="modalTitle">Decision</h3>
+        <p id="modalBody"></p>
+        <div id="modalActions" class="modal-actions"></div>
+      </div>
+    </div>
+    <div id="continueOverlay" class="continue-overlay hidden">
+      <button id="continueButton" class="primary">Continue</button>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
