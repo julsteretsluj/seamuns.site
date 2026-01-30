@@ -1256,9 +1256,22 @@ function loadConferenceDetail() {
             return;
         }
 
-        populateConferenceDetail(conference);
-        setupAttendanceButton(conference);
-        setupAwardButton(conference);
+        try {
+            populateConferenceDetail(conference);
+        } catch (e) {
+            console.error('populateConferenceDetail failed:', e);
+            throw e;
+        }
+        try {
+            setupAttendanceButton(conference);
+        } catch (e) {
+            console.error('setupAttendanceButton failed:', e);
+        }
+        try {
+            setupAwardButton(conference);
+        } catch (e) {
+            console.error('setupAwardButton failed:', e);
+        }
     } catch (error) {
         console.error('Error in loadConferenceDetail:', error);
         const conferenceNameEl = document.getElementById('conferenceName');
@@ -1267,8 +1280,20 @@ function loadConferenceDetail() {
         }
         const detailsContainer = document.querySelector('.conference-detail-main');
         if (detailsContainer) {
-            detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>Error Loading Conference</h2><p>There was an unexpected error. Please try again later.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
+            detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>Error Loading Conference</h2><p>There was an unexpected error. Please try again later.</p><p style="font-size: 0.9em; color: var(--text-secondary); margin-top: 8px;">Open the browser console (F12) for details.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
         }
+    }
+}
+
+// Safe date format for display (avoids throws on invalid dates)
+function formatDateSafe(value) {
+    if (value == null || value === '') return 'Not specified';
+    try {
+        const d = new Date(value);
+        if (isNaN(d.getTime())) return String(value);
+        return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    } catch (e) {
+        return String(value);
     }
 }
 
@@ -1276,7 +1301,7 @@ function loadConferenceDetail() {
 function populateConferenceDetail(conf) {
     try {
         // Basic info
-        document.title = `${conf.name} - SEAMUNs`;
+        document.title = (conf.name || 'Conference') + ' - SEAMUNs';
         const conferenceNameEl = document.getElementById('conferenceName');
         if (conferenceNameEl) {
             conferenceNameEl.textContent = conf.name || 'Conference Name';
@@ -1301,12 +1326,12 @@ function populateConferenceDetail(conf) {
             locationEl.textContent = `${flag} ${conf.location || 'Not specified'}`;
         }
         
-        // Dates
-        const startDate = new Date(conf.startDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-        const endDate = new Date(conf.endDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        // Dates (defensive)
+        const startDate = formatDateSafe(conf.startDate);
+        const endDate = formatDateSafe(conf.endDate);
         const datesEl = document.getElementById('dates');
         if (datesEl) {
-            datesEl.textContent = `${startDate} - ${endDate}`;
+            datesEl.textContent = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
         }
         
         // Price
@@ -1318,22 +1343,12 @@ function populateConferenceDetail(conf) {
         // Important Dates
         const registrationDeadlineEl = document.getElementById('registrationDeadline');
     if (registrationDeadlineEl) {
-        if (conf.registrationDeadline) {
-            const regDate = new Date(conf.registrationDeadline).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-            registrationDeadlineEl.textContent = regDate;
-        } else {
-            registrationDeadlineEl.textContent = 'Not specified';
-        }
+        registrationDeadlineEl.textContent = conf.registrationDeadline ? formatDateSafe(conf.registrationDeadline) : 'Not specified';
     }
     
         const positionPaperDeadlineEl = document.getElementById('positionPaperDeadline');
         if (positionPaperDeadlineEl) {
-            if (conf.positionPaperDeadline) {
-                const ppDate = new Date(conf.positionPaperDeadline).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-                positionPaperDeadlineEl.textContent = ppDate;
-            } else {
-                positionPaperDeadlineEl.textContent = 'Not specified - Check with organizers';
-            }
+            positionPaperDeadlineEl.textContent = conf.positionPaperDeadline ? formatDateSafe(conf.positionPaperDeadline) : 'Not specified - Check with organizers';
         }
 
         // Contact information with Instagram copy buttons
@@ -1344,11 +1359,13 @@ function populateConferenceDetail(conf) {
         setContactInfoWithCopyButtons('parliamentarianAccounts', conf.parliamentarianAccounts || 'Not provided');
 
         // Committees with descriptions
-        if (conf.committees && conf.committees.length > 0) {
+        if (conf.committees && Array.isArray(conf.committees) && conf.committees.length > 0) {
         const committeeItems = conf.committees.map(c => {
             // Handle both object format (from database) and string format (legacy)
             let committeeName, committeeTopic, chairInfo;
-            
+            if (typeof c !== 'string' && (typeof c !== 'object' || c === null)) {
+                return { committeeName: String(c != null ? c : ''), committeeTopic: [], chairInfo: '' };
+            }
             if (typeof c === 'object' && c !== null) {
                 // Database format: object with separate fields
                 let rawCommitteeName = c.committee_name || c.name || '';
@@ -1987,56 +2004,23 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Only proceed if we're definitely on a conference detail page
         if (conferenceNameEl && locationEl) {
-            // Function to wait for conferences to be available in localStorage
-            function waitForConferences(callback, maxAttempts = 10, delay = 100) {
-                let attempts = 0;
-                const checkInterval = setInterval(() => {
-                    attempts++;
-                    const savedConferences = localStorage.getItem('munConferences');
-                    if (savedConferences) {
-                        clearInterval(checkInterval);
-                        callback();
-                    } else if (attempts >= maxAttempts) {
-                        clearInterval(checkInterval);
-                        // Still try to load even if no data found (will show error message)
-                        callback();
-                    }
-                }, delay);
+            // Load immediately; data comes from MUN_CONFERENCES_DATA or localStorage (no wait)
+            try {
+                loadConferenceDetail();
+            } catch (error) {
+                console.error('Error in loadConferenceDetail:', error);
             }
-            
-            // Wait for script.js to initialize and populate localStorage
-            waitForConferences(() => {
-                try {
-                    loadConferenceDetail();
-                } catch (error) {
-                    console.error('Error in loadConferenceDetail:', error);
-                }
-            });
-            
-            // Also retry after a longer delay in case script.js loads conferences later
-            setTimeout(() => {
-                try {
-                    // Check if page was already populated (still shows default or error)
-                    const currentText = conferenceNameEl.textContent.trim();
-                    if (currentText === 'Conference Name' || currentText === 'Conference Not Found' || currentText === '' || currentText === 'Error Loading Conference') {
-                        loadConferenceDetail();
-                    }
-                } catch (error) {
-                    console.error('Error in loadConferenceDetail (retry 1):', error);
-                }
-            }, 1500);
-            
-            // One more retry after 3 seconds for slow loading
+            // Retry once after short delay if still loading (e.g. scripts not ready)
             setTimeout(() => {
                 try {
                     const currentText = conferenceNameEl.textContent.trim();
-                    if (currentText === 'Conference Name' || currentText === 'Conference Not Found' || currentText === '' || currentText === 'Error Loading Conference') {
+                    if (currentText === 'Loading...' || currentText === 'Conference Name' || currentText === 'Conference Not Found' || currentText === '' || currentText === 'Error Loading Conference') {
                         loadConferenceDetail();
                     }
                 } catch (error) {
-                    console.error('Error in loadConferenceDetail (retry 2):', error);
+                    console.error('Error in loadConferenceDetail (retry):', error);
                 }
-            }, 3000);
+            }, 400);
             
             // Setup award modal event listeners
             try {
