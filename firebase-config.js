@@ -2,7 +2,7 @@
 // 
 // Secrets are now loaded from an environment file (env.js)
 // so that confidential information is not stored in the repo.
-// See FIREBASE_SETUP.md for instructions.
+// Copy env.example.js to env.js and add your Firebase credentials.
 
 function getEnvValue(keys) {
     const envSource = (typeof window !== 'undefined' && window.__ENV__) || {};
@@ -58,7 +58,7 @@ try {
 } catch (error) {
     console.error('❌ Firebase initialization error:', error);
     console.error('💡 Tip: Make sure Authentication and Firestore are enabled in Firebase Console');
-    console.error('📖 See FIREBASE_QUICK_START.md for setup instructions');
+    console.error('📖 Copy env.example.js to env.js and add your Firebase credentials. See README.md.');
 }
 
 // Firebase Authentication Helper Functions
