@@ -1,6 +1,6 @@
-# MUN Simulation Game (munsimulation.seamuns.site)
+# MUN Simulation Game (munsimulation)
 
-Single-player MUN procedure simulator for [SEAMUNs](https://seamuns.site). This folder contains the app that runs at **munsimulation.seamuns.site**.
+Single-player MUN procedure simulator for [SEAMUNs](https://seamuns.site). This folder contains the app that runs at **munsimulation**.
 
 ## Contents
 
@@ -18,4 +18,4 @@ Open `index.html` in a browser or serve this folder with a static server. Entry 
 
 ## Deploy
 
-Point the subdomain **munsimulation.seamuns.site** at this folder (or build output) so the main site’s “MUN Simulation” links work.
+Upload this folder as **munsimulation** so the URL is `yoursite.com/munsimulation/`. The main site MUN Simulation links work without 404.

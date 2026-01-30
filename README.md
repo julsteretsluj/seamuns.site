@@ -37,7 +37,7 @@ A modern web app for tracking Model United Nations (MUN) conferences across **So
 - **Points** · **Motions** · **Committees** (Traditional & Special)
 - **Conduct** · **Speeches** · **Resolutions** · **Crisis** · **General Assembly**
 - **Position Papers** · **Chair Superlatives** · **Examples** · **Awards** · **Templates**
-- **MUN Simulation Game**: link to [munsimulation.seamuns.site](https://munsimulation.seamuns.site) (single-player MUN procedure simulator)
+- **MUN Simulation Game**: path `/munsimulation/` (single-player MUN procedure simulator)
 
 ### User experience
 - **Theme**: Dark mode toggle + 9 accent colours (red, orange, yellow, green, blue, purple, pink, grey, mono)
@@ -99,7 +99,7 @@ mun-tracker/
 ├── env.example.js           # Example env (Firebase keys)
 ├── README.md
 ├── database-schema.sql      # API database schema reference
-├── munsimulation.seamuns.site/   # MUN Simulation Game (munsimulation.seamuns.site)
+├── munsimulation/   # MUN Simulation Game (munsimulation)
 │   ├── index.html           # Delegate simulation entry
 │   ├── chairs.html          # Chair's Role procedure practice
 │   ├── script.js            # Delegate sim logic
@@ -141,7 +141,7 @@ mun-tracker/
 - **Attendance**: On the detail page, use **Mark as Attending** or **Mark as Attended** (when logged in).
 - **Profile**: Open **My Profile** to see your attending/attended conferences.
 - **Theme**: Use the moon icon for dark mode and the colour swatches for accent theme.
-- **MUN Simulation**: Use the **MUN Simulation** nav link to open [munsimulation.seamuns.site](https://munsimulation.seamuns.site).
+- **MUN Simulation**: Use the **MUN Simulation** nav link to open the game at `/munsimulation/`.
 
 ## Tech stack
 
