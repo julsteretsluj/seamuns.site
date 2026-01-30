@@ -1180,74 +1180,67 @@ function getConferenceIdFromURL() {
     return urlParams.get('id');
 }
 
+// Get conference by id from localStorage or window.MUN_CONFERENCES_DATA (so detail page works even without index first)
+function getConferenceForDetailPage(conferenceId) {
+    if (!conferenceId) return null;
+    // 1) Try localStorage (may have attendance etc.)
+    try {
+        const saved = localStorage.getItem('munConferences');
+        if (saved) {
+            const list = JSON.parse(saved);
+            const found = list.find(function (c) { return c.id == conferenceId; });
+            if (found) return found;
+        }
+    } catch (e) { /* ignore */ }
+    // 2) Use reference data (always loaded before this script)
+    if (typeof window.MUN_CONFERENCES_DATA !== 'undefined' && Array.isArray(window.MUN_CONFERENCES_DATA)) {
+        const found = window.MUN_CONFERENCES_DATA.find(function (c) { return c.id == conferenceId; });
+        if (found) {
+            var copy = JSON.parse(JSON.stringify(found));
+            try {
+                var list = JSON.parse(localStorage.getItem('munConferences') || '[]');
+                if (!Array.isArray(list)) list = [];
+                var idx = list.findIndex(function (c) { return c.id == conferenceId; });
+                if (idx >= 0 && list[idx].attendanceStatus) copy.attendanceStatus = list[idx].attendanceStatus;
+                if (idx >= 0) list[idx] = copy; else list.push(copy);
+                localStorage.setItem('munConferences', JSON.stringify(list));
+            } catch (e) { /* ignore */ }
+            return copy;
+        }
+    }
+    return null;
+}
+
 // Load conference data
 function loadConferenceDetail() {
     try {
         // Check if required elements exist - this is the most reliable way to detect the page
         const conferenceNameEl = document.getElementById('conferenceName');
         if (!conferenceNameEl) {
-            // Not on a conference detail page, don't do anything
             return;
         }
-        
-        // Also check for other required elements to be sure
         const locationEl = document.getElementById('location');
         if (!locationEl) {
-            // Not on a conference detail page, don't do anything
             return;
         }
-        
+
         const conferenceId = getConferenceIdFromURL();
-    
-    if (!conferenceId) {
-        // No conference ID in URL - show error message instead of redirecting
-        conferenceNameEl.textContent = 'Conference Not Found';
-        const detailsContainer = document.querySelector('.conference-detail-main');
-        if (detailsContainer) {
-            detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>Conference Not Found</h2><p>No conference ID was provided in the URL.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
-        }
-        return;
-    }
-
-    // Ensure we have conference data: use localStorage, or load sample data via MUNTracker if script.js ran
-    function ensureConferencesInStorage() {
-        if (localStorage.getItem('munConferences')) return true;
-        if (typeof MUNTracker !== 'undefined') {
-            try {
-                const tracker = new MUNTracker();
-                tracker.loadSampleData();
-                tracker.saveConferences();
-                return !!localStorage.getItem('munConferences');
-            } catch (e) {
-                console.warn('Could not load sample data via MUNTracker:', e);
+        if (!conferenceId) {
+            conferenceNameEl.textContent = 'Conference Not Found';
+            const detailsContainer = document.querySelector('.conference-detail-main');
+            if (detailsContainer) {
+                detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>Conference Not Found</h2><p>No conference ID was provided in the URL.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
             }
+            return;
         }
-        return false;
-    }
 
-    let savedConferences = localStorage.getItem('munConferences');
-    if (!savedConferences) {
-        ensureConferencesInStorage();
-        savedConferences = localStorage.getItem('munConferences');
-    }
-    if (!savedConferences) {
-        // Wait a bit and try again (in case script.js is still loading)
-        setTimeout(() => {
-            ensureConferencesInStorage();
-            savedConferences = localStorage.getItem('munConferences');
-            if (!savedConferences) {
-                // No conferences in localStorage - show error message
-                conferenceNameEl.textContent = 'Conference Not Found';
-                const detailsContainer = document.querySelector('.conference-detail-main');
-                if (detailsContainer) {
-                    detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>No Conferences Available</h2><p>Conference data could not be loaded. Please go back to the main page and try again.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
-                }
-                return;
-            }
-            // Retry loading with the data we found
-            try {
-                const conferences = JSON.parse(savedConferences);
-                const conference = conferences.find(c => c.id == conferenceId);
+        // Resolve conference from localStorage or MUN_CONFERENCES_DATA (no dependency on script.js init order)
+        let conference = getConferenceForDetailPage(conferenceId);
+
+        if (!conference) {
+            // Brief delay in case scripts are still loading, then try once more
+            setTimeout(function () {
+                conference = getConferenceForDetailPage(conferenceId);
                 if (conference) {
                     populateConferenceDetail(conference);
                     setupAttendanceButton(conference);
@@ -1259,51 +1252,10 @@ function loadConferenceDetail() {
                         detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>Conference Not Found</h2><p>The requested conference could not be found.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
                     }
                 }
-            } catch (error) {
-                console.error('Error parsing conference data:', error);
-                conferenceNameEl.textContent = 'Error Loading Conference';
-                const detailsContainer = document.querySelector('.conference-detail-main');
-                if (detailsContainer) {
-                    detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>Error Loading Conference</h2><p>There was an error loading the conference data. Please try again later.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
-                }
-            }
-        }, 500);
-        return;
-    }
-
-    let conferences;
-    try {
-        conferences = JSON.parse(savedConferences);
-    } catch (error) {
-        console.error('Error parsing conference data:', error);
-        // Corrupt localStorage – try to load fresh sample data and retry
-        ensureConferencesInStorage();
-        savedConferences = localStorage.getItem('munConferences');
-        try {
-            conferences = savedConferences ? JSON.parse(savedConferences) : [];
-        } catch (e2) {
-            conferenceNameEl.textContent = 'Error Loading Conference';
-            const detailsContainer = document.querySelector('.conference-detail-main');
-            if (detailsContainer) {
-                detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>Error Loading Conference</h2><p>There was an error loading the conference data. Please try again later.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
-            }
+            }, 300);
             return;
         }
-    }
-    
-    const conference = conferences.find(c => c.id == conferenceId);
 
-    if (!conference) {
-        // Conference not found - show error message
-        conferenceNameEl.textContent = 'Conference Not Found';
-        const detailsContainer = document.querySelector('.conference-detail-main');
-        if (detailsContainer) {
-            detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>Conference Not Found</h2><p>The requested conference could not be found. Conference ID: ' + conferenceId + '</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
-        }
-        return;
-    }
-
-        // Populate the page with conference data
         populateConferenceDetail(conference);
         setupAttendanceButton(conference);
         setupAwardButton(conference);
@@ -1312,10 +1264,10 @@ function loadConferenceDetail() {
         const conferenceNameEl = document.getElementById('conferenceName');
         if (conferenceNameEl) {
             conferenceNameEl.textContent = 'Error Loading Conference';
-            const detailsContainer = document.querySelector('.conference-detail-main');
-            if (detailsContainer) {
-                detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>Error Loading Conference</h2><p>There was an unexpected error. Please try again later.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
-            }
+        }
+        const detailsContainer = document.querySelector('.conference-detail-main');
+        if (detailsContainer) {
+            detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>Error Loading Conference</h2><p>There was an unexpected error. Please try again later.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
         }
     }
 }
