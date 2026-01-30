@@ -1,155 +1,122 @@
-# MUN Conference Tracker
+# SEAMUNs
 
-A modern, responsive web application for tracking Model United Nations (MUN) conferences worldwide. Built with vanilla HTML, CSS, and JavaScript.
+A modern web app for tracking Model United Nations (MUN) conferences across **South East Asia**. Built with vanilla HTML, CSS, and JavaScript, with optional Firebase auth and persistence.
 
 ## Features
 
-### 🎯 Core Functionality
-- **Conference Management**: Add, edit, and delete MUN conferences
-- **Smart Filtering**: Filter by status (upcoming/previous) and location
-- **Real-time Search**: Search conferences by name, organization, or location
-- **Statistics Dashboard**: View counts of upcoming, previous, and total conferences
-- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
+### Conference listing
+- **Tabs**: All Registered MUNs · Upcoming · Previous · Attending · Attended
+- **Search**: By conference name, organization, or location
+- **Filters**: Status (All / Upcoming / Previous), location, and committee (multi-select with search)
+- **Stats**: Counts for Upcoming, Previous, and Total
+- **Dates**: Display in dd/mm/yyyy
+- **Status tags**: UPCOMING / PREVIOUS from conference dates; attendance: Not Attending / Attending / Attended
 
-### 🎨 User Interface
-- **Modern Design**: Beautiful gradient backgrounds and glassmorphism effects
-- **Interactive Cards**: Hover effects and smooth animations
-- **Modal Dialogs**: Clean forms for adding/editing conferences
-- **Status Indicators**: Visual indicators for upcoming vs previous conferences
-- **Font Awesome Icons**: Professional iconography throughout
+### Conferences section
+- **Upcoming & Previous MUNs**: Main list of registered conferences
+- **Prospective MUNs**: Conferences not yet fully registered
+- **How to Host an MUN**: Guide for organisers
 
-### 💾 Data Management
-- **Local Storage**: All data persists in browser localStorage
-- **Sample Data**: Pre-loaded with 6 sample MUN conferences
-- **Data Validation**: Form validation and date checking
-- **Export Ready**: Easy to extend with data export functionality
+### Schools & advisors
+- **Participating Schools**: List of schools
+- **How to Become a Participating School**
+- **Advisor Guide**
 
-## Getting Started
+### Delegates & chairs
+- **How to Sign Up (Delegate Guide)**
+- **Individual Delegates**
+- **Chair Guide**
+- **Chair Superlatives**
+- **MUN Guide**
+- **How to Prep**
+- **How to Stand Out**
+- **Confidence Building**
+- **Support at Conferences**
+
+### Resources
+- **Points** · **Motions** · **Committees** (Traditional & Special)
+- **Conduct** · **Speeches** · **Resolutions** · **Crisis** · **General Assembly**
+- **Position Papers** · **Chair Superlatives** · **Examples** · **Awards** · **Templates**
+- **MUN Simulation Game**: link to [munsimulation.seamuns.site](https://munsimulation.seamuns.site) (single-player MUN procedure simulator)
+
+### User experience
+- **Theme**: Dark mode toggle + 9 accent colours (red, orange, yellow, green, blue, purple, pink, grey, mono)
+- **Auth**: Login / Sign up (email or Google) via Firebase when configured
+- **My Profile**: User profile and list of conferences you’re attending or have attended
+- **MUN Simulation**: Direct nav link to the single-player MUN procedure game
+
+### Conference details
+- Full conference info: organisation, location, dates, registration deadline, description
+- Committees list with topics and chair info
+- **Mark as Attending** / **Mark as Attended**
+- **View Details** opens the full conference page
+
+### Data & tech
+- **Persistence**: Firebase (when configured) and/or browser localStorage
+- **Sample data**: 7 pre-loaded conferences (MUN07 IV, STAMUN XI, THAIMUN XIII, TSIMUN 2026, KMIDSMUN II, HISMUN VI, Newton MUN I)
+- **Add conference**: Via Add Conference flow when available
+
+## Getting started
 
 ### Prerequisites
-- A modern web browser (Chrome, Firefox, Safari, Edge)
-- No server required - runs entirely in the browser
+- Modern browser (Chrome, Firefox, Safari, Edge)
+- For auth: Firebase project; copy `env.example.js` to `env.js` and add your config (keep `env.js` out of version control)
 
-### Installation
-1. Download or clone the project files
-2. Copy `env.example.js` to `env.js` and insert your Firebase credentials (keep `env.js` private)
-3. Open `index.html` in your web browser
-4. Start tracking MUN conferences!
+### Run locally
+1. Clone or download the project.
+2. (Optional) Copy `env.example.js` to `env.js` and add Firebase credentials.
+3. Open `index.html` in a browser or serve the folder with any static server.
 
-### File Structure
+No build step required.
+
+## Project structure (main pieces)
+
 ```
 mun-tracker/
-├── index.html          # Main HTML file
-├── styles.css          # CSS styles and responsive design
-├── script.js           # JavaScript functionality
-└── README.md           # This file
+├── index.html              # Home: conference list, search, filters, tabs
+├── conference-template.html # Conference detail page
+├── profile.html             # My Profile (attending / attended)
+├── add-conference.html      # Add conference
+├── script.js                # Conference list, filters, tabs, sample data
+├── conference-detail.js     # Conference detail page logic
+├── profile.js               # Profile page logic
+├── firebase-config.js       # Firebase init (uses env.js)
+├── styles.css               # Global styles, themes, layout
+├── theme-init.js            # Theme (dark/light + colour) persistence
+├── logo.png
+├── env.example.js           # Example env (Firebase keys)
+├── README.md
+├── Conferences:             index, prospective-muns, how-to-host
+├── Schools:                 participating-schools, become-participating-school, advisor-guide
+├── Delegates & Chairs:      delegate-signup, individual-delegates, chair-guide, chair-superlatives,
+│                            mun-guide, how-to-prep, stand-out, confidence, support
+├── Resources:               points, motions, committees, conduct, speeches, resolutions,
+│                            crisis, ga, position-papers, examples, awards, templates
+├── About:                   about.html
+└── api/                     # Optional PHP/backend (e.g. feedback, conferences)
 ```
 
 ## Usage
 
-### Adding a Conference
-1. Click the "Add Conference" button
-2. Fill in the required fields:
-   - Conference Name
-   - Organization
-   - Location
-   - Start Date
-   - End Date
-3. Optionally add:
-   - Description
-   - Website URL
-   - Registration Deadline
-4. Click "Save Conference"
+- **Browse conferences**: Use tabs (All / Upcoming / Previous / Attending / Attended), search, and filters.
+- **Conference details**: Click **View Details** on a card.
+- **Attendance**: On the detail page, use **Mark as Attending** or **Mark as Attended** (when logged in).
+- **Profile**: Open **My Profile** to see your attending/attended conferences.
+- **Theme**: Use the moon icon for dark mode and the colour swatches for accent theme.
+- **MUN Simulation**: Use the **MUN Simulation** nav link to open [munsimulation.seamuns.site](https://munsimulation.seamuns.site).
 
-### Viewing Conference Details
-- Click on any conference card to view full details
-- Use the "View Details" button for the same functionality
+## Tech stack
 
-### Editing a Conference
-1. Open conference details
-2. Click "Edit" button
-3. Modify the information
-4. Click "Save Conference"
+- **HTML5** · **CSS3** (layout, theming, responsive)
+- **JavaScript (ES6+)** · **Font Awesome** icons
+- **Firebase** (optional): Auth, Firestore
+- **Local storage**: Conferences and theme when Firebase not used
 
-### Filtering and Searching
-- **Search Bar**: Type to search by name, organization, or location
-- **Status Filter**: Choose "All", "Upcoming", or "Previous"
-- **Location Filter**: Filter by specific locations
+## Browser support
 
-### Deleting a Conference
-1. Open conference details
-2. Click "Delete" button
-3. Confirm deletion
-
-## Sample Data
-
-The application comes pre-loaded with 6 sample MUN conferences:
-
-1. **Harvard WorldMUN 2024** - New York, USA (Upcoming)
-2. **Oxford International MUN** - Oxford, UK (Upcoming)
-3. **Singapore Model UN** - Singapore (Upcoming)
-4. **Berlin International MUN** - Berlin, Germany (Previous)
-5. **Tokyo Global MUN** - Tokyo, Japan (Previous)
-6. **Dubai International MUN** - Dubai, UAE (Previous)
-
-## Technical Details
-
-### Technologies Used
-- **HTML5**: Semantic markup and modern form elements
-- **CSS3**: Flexbox, Grid, animations, and responsive design
-- **JavaScript ES6+**: Classes, arrow functions, and modern syntax
-- **Font Awesome**: Professional icons
-- **Local Storage API**: Data persistence
-
-### Browser Compatibility
-- Chrome 60+
-- Firefox 55+
-- Safari 12+
-- Edge 79+
-
-### Performance Features
-- Efficient DOM manipulation
-- Event delegation for better performance
-- Responsive images and optimized CSS
-- Minimal external dependencies
-
-## Customization
-
-### Adding New Fields
-To add new conference fields:
-1. Update the HTML form in `index.html`
-2. Modify the JavaScript `addConference()` method
-3. Update the rendering functions
-4. Add corresponding CSS styles
-
-### Styling Changes
-- Modify `styles.css` for visual changes
-- CSS custom properties (variables) can be added for easy theming
-- Responsive breakpoints can be adjusted
-
-### Data Export
-The application stores data in localStorage. To export:
-```javascript
-// In browser console
-JSON.stringify(JSON.parse(localStorage.getItem('munConferences')))
-```
-
-## Future Enhancements
-
-Potential features for future versions:
-- Data import/export (CSV, JSON)
-- Calendar view
-- Email notifications
-- Conference categories/tags
-- User accounts and sharing
-- Mobile app version
-- Integration with conference APIs
-
-## Contributing
-
-This is a demonstration project. Feel free to fork and modify for your own use or to contribute improvements.
+- Chrome, Firefox, Safari, Edge (recent versions)
+- Requires JavaScript enabled
 
 ## License
 
-This project is open source and available under the MIT License.
-# seamuns.site
+Open source; see repository for license details.
