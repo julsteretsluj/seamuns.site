@@ -952,29 +952,27 @@ class MUNTracker {
         this.loadSampleData();
         console.log('Sample data loaded, conferences count:', this.conferences.length);
         
-        // Save sample data to localStorage immediately so it's available for conference detail pages
-        this.saveConferences();
-        console.log('Conferences saved to localStorage');
-        
-        // Then check localStorage and merge if there's saved data (for user-specific data like attendance)
+        // Merge attendance from previously saved munConferences BEFORE overwriting (preserve guest/detail-page attendance)
         const saved = localStorage.getItem('munConferences');
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
                 if (Array.isArray(parsed) && parsed.length > 0) {
-                    // Merge attendance status from saved data
                     parsed.forEach(savedConf => {
                         const existing = this.conferences.find(c => c.id === savedConf.id);
                         if (existing && savedConf.attendanceStatus) {
                             existing.attendanceStatus = savedConf.attendanceStatus;
                         }
                     });
-                    this.saveConferences();
                 }
             } catch (_e) {
-                // Ignore corrupt data, use sample data
+                // Ignore corrupt data
             }
         }
+        
+        // Save to localStorage so conference detail pages and next load have latest data
+        this.saveConferences();
+        console.log('Conferences saved to localStorage');
     }
 
     saveConferences() {
@@ -1405,11 +1403,14 @@ class MUNTracker {
                     newStatus = 'attending';
             }
             
-            // Save to Firebase if available, otherwise save locally
+            // Save to Firebase if available, otherwise save locally (userAttendance_ or munConferences)
             await this.saveUserAttendanceStatus(id, newStatus);
             
             // Update local conference data for immediate UI update
             conference.attendanceStatus = newStatus;
+            
+            // Persist to munConferences so detail page and next load see it (guests + backup)
+            this.saveConferences();
             
             this.updateStatistics();
             this.renderConferences();

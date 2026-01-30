@@ -71,6 +71,26 @@ A modern web app for tracking Model United Nations (MUN) conferences across **So
 
 No build step required.
 
+### Why isn’t Google sign-in working?
+
+1. **Firebase config**  
+   Ensure `env.js` exists (copy from `env.example.js`) and has real Firebase values. If `env.js` is missing or still has placeholders, Firebase won’t initialize and Google sign-in will show “Google Sign-In is not available”.
+
+2. **Authorized domains**  
+   In [Firebase Console](https://console.firebase.google.com) → **Authentication** → **Settings** → **Authorized domains**, add the domain where the app runs, e.g.:
+   - `localhost` (for local testing)
+   - Your production host (e.g. `seamuns.site`, `yourusername.github.io`)
+   Opening the site via `file://` will not work; use a local server or a hosted URL.
+
+3. **Google provider**  
+   In Firebase Console → **Authentication** → **Sign-in method**, enable **Google**.
+
+4. **Pop-ups**  
+   Google sign-in uses a pop-up. If the browser or an extension blocks pop-ups, allow them for your site and try again.
+
+5. **Console errors**  
+   Open DevTools (F12) → **Console**. Firebase and `firebase-config.js` log errors (e.g. missing config, `auth/unauthorized-domain`). Fix any reported issues.
+
 ## Project structure (main pieces)
 
 ```

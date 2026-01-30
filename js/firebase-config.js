@@ -190,7 +190,9 @@ const FirebaseAuth = {
             } else if (error.code === 'auth/cancelled-popup-request') {
                 return { success: false, error: 'Sign-in was cancelled.' };
             } else if (error.code === 'auth/unauthorized-domain') {
-                return { success: false, error: 'This domain is not authorized for Google Sign-In. Please add it in Firebase Console.' };
+                return { success: false, error: 'This domain is not authorized for Google Sign-In. In Firebase Console go to Authentication → Settings → Authorized domains and add this site (e.g. localhost or your production domain).' };
+            } else if (error.code === 'auth/operation-not-allowed') {
+                return { success: false, error: 'Google Sign-In is not enabled. In Firebase Console go to Authentication → Sign-in method and enable Google.' };
             }
             
             return { success: false, error: error.message || 'Unknown error occurred' };

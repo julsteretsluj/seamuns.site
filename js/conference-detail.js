@@ -1211,6 +1211,81 @@ function getConferenceForDetailPage(conferenceId) {
     return null;
 }
 
+// Get current user from localStorage (same shape as script.js)
+function getCurrentUserForDetail() {
+    try {
+        const raw = localStorage.getItem('munCurrentUser');
+        if (!raw) return null;
+        return JSON.parse(raw);
+    } catch (e) { return null; }
+}
+
+function getCurrentUserKeyForDetail(user) {
+    if (!user) return null;
+    return user.id || user.uid || user.email || null;
+}
+
+// Get user's attendance status for a conference (Firebase or userAttendance_ localStorage)
+async function getAttendanceForDetailPage(conferenceId) {
+    const user = getCurrentUserForDetail();
+    if (!user) return null;
+    const key = getCurrentUserKeyForDetail(user);
+    if (!key) return null;
+    try {
+        if (user.authProvider === 'firebase' || user.authProvider === 'google') {
+            if (typeof FirebaseDB !== 'undefined' && user.uid) {
+                const result = await FirebaseDB.getUserAttendance(user.uid, conferenceId);
+                if (result.success && result.data) return result.data.status || null;
+            }
+        }
+        const userAttendance = JSON.parse(localStorage.getItem('userAttendance_' + key) || '{}');
+        return userAttendance[conferenceId] || null;
+    } catch (e) { return null; }
+}
+
+// Save user's attendance status (Firebase or userAttendance_ localStorage)
+async function saveAttendanceFromDetailPage(conferenceId, status) {
+    const user = getCurrentUserForDetail();
+    if (!user) return;
+    const key = getCurrentUserKeyForDetail(user);
+    if (!key) return;
+    try {
+        if (user.authProvider === 'firebase' || user.authProvider === 'google') {
+            if (typeof FirebaseDB !== 'undefined' && user.uid) {
+                const result = await FirebaseDB.saveUserAttendance(user.uid, conferenceId, status);
+                if (result.success) return;
+            }
+        }
+        const userAttendance = JSON.parse(localStorage.getItem('userAttendance_' + key) || '{}');
+        userAttendance[conferenceId] = status;
+        localStorage.setItem('userAttendance_' + key, JSON.stringify(userAttendance));
+    } catch (e) { console.warn('saveAttendanceFromDetailPage:', e); }
+}
+
+// Fetch user attendance (Firebase/userAttendance_), merge into conference, then populate and setup buttons
+async function applyUserAttendanceAndShow(conference) {
+    try {
+        const userStatus = await getAttendanceForDetailPage(conference.id);
+        if (userStatus) conference.attendanceStatus = userStatus;
+    } catch (e) { /* ignore */ }
+    try {
+        populateConferenceDetail(conference);
+    } catch (e) {
+        console.error('populateConferenceDetail failed:', e);
+        throw e;
+    }
+    try {
+        setupAttendanceButton(conference);
+    } catch (e) {
+        console.error('setupAttendanceButton failed:', e);
+    }
+    try {
+        setupAwardButton(conference);
+    } catch (e) {
+        console.error('setupAwardButton failed:', e);
+    }
+}
+
 // Load conference data
 function loadConferenceDetail() {
     try {
@@ -1242,9 +1317,7 @@ function loadConferenceDetail() {
             setTimeout(function () {
                 conference = getConferenceForDetailPage(conferenceId);
                 if (conference) {
-                    populateConferenceDetail(conference);
-                    setupAttendanceButton(conference);
-                    setupAwardButton(conference);
+                    applyUserAttendanceAndShow(conference);
                 } else {
                     conferenceNameEl.textContent = '🔍 Conference Not Found';
                     const detailsContainer = document.querySelector('.conference-detail-main');
@@ -1256,22 +1329,7 @@ function loadConferenceDetail() {
             return;
         }
 
-        try {
-            populateConferenceDetail(conference);
-        } catch (e) {
-            console.error('populateConferenceDetail failed:', e);
-            throw e;
-        }
-        try {
-            setupAttendanceButton(conference);
-        } catch (e) {
-            console.error('setupAttendanceButton failed:', e);
-        }
-        try {
-            setupAwardButton(conference);
-        } catch (e) {
-            console.error('setupAwardButton failed:', e);
-        }
+        applyUserAttendanceAndShow(conference);
     } catch (error) {
         console.error('Error in loadConferenceDetail:', error);
         const conferenceNameEl = document.getElementById('conferenceName');
@@ -1811,7 +1869,7 @@ function updateAttendanceButton(status) {
     }
 }
 
-function toggleAttendance(conferenceId) {
+async function toggleAttendance(conferenceId) {
     const savedConferences = localStorage.getItem('munConferences');
     if (!savedConferences) return;
 
@@ -1839,6 +1897,9 @@ function toggleAttendance(conferenceId) {
 
     conference.attendanceStatus = newStatus;
     localStorage.setItem('munConferences', JSON.stringify(conferences));
+    
+    // Save to user-specific storage (Firebase or userAttendance_ localStorage) so it persists across devices/sessions
+    await saveAttendanceFromDetailPage(conferenceId, newStatus);
     
     updateAttendanceButton(newStatus);
     
