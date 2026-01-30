@@ -91,6 +91,9 @@ No build step required.
 5. **Console errors**  
    Open DevTools (F12) → **Console**. Firebase and `firebase-config.js` log errors (e.g. missing config, `auth/unauthorized-domain`). Fix any reported issues.
 
+6. **Other console messages**  
+   A **404 for `rul?tid=G-...`** or **“Blocked a frame with origin … doubleclick.net”** usually comes from Hostinger-injected tracking or a browser extension (e.g. `content.js`), not from this app. You can ignore them or disable the host’s analytics/extensions if you want a clean console. **env.js** is loaded via `env-loader.js` so a missing `env.js` (e.g. on production) does not cause a script 404.
+
 ## Project structure (main pieces)
 
 ```

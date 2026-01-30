@@ -500,13 +500,11 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
+    <!-- Load env.js without 404 when missing (then load scripts below) -->
+    <script src="js/env-loader.js" data-env-path="env.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
-    <!-- Environment Configuration (gitignored) -->
-    <script src="env.js"></script>
 
     <!-- Conference data (reference: all conferences and their info) -->
     <script src="js/conferences-data.js"></script>
