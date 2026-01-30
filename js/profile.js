@@ -518,7 +518,6 @@ let currentEditingAwardId = null;
 
 // Event listeners for award management
 document.addEventListener('DOMContentLoaded', () => {
-    const addAwardBtn = document.getElementById('addAwardBtn');
     const awardModal = document.getElementById('awardModal');
     const closeAwardModal = document.getElementById('closeAwardModal');
     const cancelAwardBtn = document.getElementById('cancelAwardBtn');
@@ -526,9 +525,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const awardTypeSelect = document.getElementById('awardType');
     const otherAwardTypeGroup = document.getElementById('otherAwardTypeGroup');
     
-    if (addAwardBtn) {
-        addAwardBtn.addEventListener('click', openAddAwardModal);
-    }
+    // Use delegation so Add Award works even when button is inside #profileContent (shown after auth)
+    document.body.addEventListener('click', (e) => {
+        if (e.target.closest && e.target.closest('#addAwardBtn')) {
+            e.preventDefault();
+            openAddAwardModal();
+        }
+    });
     
     if (closeAwardModal) {
         closeAwardModal.addEventListener('click', closeAwardModalFunc);
