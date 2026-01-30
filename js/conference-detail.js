@@ -1308,7 +1308,8 @@ function populateConferenceDetail(conf) {
         }
         const statusEl = document.getElementById('conferenceStatus');
         if (statusEl) {
-            statusEl.textContent = conf.status || 'Upcoming';
+            statusEl.textContent = conf.status === 'previous' ? 'PREVIOUS' : 'UPCOMING';
+            statusEl.classList.toggle('previous', conf.status === 'previous');
         }
         const sizeEl = document.getElementById('conferenceSize');
         if (sizeEl) {
