@@ -73,26 +73,32 @@ No build step required.
 
 ```
 mun-tracker/
-├── index.html              # Home: conference list, search, filters, tabs
-├── conference-template.html # Conference detail page
-├── profile.html             # My Profile (attending / attended)
-├── add-conference.html      # Add conference
-├── script.js                # Conference list, filters, tabs, sample data
-├── conference-detail.js     # Conference detail page logic
-├── profile.js               # Profile page logic
-├── firebase-config.js       # Firebase init (uses env.js)
-├── styles.css               # Global styles, themes, layout
-├── theme-init.js            # Theme (dark/light + colour) persistence
-├── logo.png
+├── index.html               # Home: conference list, search, filters, tabs
 ├── env.example.js           # Example env (Firebase keys)
 ├── README.md
-├── Conferences:             index, prospective-muns, how-to-host
-├── Schools:                 participating-schools, become-participating-school, advisor-guide
-├── Delegates & Chairs:      delegate-signup, individual-delegates, chair-guide, chair-superlatives,
-│                            mun-guide, how-to-prep, stand-out, confidence, support
-├── Resources:               points, motions, committees, conduct, speeches, resolutions,
-│                            crisis, ga, position-papers, examples, awards, templates
-├── About:                   about.html
+├── database-schema.sql      # API database schema reference
+├── pages/                   # All other HTML pages
+│   ├── conference-template.html  # Conference detail page
+│   ├── profile.html             # My Profile (attending / attended)
+│   ├── about.html
+│   ├── prospective-muns.html, how-to-host.html
+│   ├── participating-schools.html, become-participating-school.html, advisor-guide.html
+│   ├── delegate-signup.html, individual-delegates.html, chair-guide.html, chair-superlatives.html
+│   ├── mun-guide.html, how-to-prep.html, stand-out.html, confidence.html, support.html
+│   ├── points.html, motions.html, committees.html, conduct.html, speeches.html
+│   ├── resolutions.html, crisis.html, ga.html, position-papers.html
+│   ├── examples.html, awards.html, templates.html
+│   └── ...
+├── js/                      # Scripts
+│   ├── script.js            # Conference list, filters, tabs, sample data
+│   ├── conference-detail.js  # Conference detail page logic
+│   ├── profile.js           # Profile page logic
+│   ├── firebase-config.js   # Firebase init (uses env.js)
+│   └── theme-init.js        # Theme (dark/light + colour) persistence
+├── css/
+│   └── styles.css           # Global styles, themes, layout
+├── assets/
+│   └── logo.png
 └── api/                     # Optional PHP/backend (e.g. feedback, conferences)
 ```
 
