@@ -1,5 +1,5 @@
 // Profile Page JavaScript
-function updateProfileUIFromAuth(user) {
+async function updateProfileUIFromAuth(user) {
     const profileNotLoggedIn = document.getElementById('profileNotLoggedIn');
     const profileContent = document.getElementById('profileContent');
     if (!profileNotLoggedIn || !profileContent) return;
@@ -11,6 +11,24 @@ function updateProfileUIFromAuth(user) {
         profileNotLoggedIn.style.display = 'none';
         profileContent.style.display = 'block';
         ensureUserMenuShown(user);
+        // Fetch latest profile from Firestore so we show current name, pronouns, awards
+        if ((user.authProvider === 'firebase' || user.authProvider === 'google') && user.uid && typeof FirebaseDB !== 'undefined' && FirebaseDB.getUserProfile) {
+            try {
+                const res = await FirebaseDB.getUserProfile(user.uid);
+                if (res.success && res.data) {
+                    const d = res.data;
+                    user.name = d.name || user.name;
+                    user.pronouns = d.pronouns != null ? d.pronouns : user.pronouns;
+                    user.awards = d.awards || user.awards || [];
+                    user.profilePicture = d.profilePicture || user.profilePicture;
+                    user.bannerType = d.bannerType;
+                    user.bannerPreset = d.bannerPreset;
+                    user.bannerImage = d.bannerImage || d.banner;
+                    localStorage.setItem('munCurrentUser', JSON.stringify(user));
+                    if (window.__munCurrentUser) window.__munCurrentUser = user;
+                }
+            } catch (e) { console.warn('Profile fetch failed:', e); }
+        }
         loadUserProfile(user);
     }
 }
@@ -150,14 +168,20 @@ function loadUserProfile(user) {
         profileBanner.className = 'profile-banner preset-banner-1';
         profileBanner.innerHTML = '';
     }
+
+    // Set profile avatar
+    const profileAvatar = document.getElementById('profileAvatar');
+    if (profileAvatar) {
+        const src = user.profilePicture || getDefaultAvatar(user.name);
+        profileAvatar.src = src;
+        profileAvatar.alt = user.name ? `${user.name}'s avatar` : 'Profile';
+        profileAvatar.style.display = 'block';
     }
-    
-    // Profile icon is now static in HTML, no need to set picture
-    
+
     // Set profile name
     const profileName = document.getElementById('profileName');
-    if (profileName) profileName.textContent = user.name;
-    
+    if (profileName) profileName.textContent = user.name || 'Delegate';
+
     // Set pronouns
     const pronounsElement = document.getElementById('profilePronouns');
     if (user.pronouns) {
@@ -203,8 +227,10 @@ function loadUserProfile(user) {
     // Update stats
     const totalConferences = attendedConferences.length + attendingConferences.length;
     const totalConferencesCount = document.getElementById('totalConferencesCount');
+    const attendingConferencesCount = document.getElementById('attendingConferencesCount');
     const attendedConferencesCount = document.getElementById('attendedConferencesCount');
     if (totalConferencesCount) totalConferencesCount.textContent = totalConferences;
+    if (attendingConferencesCount) attendingConferencesCount.textContent = attendingConferences.length;
     if (attendedConferencesCount) attendedConferencesCount.textContent = attendedConferences.length;
     
     // Load awards

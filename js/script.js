@@ -205,12 +205,18 @@ class MUNTracker {
                 if (user) {
                     const profileResult = await FirebaseDB.getUserProfile(user.uid);
                     if (profileResult.success) {
+                        const d = profileResult.data;
                         this.currentUser = {
                             id: user.uid,
                             uid: user.uid,
                             email: user.email,
-                            name: profileResult.data.name,
-                            profilePicture: profileResult.data.profilePicture,
+                            name: d.name || user.displayName || user.email?.split('@')[0],
+                            profilePicture: d.profilePicture || user.photoURL || '',
+                            pronouns: d.pronouns || '',
+                            awards: d.awards || [],
+                            bannerType: d.bannerType,
+                            bannerPreset: d.bannerPreset,
+                            bannerImage: d.bannerImage || d.banner,
                             authProvider: 'firebase'
                         };
                         localStorage.setItem('munCurrentUser', JSON.stringify(this.currentUser));
@@ -307,45 +313,54 @@ class MUNTracker {
                         try {
                             const profileResult = await FirebaseDB.getUserProfile(result.user.uid);
                             if (profileResult.success) {
+                                const d = profileResult.data;
                                 this.currentUser = {
                                     id: result.user.uid,
                                     uid: result.user.uid,
                                     email: result.user.email,
-                                    name: profileResult.data.name || result.user.displayName || result.user.email.split('@')[0],
-                                    profilePicture: profileResult.data.profilePicture || result.user.photoURL || '',
+                                    name: d.name || result.user.displayName || result.user.email.split('@')[0],
+                                    profilePicture: d.profilePicture || result.user.photoURL || '',
+                                    pronouns: d.pronouns || '',
+                                    awards: d.awards || [],
+                                    bannerType: d.bannerType,
+                                    bannerPreset: d.bannerPreset,
+                                    bannerImage: d.bannerImage || d.banner,
                                     authProvider: 'firebase'
                                 };
                             } else {
-                                // Profile doesn't exist yet, create basic user from Firebase auth
                                 this.currentUser = {
                                     id: result.user.uid,
                                     uid: result.user.uid,
                                     email: result.user.email,
                                     name: result.user.displayName || result.user.email.split('@')[0],
                                     profilePicture: result.user.photoURL || '',
+                                    pronouns: '',
+                                    awards: [],
                                     authProvider: 'firebase'
                                 };
                             }
                         } catch (profileError) {
                             console.error('Error getting user profile:', profileError);
-                            // Still proceed with basic user info from Firebase auth
                             this.currentUser = {
                                 id: result.user.uid,
                                 uid: result.user.uid,
                                 email: result.user.email,
                                 name: result.user.displayName || result.user.email.split('@')[0],
                                 profilePicture: result.user.photoURL || '',
+                                pronouns: '',
+                                awards: [],
                                 authProvider: 'firebase'
                             };
                         }
                     } else {
-                        // FirebaseDB not available, use basic user info from Firebase auth
                         this.currentUser = {
                             id: result.user.uid,
                             uid: result.user.uid,
                             email: result.user.email,
                             name: result.user.displayName || result.user.email.split('@')[0],
                             profilePicture: result.user.photoURL || '',
+                            pronouns: '',
+                            awards: [],
                             authProvider: 'firebase'
                         };
                     }
@@ -420,6 +435,8 @@ class MUNTracker {
                         email: result.user.email,
                         name: name,
                         profilePicture: result.user.photoURL || '',
+                        pronouns: '',
+                        awards: [],
                         authProvider: 'firebase'
                     };
                     localStorage.setItem('munCurrentUser', JSON.stringify(this.currentUser));
@@ -509,8 +526,13 @@ class MUNTracker {
                         id: result.user.uid,
                         uid: result.user.uid,
                         email: result.user.email,
-                        name: userProfile.name,
+                        name: userProfile.name || result.user.displayName || result.user.email.split('@')[0],
                         profilePicture: userProfile.profilePicture || result.user.photoURL || '',
+                        pronouns: userProfile.pronouns || '',
+                        awards: userProfile.awards || [],
+                        bannerType: userProfile.bannerType,
+                        bannerPreset: userProfile.bannerPreset,
+                        bannerImage: userProfile.bannerImage || userProfile.banner,
                         authProvider: 'google'
                     };
                     localStorage.setItem('munCurrentUser', JSON.stringify(this.currentUser));

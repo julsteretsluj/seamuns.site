@@ -170,16 +170,20 @@
             <div id="profileContent" class="profile-content-wrapper" style="display: none;">
                 <section class="content-section profile-header-section">
                     <div class="profile-banner preset-banner-1"></div>
-                    <div class="profile-info" style="margin-top: 1rem;">
-                        <h3 id="profileName" class="profile-name"></h3>
-                        <p id="profilePronouns" class="profile-pronouns" style="display: none;"></p>
-                        <p id="profileEmail" class="profile-email"><i class="fas fa-envelope"></i> <span></span></p>
+                    <div class="profile-info" style="margin-top: 1rem; display: flex; align-items: flex-start; gap: 1rem; flex-wrap: wrap;">
+                        <img id="profileAvatar" src="" alt="" class="profile-avatar" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border-color); display: none;">
+                        <div>
+                            <h3 id="profileName" class="profile-name"></h3>
+                            <p id="profilePronouns" class="profile-pronouns" style="display: none;"></p>
+                            <p id="profileEmail" class="profile-email"><i class="fas fa-envelope"></i> <span></span></p>
+                        </div>
                     </div>
                 </section>
                 <section class="content-section profile-stats">
                     <h3>📊 Your conference stats</h3>
-                    <div class="profile-stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-top: 0.75rem;">
+                    <div class="profile-stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem; margin-top: 0.75rem;">
                         <div class="stat-item"><span id="totalConferencesCount">0</span> <span class="stat-label">Total</span></div>
+                        <div class="stat-item"><span id="attendingConferencesCount">0</span> <span class="stat-label">Attending</span></div>
                         <div class="stat-item"><span id="attendedConferencesCount">0</span> <span class="stat-label">Attended</span></div>
                         <div class="stat-item"><span id="totalAwardsCount">0</span> <span class="stat-label">Awards</span></div>
                     </div>
