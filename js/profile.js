@@ -1,40 +1,38 @@
 // Profile Page JavaScript
+function updateProfileUIFromAuth(user) {
+    const profileNotLoggedIn = document.getElementById('profileNotLoggedIn');
+    const profileContent = document.getElementById('profileContent');
+    if (!profileNotLoggedIn || !profileContent) return;
+
+    if (!user) {
+        profileNotLoggedIn.style.display = 'block';
+        profileContent.style.display = 'none';
+    } else {
+        profileNotLoggedIn.style.display = 'none';
+        profileContent.style.display = 'block';
+        ensureUserMenuShown(user);
+        loadUserProfile(user);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Wait for MUNTracker to initialize first
-    setTimeout(() => {
-        // Check if user is logged in
-        const currentUser = JSON.parse(localStorage.getItem('munCurrentUser'));
-        
-        if (!currentUser) {
-            // Show login prompt
-            const profileNotLoggedIn = document.getElementById('profileNotLoggedIn');
-            const profileContent = document.getElementById('profileContent');
-            if (profileNotLoggedIn) profileNotLoggedIn.style.display = 'block';
-            if (profileContent) profileContent.style.display = 'none';
-            
-            // Auto-open login modal after a short delay
-            setTimeout(() => {
-                const loginModal = document.getElementById('loginModal');
-                if (loginModal) {
-                    loginModal.classList.add('show');
-                }
-            }, 500);
-        } else {
-            // Show profile content
-            const profileNotLoggedIn = document.getElementById('profileNotLoggedIn');
-            const profileContent = document.getElementById('profileContent');
-            if (profileNotLoggedIn) profileNotLoggedIn.style.display = 'none';
-            if (profileContent) profileContent.style.display = 'block';
-            
-            // Ensure user menu is shown in header (in case MUNTracker hasn't done it yet)
-            ensureUserMenuShown(currentUser);
-            
-            // Load and display profile
-            loadUserProfile(currentUser);
-        }
-    }, 100); // Small delay to let MUNTracker initialize
-    
-    // Listen for successful login/signup to reload profile
+    // Use auth state from MUNTracker when it's ready (profile page now runs MUNTracker)
+    function applyAuthState() {
+        const user = window.__munCurrentUser !== undefined ? window.__munCurrentUser : JSON.parse(localStorage.getItem('munCurrentUser') || 'null');
+        updateProfileUIFromAuth(user);
+    }
+
+    if (window.__munAuthReady && window.__munCurrentUser !== undefined) {
+        applyAuthState();
+    }
+    window.addEventListener('munAuthStateReady', (e) => {
+        window.__munCurrentUser = e.detail && e.detail.user !== undefined ? e.detail.user : null;
+        applyAuthState();
+    });
+    // Fallback: run after short delay in case MUNTracker init is still in progress
+    setTimeout(applyAuthState, 400);
+
+    // Listen for successful login/signup to reload profile (so data is fresh)
     window.addEventListener('userLoggedIn', () => {
         location.reload();
     });
@@ -44,8 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
             setTimeout(() => {
-                // After logout completes, redirect to home page
-                window.location.href = 'index.html';
+                // After logout completes, redirect to home (profile is in pages/)
+                window.location.href = document.querySelector('a[href="../index.html"]') ? '../index.html' : 'index.html';
             }, 500);
         });
     }

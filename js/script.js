@@ -218,6 +218,7 @@ class MUNTracker {
                         await this.loadUserAttendanceData();
                         this.updateStatistics();
                         this.renderConferences();
+                        this.dispatchAuthStateReady();
                         return;
                     }
                 }
@@ -245,6 +246,15 @@ class MUNTracker {
         } else {
             this.showAuthButtons();
         }
+        this.dispatchAuthStateReady();
+    }
+
+    dispatchAuthStateReady() {
+        try {
+            window.__munAuthReady = true;
+            window.__munCurrentUser = this.currentUser || null;
+            window.dispatchEvent(new CustomEvent('munAuthStateReady', { detail: { user: this.currentUser || null } }));
+        } catch (e) { /* ignore */ }
     }
 
     showUserMenu() {
@@ -348,6 +358,8 @@ class MUNTracker {
                     this.renderConferences();
                     this.closeModal('loginModal');
                     this.showMessage('Login successful!', 'success');
+                    this.dispatchAuthStateReady();
+                    try { window.dispatchEvent(new Event('userLoggedIn')); } catch (e) {}
                     return true;
                 } else {
                     // Firebase login failed, show error and try local auth
@@ -377,6 +389,8 @@ class MUNTracker {
             this.renderConferences();
             this.closeModal('loginModal');
             this.showMessage('Login successful!', 'success');
+            this.dispatchAuthStateReady();
+            try { window.dispatchEvent(new Event('userLoggedIn')); } catch (e) {}
             return true;
         } else {
             this.showMessage('Invalid email or password', 'error');
@@ -415,6 +429,8 @@ class MUNTracker {
                     this.renderConferences();
                     this.closeModal('signupModal');
                     this.showMessage('Signup successful!', 'success');
+                    this.dispatchAuthStateReady();
+                    try { window.dispatchEvent(new Event('userLoggedIn')); } catch (e) {}
                     return true;
                 } else {
                     // Firebase signup failed, show error and try local auth
@@ -456,6 +472,8 @@ class MUNTracker {
         this.renderConferences();
         this.closeModal('signupModal');
         this.showMessage('Signup successful!', 'success');
+        this.dispatchAuthStateReady();
+        try { window.dispatchEvent(new Event('userLoggedIn')); } catch (e) {}
         return true;
     }
 
@@ -506,6 +524,8 @@ class MUNTracker {
                     this.closeModal('signupModal');
                     
                     this.showMessage('Signed in with Google successfully!', 'success');
+                    this.dispatchAuthStateReady();
+                    try { window.dispatchEvent(new Event('userLoggedIn')); } catch (e) {}
                     return true;
                 }
             } else {
@@ -2991,8 +3011,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const isIndexPage = document.getElementById('conferencesList');
         const isConferenceDetailPage = document.getElementById('conferenceName') && document.getElementById('location');
         const isConferenceDetailPageAlt = document.getElementById('conferenceDetail');
+        const isProfilePage = document.getElementById('profileContent') || document.getElementById('profileNotLoggedIn');
         
-        if (isIndexPage || isConferenceDetailPage || isConferenceDetailPageAlt) {
+        if (isIndexPage || isConferenceDetailPage || isConferenceDetailPageAlt || isProfilePage) {
             try {
                 console.log('Initializing MUNTracker...');
                 munTracker = new MUNTracker();
