@@ -1256,6 +1256,56 @@ body::before {
     color: var(--text-secondary);
 }
 
+/* Modern content typography & lists */
+.content-section {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.content-section h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 1.75rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--border-color);
+    letter-spacing: -0.01em;
+}
+.content-section h3:first-of-type {
+    margin-top: 1.25rem;
+}
+.content-section ul,
+.content-section ol {
+    margin: 0 0 1.25rem 0;
+    padding-left: 1.5rem;
+    line-height: 1.65;
+    color: var(--text-primary);
+}
+.content-section li {
+    margin-bottom: 0.5rem;
+}
+.content-section li:last-child {
+    margin-bottom: 0;
+}
+.content-section pre {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    border-radius: 12px;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+.content-section a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 2px;
+}
+.content-section a:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+}
+
 /* Section Divider */
 .section-divider {
     margin: 48px 0;

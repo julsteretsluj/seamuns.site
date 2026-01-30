@@ -1226,10 +1226,10 @@ function loadConferenceDetail() {
 
         const conferenceId = getConferenceIdFromURL();
         if (!conferenceId) {
-            conferenceNameEl.textContent = 'Conference Not Found';
+            conferenceNameEl.textContent = '🔍 Conference Not Found';
             const detailsContainer = document.querySelector('.conference-detail-main');
             if (detailsContainer) {
-                detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>Conference Not Found</h2><p>No conference ID was provided in the URL.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
+                detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>🔍 Conference Not Found</h2><p>No conference ID was provided in the URL.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
             }
             return;
         }
@@ -1246,10 +1246,10 @@ function loadConferenceDetail() {
                     setupAttendanceButton(conference);
                     setupAwardButton(conference);
                 } else {
-                    conferenceNameEl.textContent = 'Conference Not Found';
+                    conferenceNameEl.textContent = '🔍 Conference Not Found';
                     const detailsContainer = document.querySelector('.conference-detail-main');
                     if (detailsContainer) {
-                        detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>Conference Not Found</h2><p>The requested conference could not be found.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
+                        detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>🔍 Conference Not Found</h2><p>The requested conference could not be found.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
                     }
                 }
             }, 300);
@@ -1276,11 +1276,11 @@ function loadConferenceDetail() {
         console.error('Error in loadConferenceDetail:', error);
         const conferenceNameEl = document.getElementById('conferenceName');
         if (conferenceNameEl) {
-            conferenceNameEl.textContent = 'Error Loading Conference';
+            conferenceNameEl.textContent = '⚠️ Error Loading Conference';
         }
         const detailsContainer = document.querySelector('.conference-detail-main');
         if (detailsContainer) {
-            detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>Error Loading Conference</h2><p>There was an unexpected error. Please try again later.</p><p style="font-size: 0.9em; color: var(--text-secondary); margin-top: 8px;">Open the browser console (F12) for details.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
+            detailsContainer.innerHTML = '<div style="padding: 40px; text-align: center;"><h2>⚠️ Error Loading Conference</h2><p>There was an unexpected error. Please try again later.</p><p style="font-size: 0.9em; color: var(--text-secondary); margin-top: 8px;">Open the browser console (F12) for details.</p><a href="../index.html" class="btn btn-primary">Back to Conferences</a></div>';
         }
     }
 }
@@ -1763,7 +1763,7 @@ function populateConferenceDetail(conf) {
         console.error('Error in populateConferenceDetail:', error);
         const conferenceNameEl = document.getElementById('conferenceName');
         if (conferenceNameEl) {
-            conferenceNameEl.textContent = 'Error Loading Conference Details';
+            conferenceNameEl.textContent = '⚠️ Error Loading Conference Details';
         }
     }
 }
@@ -2009,7 +2009,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 try {
                     const currentText = conferenceNameEl.textContent.trim();
-                    if (currentText === 'Loading...' || currentText === 'Conference Name' || currentText === 'Conference Not Found' || currentText === '' || currentText === 'Error Loading Conference') {
+                    if (currentText === 'Loading...' || currentText === 'Conference Name' || currentText === '🔍 Conference Not Found' || currentText === '' || currentText === '⚠️ Error Loading Conference') {
                         loadConferenceDetail();
                     }
                 } catch (error) {
