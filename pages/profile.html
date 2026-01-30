@@ -152,10 +152,18 @@
                 <p>Your profile lets you track which conferences you plan to attend or have attended. Log in to see your saved conferences below.</p>
             </section>
 
-            <!-- Shown when not logged in -->
-            <div id="profileNotLoggedIn" class="content-section" style="display: none;">
+            <!-- Shown when not logged in (visible by default so login buttons show before JS runs) -->
+            <div id="profileNotLoggedIn" class="content-section">
                 <p>Please log in to view your attending and attended conferences.</p>
                 <p>Use the main conference list (<a href="../index.html">Upcoming & Previous MUNs</a>) to browse and mark conferences. For full sync across devices, log in with the same account.</p>
+                <div class="profile-auth-actions" style="margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+                    <button type="button" class="btn btn-primary" id="profileLoginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Log in
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="profileSignupBtn">
+                        <i class="fas fa-user-plus"></i> Sign up
+                    </button>
+                </div>
             </div>
 
             <!-- Shown when logged in -->

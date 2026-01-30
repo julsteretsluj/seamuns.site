@@ -32,6 +32,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fallback: run after short delay in case MUNTracker init is still in progress
     setTimeout(applyAuthState, 400);
 
+    // In-content Login/Sign Up buttons (open same modals as header buttons)
+    const profileLoginBtn = document.getElementById('profileLoginBtn');
+    const profileSignupBtn = document.getElementById('profileSignupBtn');
+    if (profileLoginBtn) {
+        profileLoginBtn.addEventListener('click', () => {
+            if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.openModal === 'function') {
+                munTracker.openModal('loginModal');
+            } else {
+                const m = document.getElementById('loginModal');
+                if (m) { m.classList.add('show'); m.style.display = 'flex'; }
+            }
+        });
+    }
+    if (profileSignupBtn) {
+        profileSignupBtn.addEventListener('click', () => {
+            if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.openModal === 'function') {
+                munTracker.openModal('signupModal');
+            } else {
+                const m = document.getElementById('signupModal');
+                if (m) { m.classList.add('show'); m.style.display = 'flex'; }
+            }
+        });
+    }
+
     // Listen for successful login/signup to reload profile (so data is fresh)
     window.addEventListener('userLoggedIn', () => {
         location.reload();
