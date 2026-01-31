@@ -41,7 +41,7 @@ function validateFirebaseConfig(config) {
 }
 
 // Initialize Firebase
-let auth, db;
+let auth, db, storage;
 try {
     // Check if Firebase SDK is loaded
     if (typeof firebase === 'undefined') {
@@ -50,6 +50,9 @@ try {
         const app = firebase.initializeApp(firebaseConfig);
         auth = firebase.auth();
         db = firebase.firestore();
+        if (typeof firebase.storage === 'function') {
+            storage = firebase.storage();
+        }
         console.log('✅ Firebase initialized successfully');
         console.log('📦 Project:', firebaseConfig.projectId);
         console.log('🔐 Auth ready:', !!auth);
@@ -354,6 +357,49 @@ const FirebaseDB = {
             return { success: true };
         } catch (error) {
             console.error('❌ Update award error:', error);
+            return { success: false, error: error.message };
+        }
+    }
+};
+
+// Archive: shared Firestore collection + Storage so all users see the same uploads
+const FirebaseArchive = {
+    async getArchiveItems() {
+        try {
+            if (!db) return { success: false, error: 'Firestore not available', data: [] };
+            const snapshot = await db.collection('archive').orderBy('createdAt', 'desc').get();
+            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            return { success: true, data: items };
+        } catch (error) {
+            console.error('❌ Get archive error:', error);
+            return { success: false, error: error.message, data: [] };
+        }
+    },
+    async addArchiveItem(file, metadata) {
+        try {
+            if (!db) return { success: false, error: 'Firestore not available' };
+            if (!storage) return { success: false, error: 'Storage not available. Enable Firebase Storage and add firebase-storage-compat.js to the page.' };
+            const docRef = db.collection('archive').doc();
+            const id = docRef.id;
+            const ext = (file.name.match(/\.[^.]+$/) || [])[0] || '';
+            const path = `archive/${id}/${encodeURIComponent(file.name)}`;
+            const ref = storage.ref(path);
+            await ref.put(file);
+            const fileUrl = await ref.getDownloadURL();
+            const doc = {
+                type: metadata.type,
+                title: metadata.title,
+                description: metadata.description || '',
+                fileName: file.name,
+                fileUrl,
+                authorName: metadata.authorName || '',
+                authorId: metadata.authorId || '',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            await docRef.set(doc);
+            return { success: true, id };
+        } catch (error) {
+            console.error('❌ Add archive error:', error);
             return { success: false, error: error.message };
         }
     }

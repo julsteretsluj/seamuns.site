@@ -1256,11 +1256,9 @@ body::before {
     color: var(--text-secondary);
 }
 
-/* Modern content typography & lists */
+/* Modern content typography & lists - use full container width for efficient space use */
 .content-section {
-    max-width: 720px;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 100%;
 }
 .content-section h3 {
     font-size: 1.25rem;
@@ -1323,8 +1321,8 @@ body::before {
 /* Slideshow Container */
 .slideshow-container {
     position: relative;
-    max-width: 900px;
-    margin: 32px auto;
+    max-width: 100%;
+    margin: 32px 0;
     min-height: 500px;
 }
 
@@ -2637,7 +2635,7 @@ body::before {
 }
 
 .conference-detail-main .container {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -5810,7 +5808,7 @@ form::-webkit-scrollbar-thumb:hover {
     margin-bottom: 40px;
     color: var(--text-secondary);
     font-size: 16px;
-    max-width: 600px;
+    max-width: 720px;
     margin-left: auto;
     margin-right: auto;
 }

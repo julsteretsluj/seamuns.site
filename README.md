@@ -37,6 +37,7 @@ A modern web app for tracking Model United Nations (MUN) conferences across **So
 - **Points** · **Motions** · **Committees** (Traditional & Special)
 - **Conduct** · **Speeches** · **Resolutions** · **Crisis** · **General Assembly**
 - **Position Papers** · **Chair Superlatives** · **Examples** · **Awards** · **Templates**
+- **Archive**: shared reference library (position papers, chair reports, slides, speeches, prep docs). Logged-in users can upload; everyone can browse and filter by category. Data is shared via Firebase (Firestore + Storage).
 - **MUN Simulation Game**: path `/munsimulation/` (single-player MUN procedure simulator)
 
 ### User experience
@@ -57,6 +58,9 @@ A modern web app for tracking Model United Nations (MUN) conferences across **So
   - **`js/conferences-data.js`** — used by the app; edit to add or update conferences.
   - **`data/conferences.json`** — same data in JSON (human-readable reference).
 - **Pre-loaded**: 7 conferences (MUN07 IV, STAMUN XI, THAIMUN XIII, TSIMUN 2026, KMIDSMUN II, HISMUN VI, Newton MUN I)
+- **Archive (shared)**: Uploaded files and metadata are stored in Firebase so all users see the same content:
+  - **Firestore** collection `archive`: each document has `title`, `category`, `description`, `uploadedBy`, `downloadUrl`, `fileName`, `createdAt`.
+  - **Firebase Storage**: files are stored under `archive/`; Firestore holds the public download URL. Anyone can read archive items; only authenticated users can add new ones (enforced in the app and should be reflected in Firebase Security Rules).
 
 ## Getting started
 
@@ -119,7 +123,7 @@ mun-tracker/
 │   ├── mun-guide.html, how-to-prep.html, stand-out.html, confidence.html, support.html
 │   ├── points.html, motions.html, committees.html, conduct.html, speeches.html
 │   ├── resolutions.html, crisis.html, ga.html, position-papers.html
-│   ├── examples.html, awards.html, templates.html
+│   ├── examples.html, awards.html, templates.html, archive.html
 │   └── ...
 ├── data/                    # Reference data
 │   └── conferences.json     # All conferences and their info (JSON reference)
@@ -128,7 +132,8 @@ mun-tracker/
 │   ├── script.js            # Conference list, filters, tabs, sample data
 │   ├── conference-detail.js  # Conference detail page logic
 │   ├── profile.js           # Profile page logic
-│   ├── firebase-config.js   # Firebase init (uses env.js)
+│   ├── firebase-config.js   # Firebase init (uses env.js); archive helpers (Firestore + Storage)
+│   ├── archive.js           # Archive page: load, filter, upload
 │   └── theme-init.js        # Theme (dark/light + colour) persistence
 ├── css/
 │   └── styles.css           # Global styles, themes, layout
