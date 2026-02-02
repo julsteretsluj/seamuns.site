@@ -4,22 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://*.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://www.gstatic.com https://*.firebaseio.com https://*.cloudfunctions.net https://*.firebaseapp.com wss://*.firebaseio.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' https: data: blob:;">
-    <title>Conduct & Decorum - SEAMUNs</title>
+    <title>Announcements - SEAMUNs</title>
     <link rel="icon" type="image/png" href="../assets/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css?v=3">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-
 <body>
     <!-- Theme Controls Container -->
     <div class="theme-controls">
-        <!-- Dark Mode Toggle -->
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode" type="button">
             <i class="fas fa-moon" id="themeIcon"></i>
         </button>
-
-        <!-- Theme Color Selector -->
         <div class="theme-selector" id="themeSelector">
             <span class="theme-selector-label">Theme</span>
             <div class="color-swatch" data-color="red" title="Red Theme"></div>
@@ -34,7 +30,6 @@
         </div>
     </div>
 
-    <!-- User Menu -->
     <div class="user-menu" id="userMenu" style="display: none;">
         <div class="user-info">
             <img id="userProfileImg" src="" alt="Profile" style="width: 36px; height: 36px; border-radius: 50%; margin-right: 8px; object-fit: cover;">
@@ -49,7 +44,6 @@
         </button>
     </div>
 
-    <!-- Auth Buttons -->
     <div class="auth-buttons" id="authButtons">
         <button class="btn btn-secondary" id="loginBtn">
             <i class="fas fa-sign-in-alt"></i>
@@ -72,7 +66,6 @@
         </div>
     </header>
 
-    <!-- Navigation Menu -->
     <nav class="main-nav">
         <div class="container">
             <div class="nav-wrapper">
@@ -84,7 +77,6 @@
                         <a href="how-to-host.html"><i class="fas fa-building"></i> 🏢 How to Host an MUN</a>
                     </div>
                 </div>
-
                 <div class="nav-item dropdown">
                     <button class="nav-link">🏫 Schools & Advisors <i class="fas fa-chevron-down"></i></button>
                     <div class="dropdown-content">
@@ -93,7 +85,6 @@
                         <a href="advisor-guide.html"><i class="fas fa-chalkboard-teacher"></i> 👩‍🏫 Advisor Guide</a>
                     </div>
                 </div>
-
                 <div class="nav-item dropdown">
                     <button class="nav-link">👥 Delegates & Chairs <i class="fas fa-chevron-down"></i></button>
                     <div class="dropdown-content">
@@ -108,7 +99,6 @@
                         <a href="support.html"><i class="fas fa-hands-helping"></i> Support at Conferences</a>
                     </div>
                 </div>
-
                 <div class="nav-item dropdown">
                     <button class="nav-link">📚 Resources <i class="fas fa-chevron-down"></i></button>
                     <div class="dropdown-content">
@@ -131,45 +121,32 @@
                         <a href="../munsimulation/" target="_blank" rel="noopener noreferrer"><i class="fas fa-gamepad"></i> MUN Simulation Game</a>
                     </div>
                 </div>
-
                 <div class="nav-item">
                     <a href="../munsimulation/" target="_blank" rel="noopener noreferrer" class="nav-link"><i class="fas fa-gamepad"></i> MUN Simulation</a>
                 </div>
-
                 <div class="nav-item">
                     <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> 👤 My Profile</a>
                 </div>
-
                 <div class="nav-item">
                     <a href="announcements.html" class="nav-link"><i class="fas fa-bullhorn"></i> 📢 Announcements</a>
                 </div>
-
                 <div class="nav-item">
                     <a href="about.html" class="nav-link"><i class="fas fa-info-circle"></i> ℹ️ About & Contact</a>
                 </div>
             </div>
         </div>
     </nav>
+
     <main class="main">
         <div class="container">
             <section class="content-section">
-                <h2>⚖️ Conduct & Decorum</h2>
-                <p>Professional behavior keeps debate fair and productive. Follow these guidelines at SEAMUNs conferences.</p>
-                <h3>🏛️ In committee</h3>
-                <ul>
-                    <li>Address the chair and other delegates formally (e.g. “Honorable Chair,” “the delegate of…”).</li>
-                    <li>No personal attacks; criticize positions, not people.</li>
-                    <li>Follow the rules of procedure and the chair’s rulings.</li>
-                    <li>Raise your placard for points and motions; wait to be recognized before speaking.</li>
-                    <li>No use of electronic devices for unauthorized communication during formal debate, unless the conference allows it.</li>
-                </ul>
-                <h3>👔 General</h3>
-                <ul>
-                    <li>Be on time and dressed in business or business-casual attire as required.</li>
-                    <li>Respect the venue, staff, and other delegates.</li>
-                    <li>Report any harassment or safety concerns to the secretariat or advisors.</li>
-                </ul>
-                <p>Specific rules may vary by conference; check the conference’s code of conduct or rules pack.</p>
+                <h2>📢 Announcements</h2>
+                <p>Recent updates and new features on SEAMUNs. Check back for the latest.</p>
+                <p style="font-size: 0.9rem; color: var(--text-tertiary); margin-top: 0.5rem;">Last updated: <strong id="announcementsLastUpdated"></strong></p>
+
+                <div id="announcementsList" class="announcements-list" style="margin-top: 2rem;" aria-live="polite">
+                    <p class="text-secondary">Loading announcements…</p>
+                </div>
             </section>
         </div>
     </main>
@@ -178,8 +155,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
     <script src="../js/firebase-config.js"></script>
     <script src="../js/script.js"></script>
+    <script src="../js/announcements-data.js"></script>
+    <script src="../js/announcements.js"></script>
 </body>
 </html>
