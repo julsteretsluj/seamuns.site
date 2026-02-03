@@ -16,14 +16,19 @@
   function isEnvScript(src) {
     return src && (src.slice(-7) === 'env.js' || src.indexOf('/env.js?') !== -1);
   }
+  var list = next.filter(function (o) { return o.src && !isEnvScript(o.src); });
+  function loadScript(index) {
+    if (index >= list.length) return;
+    var o = list[index];
+    var el = document.createElement('script');
+    el.src = o.src;
+    if (o.async) el.async = true;
+    if (o.defer) el.defer = true;
+    el.onload = el.onerror = function () { loadScript(index + 1); };
+    document.body.appendChild(el);
+  }
   function runNext() {
-    next.filter(function (o) { return !isEnvScript(o.src); }).forEach(function (o) {
-      var el = document.createElement('script');
-      el.src = o.src;
-      if (o.async) el.async = true;
-      if (o.defer) el.defer = true;
-      document.body.appendChild(el);
-    });
+    loadScript(0);
   }
   fetch(path)
     .then(function (r) { return r.ok ? r.text() : ''; })

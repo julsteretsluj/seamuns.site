@@ -39,6 +39,7 @@ A modern web app for tracking Model United Nations (MUN) conferences across **So
 - **Position Papers** · **Chair Superlatives** · **Examples** · **Awards** · **Templates**
 - **Archive**: shared reference library (position papers, chair reports, slides, speeches, prep docs). Logged-in users can upload; everyone can browse and filter by category. Data is shared via Firebase (Firestore + Storage).
 - **MUN Simulation Game**: path `/munsimulation/` (single-player MUN procedure simulator)
+- **SEAMUNs Dashboard**: [thedashboard.seamuns.site](https://thedashboard.seamuns.site) — for use during conferences; chairs and delegates can track activity and documents
 
 ### User experience
 - **Theme**: Dark mode toggle + 9 accent colours (red, orange, yellow, green, blue, purple, pink, grey, mono)

@@ -5,6 +5,15 @@
 window.SEAMUNS_ANNOUNCEMENTS = [
     {
         date: '2026-01-29',
+        icon: 'fas fa-tachometer-alt',
+        title: 'SEAMUNs Dashboard',
+        body: 'Use <a href="https://thedashboard.seamuns.site" target="_blank" rel="noopener noreferrer">thedashboard.seamuns.site</a> during conferences to track activity and documents. For chairs and delegates.',
+        linkText: 'Open Dashboard →',
+        linkHref: 'https://thedashboard.seamuns.site',
+        external: true
+    },
+    {
+        date: '2026-01-29',
         icon: 'fas fa-bullhorn',
         title: 'Announcements page',
         body: 'A dedicated page for product updates and new features. You’re reading it now.'

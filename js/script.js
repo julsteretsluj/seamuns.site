@@ -377,18 +377,22 @@ class MUNTracker {
                     try { window.dispatchEvent(new Event('userLoggedIn')); } catch (e) {}
                     return true;
                 } else {
-                    // Firebase login failed, show error and try local auth
+                    // Firebase login failed: show error, then try local auth as fallback
                     const errorMsg = result.error || 'Login failed';
                     console.error('Firebase login error:', errorMsg);
-                    // Don't show error yet, try local auth first
+                    this.showMessage(errorMsg, 'error');
+                    // Still try local auth below in case they have a local account
                 }
             } catch (error) {
                 console.error('Firebase login exception:', error);
+                if (error.message && !error.message.includes('auth')) {
+                    this.showMessage(error.message || 'Login failed.', 'error');
+                }
                 // Fall through to local auth
             }
         }
         
-        // Fallback to local authentication
+        // Fallback to local authentication (when Firebase not configured or user not in Firebase)
         if (!this.users || this.users.length === 0) {
             this.loadUsers(); // Make sure users are loaded
         }

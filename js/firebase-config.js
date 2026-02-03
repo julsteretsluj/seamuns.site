@@ -94,13 +94,23 @@ const FirebaseAuth = {
 
     // Log in existing user with email/password
     async login(email, password) {
+        if (!auth) {
+            console.error('❌ Auth not initialized. Check Firebase config (env.js).');
+            return { success: false, error: 'Login is not available. Check that Firebase is configured (see About / README).' };
+        }
         try {
             const userCredential = await auth.signInWithEmailAndPassword(email, password);
             console.log('✅ User logged in:', userCredential.user.uid);
             return { success: true, user: userCredential.user };
         } catch (error) {
             console.error('❌ Login error:', error);
-            return { success: false, error: error.message };
+            const code = error.code || '';
+            const msg = code === 'auth/user-not-found' ? 'No account found with this email.'
+                : code === 'auth/wrong-password' || code === 'auth/invalid-credential' ? 'Incorrect password or email.'
+                : code === 'auth/invalid-email' ? 'Please enter a valid email address.'
+                : code === 'auth/too-many-requests' ? 'Too many attempts. Try again later.'
+                : error.message || 'Login failed.';
+            return { success: false, error: msg };
         }
     },
 
