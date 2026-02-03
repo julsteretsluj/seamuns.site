@@ -56,18 +56,20 @@ try {
         console.log('📦 Project:', firebaseConfig.projectId);
         console.log('🔐 Auth ready:', !!auth);
         console.log('💾 Firestore ready:', !!db);
+        if (typeof window !== 'undefined') window.auth = auth;
     }
 } catch (error) {
     console.warn('Firebase init failed:', error.message);
 }
+if (typeof window !== 'undefined' && typeof window.auth === 'undefined') window.auth = null;
 
 // Firebase Authentication Helper Functions
 const FirebaseAuth = {
     // Sign up new user with email/password
     async signup(email, password, userData) {
         if (!auth) {
-            console.error('❌ Auth not initialized. Check Firebase config (env.js).');
-            return { success: false, error: 'Sign up is not available. Check that Firebase is configured (see About / README).' };
+            console.warn('Auth not initialized (env.js missing or Firebase not configured).');
+            return { success: false, error: 'Login is not available on this server. You can still browse without an account.' };
         }
         try {
             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
@@ -96,8 +98,8 @@ const FirebaseAuth = {
     // Log in existing user with email/password
     async login(email, password) {
         if (!auth) {
-            console.error('❌ Auth not initialized. Check Firebase config (env.js).');
-            return { success: false, error: 'Login is not available. Check that Firebase is configured (see About / README).' };
+            console.warn('Auth not initialized (env.js missing or Firebase not configured).');
+            return { success: false, error: 'Login is not available on this server. You can still browse without an account.' };
         }
         try {
             const userCredential = await auth.signInWithEmailAndPassword(email, password);
@@ -127,9 +129,8 @@ const FirebaseAuth = {
             }
             
             if (!auth) {
-                console.error('❌ Auth object is null');
-                console.error('💡 Make sure Firebase is initialized and Google Sign-In is enabled in Firebase Console');
-                return { success: false, error: 'Authentication not initialized. Please check Firebase configuration.' };
+                console.warn('Auth not initialized (env.js missing or Firebase not configured).');
+                return { success: false, error: 'Login is not available on this server. You can still browse without an account.' };
             }
 
             if (!db) {

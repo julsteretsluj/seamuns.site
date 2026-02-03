@@ -2994,45 +2994,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 googleLoginBtn.setAttribute('data-google-handler-attached', 'true');
                 googleLoginBtn.addEventListener('click', async () => {
                     try {
-                        // Check if Firebase is available
-                        if (typeof firebase === 'undefined') {
-                            alert('Firebase is not loaded. Please refresh the page and try again.');
-                            console.error('Firebase SDK not loaded');
-                            return;
-                        }
-                        
-                        // Check if auth is available
-                        if (typeof auth === 'undefined' || !auth) {
-                            alert('Authentication is not initialized. Please check your Firebase configuration.');
-                            console.error('Auth object is undefined');
-                            return;
-                        }
-                        
-                        // Try MUNTracker first if available
                         if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.signInWithGoogle === 'function') {
                             const success = await munTracker.signInWithGoogle();
-                            if (success) {
-                                return; // Success, MUNTracker handled it
-                            }
+                            if (success) return;
                         }
-                        
-                        // Fallback: use FirebaseAuth directly
                         if (typeof FirebaseAuth !== 'undefined' && typeof FirebaseAuth.signInWithGoogle === 'function') {
                             const result = await FirebaseAuth.signInWithGoogle();
                             if (result.success) {
-                                // Reload page to show logged-in state
                                 window.location.reload();
                             } else {
-                                alert(result.error || 'Google Sign-In failed. Please check the browser console for details.');
+                                if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.showMessage === 'function') {
+                                    munTracker.showMessage(result.error || 'Google Sign-In failed.', 'error');
+                                } else {
+                                    alert(result.error || 'Google Sign-In failed. Please try again.');
+                                }
                                 console.error('Google Sign-In failed:', result.error);
                             }
                         } else {
-                            alert('Google Sign-In is not available. Please use email/password.');
-                            console.error('FirebaseAuth.signInWithGoogle is not available');
+                            const msg = 'Login is not available on this server. You can still browse without an account.';
+                            if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.showMessage === 'function') {
+                                munTracker.showMessage(msg, 'error');
+                            } else {
+                                alert(msg);
+                            }
                         }
                     } catch (error) {
                         console.error('Google Sign-In error:', error);
-                        alert('Google Sign-In failed: ' + (error.message || 'Unknown error') + '. Please check the browser console for details.');
+                        const errMsg = error.message || 'Unknown error';
+                        if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.showMessage === 'function') {
+                            munTracker.showMessage('Google Sign-In failed: ' + errMsg, 'error');
+                        } else {
+                            alert('Google Sign-In failed: ' + errMsg);
+                        }
                     }
                 });
             }
@@ -3043,45 +3036,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 googleSignupBtn.setAttribute('data-google-handler-attached', 'true');
                 googleSignupBtn.addEventListener('click', async () => {
                     try {
-                        // Check if Firebase is available
-                        if (typeof firebase === 'undefined') {
-                            alert('Firebase is not loaded. Please refresh the page and try again.');
-                            console.error('Firebase SDK not loaded');
-                            return;
-                        }
-                        
-                        // Check if auth is available
-                        if (typeof auth === 'undefined' || !auth) {
-                            alert('Authentication is not initialized. Please check your Firebase configuration.');
-                            console.error('Auth object is undefined');
-                            return;
-                        }
-                        
-                        // Try MUNTracker first if available
+                        // Try MUNTracker first (handles Firebase/auth checks and messages)
                         if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.signInWithGoogle === 'function') {
                             const success = await munTracker.signInWithGoogle();
-                            if (success) {
-                                return; // Success, MUNTracker handled it
-                            }
+                            if (success) return;
                         }
-                        
-                        // Fallback: use FirebaseAuth directly
+                        // Fallback: FirebaseAuth (returns user-friendly error if auth not set up)
                         if (typeof FirebaseAuth !== 'undefined' && typeof FirebaseAuth.signInWithGoogle === 'function') {
                             const result = await FirebaseAuth.signInWithGoogle();
                             if (result.success) {
-                                // Reload page to show logged-in state
                                 window.location.reload();
                             } else {
-                                alert(result.error || 'Google Sign-In failed. Please check the browser console for details.');
+                                if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.showMessage === 'function') {
+                                    munTracker.showMessage(result.error || 'Google Sign-In failed.', 'error');
+                                } else {
+                                    alert(result.error || 'Google Sign-In failed. Please try again.');
+                                }
                                 console.error('Google Sign-In failed:', result.error);
                             }
                         } else {
-                            alert('Google Sign-In is not available. Please use email/password.');
-                            console.error('FirebaseAuth.signInWithGoogle is not available');
+                            const msg = 'Login is not available on this server. You can still browse without an account.';
+                            if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.showMessage === 'function') {
+                                munTracker.showMessage(msg, 'error');
+                            } else {
+                                alert(msg);
+                            }
                         }
                     } catch (error) {
                         console.error('Google Sign-In error:', error);
-                        alert('Google Sign-In failed: ' + (error.message || 'Unknown error') + '. Please check the browser console for details.');
+                        const errMsg = error.message || 'Unknown error';
+                        if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.showMessage === 'function') {
+                            munTracker.showMessage('Google Sign-In failed: ' + errMsg, 'error');
+                        } else {
+                            alert('Google Sign-In failed: ' + errMsg);
+                        }
                     }
                 });
             }

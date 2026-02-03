@@ -2,6 +2,7 @@ env.js
 .env
 .env.local
 env.local.js
+api/database.php
 node_modules/
 *.log
 .DS_Store

@@ -100,6 +100,18 @@ You can store Firebase credentials in the repo as an encrypted file so only peop
 
 - **Repo layout**: `env.js` stays in `.gitignore`; only `env.js.enc` is committed. New clones: run `decrypt-env.sh` with the shared passphrase to get `env.js`.
 
+### Using env so it’s not shown to users
+
+- **Not in the repo**: `env.js` is in `.gitignore`, so it never appears in the published source or in git history. Deploy it only to your server (or decrypt `env.js.enc` there) so the repo stays clean.
+
+- **Not in the page source**: The app loads env via a separate request (fetch), not as inline script in the HTML, so the values don’t appear in “View page source”.
+
+- **What visitors can still see**: When someone opens your site, the browser loads the env file so the app can connect to Firebase. In DevTools → Network or Sources they can see that request and its response. That’s normal: **Firebase client config (apiKey, projectId, etc.) is meant to be public**. Security is enforced by Firebase (Authorized domains, Firestore/Auth rules), not by hiding the config.
+
+- **Optional – less obvious path**: To avoid a filename that looks like “env”, use a different path. Put your config in e.g. `config/app.js` and point the loader at it. On the **home page** set `data-env-path="config/app.js"` on the env-loader script; on **pages/** use `data-env-path="../config/app.js"`. Upload that file to your server as `config/app.js`. Add `config/app.js` (or the whole `config/` folder) to `.gitignore` if you don’t want it in the repo. The file is still loaded by the browser, but its name isn’t obviously “env”.
+
+- **Real secrets**: Don’t put server API keys or private keys in env.js. Use a backend (e.g. Cloud Functions) for anything that must stay secret; the front end should only get Firebase client config and, if needed, short-lived tokens from your backend.
+
 ### Why isn’t Google sign-in working?
 
 1. **Firebase config**  
@@ -136,7 +148,8 @@ mun-tracker/
 ├── firestore.rules.example  # Firestore security rules (copy to Firebase Console if Google sign-in shows "insufficient permissions")
 ├── scripts/
 │   ├── encrypt-env.sh       # Encrypt env.js → env.js.enc (passphrase)
-│   └── decrypt-env.sh       # Decrypt env.js.enc → env.js (passphrase)
+│   ├── decrypt-env.sh       # Decrypt env.js.enc → env.js (passphrase)
+│   └── setup-database.sql   # One-shot DB setup: creates seamuns_db + tables + sample data
 ├── README.md
 ├── database-schema.sql      # API database schema reference
 ├── munsimulation/   # MUN Simulation Game (munsimulation)
@@ -172,8 +185,59 @@ mun-tracker/
 │   └── styles.css           # Global styles, themes, layout
 ├── assets/
 │   └── logo.png
-└── api/                     # Optional PHP/backend (e.g. feedback, conferences)
+└── api/                     # Optional PHP backend (conferences, feedback)
+    ├── database.example.php  # Copy to database.php and set DB credentials (database.php is gitignored)
+    ├── conferences.php     # Conferences CRUD API
+    └── feedback.php        # Feedback/reviews API
 ```
+
+### Using the backend
+
+The repo includes an **optional PHP + MySQL backend** in `api/`. The app currently runs without it (conferences from `js/conferences-data.js`, auth/attendance from Firebase). Use the backend if you want to store conferences or feedback in your own database and keep credentials on the server.
+
+**1. Prerequisites**
+
+- PHP (e.g. 7.4+) with PDO MySQL
+- MySQL or MariaDB
+- Web server (Apache/Nginx) that runs PHP
+
+**2. Database setup**
+
+- **Option A – one-shot setup (recommended):**  
+  Run the setup script as a user that can create databases (e.g. `root`):  
+  `mysql -u root -p < scripts/setup-database.sql`  
+  This creates the database `seamuns_db`, all tables, and sample data (MUN07 IV). For a clean reset, run `DROP DATABASE seamuns_db;` first.
+
+- **Option B – manual:**  
+  Create the database and a MySQL user, then import the schema:  
+  `mysql -u your_user -p seamuns_db < database-schema.sql`
+
+- Copy **`api/database.example.php`** to **`api/database.php`** and set your credentials there (`DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`). `api/database.php` is gitignored so real credentials are not committed.
+
+**3. Deploy**
+
+- Upload the whole project (including `api/`) to a host that supports PHP and MySQL (e.g. Hostinger, shared hosting). Ensure the document root serves your `index.html` and that `api/*.php` are reachable at e.g. `https://yoursite.com/api/conferences.php`.
+
+**4. API endpoints**
+
+- **Conferences**: `GET/POST/PUT/DELETE api/conferences.php`  
+  - `GET api/conferences.php` – list all; `GET api/conferences.php?id=1` – one by id.
+- **Feedback**: `GET/POST/PUT/DELETE api/feedback.php`  
+  - Query params: `conference_id`, `user_id` for GET.
+
+CORS is set to `*` in the PHP files so the front end can call the API from your domain. For production you may want to restrict `Access-Control-Allow-Origin` to your site.
+
+**5. Using the backend from the front end**
+
+- From JavaScript, call the API with `fetch()`:
+  - `fetch('/api/conferences.php')` or `fetch('https://yoursite.com/api/conferences.php')` for conferences.
+  - Send JSON with `Content-Type: application/json` for POST/PUT.
+- The app does **not** use this API by default; conference data comes from `js/conferences-data.js`. To switch to the backend you’d change the app to load conferences from the API instead of the static file (and optionally keep Firebase for auth).
+
+**6. Keeping secrets**
+
+- **Database credentials** stay in `api/database.php` on the server. The repo provides `api/database.example.php`; `api/database.php` is in `.gitignore` so you don’t commit real credentials.
+- **Firebase**: keep using `env.js` (or encrypted `env.js.enc`) for client-side Firebase config. For server-only secrets (e.g. a server API key), use environment variables or a config file that is only on the server and never sent to the browser.
 
 ## Usage
 
