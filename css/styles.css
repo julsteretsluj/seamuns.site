@@ -7070,6 +7070,7 @@ i.fas, i.far, i.fab {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
     padding: 12px 16px;
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
@@ -7079,6 +7080,11 @@ i.fas, i.far, i.fab {
     user-select: none;
     position: relative;
     z-index: 1001;
+    font-family: inherit;
+    font-size: inherit;
+    text-align: left;
+    appearance: none;
+    -webkit-appearance: none;
 }
 
 .committee-filter-header:hover {

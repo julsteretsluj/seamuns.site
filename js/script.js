@@ -858,6 +858,7 @@ class MUNTracker {
                 e.stopPropagation();
                 const isOpen = committeeFilterDropdown.style.display !== 'none';
                 committeeFilterDropdown.style.display = isOpen ? 'none' : 'block';
+                committeeFilterHeader.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
                 const chevron = committeeFilterHeader.querySelector('.fa-chevron-down');
                 if (chevron) {
                     chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
@@ -868,6 +869,7 @@ class MUNTracker {
             document.addEventListener('click', (e) => {
                 if (!committeeFilter.contains(e.target)) {
                     committeeFilterDropdown.style.display = 'none';
+                    committeeFilterHeader.setAttribute('aria-expanded', 'false');
                     const chevron = committeeFilterHeader.querySelector('.fa-chevron-down');
                     if (chevron) {
                         chevron.style.transform = 'rotate(0deg)';
