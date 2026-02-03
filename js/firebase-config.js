@@ -28,10 +28,10 @@ const firebaseConfig = {
     measurementId: getEnvValue(['FIREBASE_MEASUREMENT_ID'])
 };
 
+// Required for Auth + Firestore; measurementId is optional (Analytics)
+const REQUIRED_KEYS = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId'];
 function validateFirebaseConfig(config) {
-    const missing = Object.entries(config)
-        .filter(([, value]) => !value)
-        .map(([key]) => key);
+    const missing = REQUIRED_KEYS.filter((key) => !config[key]);
     if (missing.length) {
         console.error('❌ Firebase configuration is incomplete. Missing:', missing.join(', '));
         console.error('💡 Copy env.example.js to env.js and set your Firebase credentials.');
@@ -68,6 +68,10 @@ try {
 const FirebaseAuth = {
     // Sign up new user with email/password
     async signup(email, password, userData) {
+        if (!auth) {
+            console.error('❌ Auth not initialized. Check Firebase config (env.js).');
+            return { success: false, error: 'Sign up is not available. Check that Firebase is configured (see About / README).' };
+        }
         try {
             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;

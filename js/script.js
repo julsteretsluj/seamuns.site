@@ -18,23 +18,26 @@ class MUNTracker {
             console.log('MUNTracker.init() started');
             this.loadUsers();
             this.loadTheme();
-            console.log('Loading conferences...');
-            this.loadConferences();
-            console.log('Conferences loaded, count:', this.conferences.length);
             this.bindEvents();
-            this.bindDetailsModalEvents();
-            this.updateStatistics();
-            this.updateLocationFilter();
-            this.populateCommitteeFilter();
-            console.log('Rendering conferences...');
-            this.renderConferences();
             this.checkAuthState();
-            // Date/time display is initialized globally via initDateTimeDisplayStandalone()
+            var hasConferenceList = document.getElementById('conferencesList');
+            if (hasConferenceList) {
+                console.log('Loading conferences...');
+                this.loadConferences();
+                console.log('Conferences loaded, count:', this.conferences.length);
+                this.bindDetailsModalEvents();
+                this.updateStatistics();
+                this.updateLocationFilter();
+                this.populateCommitteeFilter();
+                console.log('Rendering conferences...');
+                this.renderConferences();
+                if (window.location.search.indexOf('open=login') !== -1) this.openModal('loginModal');
+                if (window.location.search.indexOf('open=signup') !== -1) this.openModal('signupModal');
+            }
             console.log('MUNTracker.init() completed');
         } catch (error) {
             console.error('Error in MUNTracker.init():', error);
             console.error('Error stack:', error.stack);
-            // Don't throw - allow page to continue loading
         }
     }
 
@@ -412,7 +415,15 @@ class MUNTracker {
             try { window.dispatchEvent(new Event('userLoggedIn')); } catch (e) {}
             return true;
         } else {
-            this.showMessage('Invalid email or password', 'error');
+            const noFirebase = typeof FirebaseAuth === 'undefined' || typeof auth === 'undefined' || !auth;
+            const noEnv = typeof window.__ENV__ === 'undefined' || !window.__ENV__ || !window.__ENV__.FIREBASE_API_KEY;
+            if (noFirebase && noEnv) {
+                this.showMessage('Login requires Firebase. Add env.js (from env.example.js) with your Firebase config and open the app over HTTP (e.g. run a local server). In Firebase Console enable Authentication → Sign-in method → Email/Password.', 'error');
+            } else if (noFirebase) {
+                this.showMessage('Firebase could not start. Check the browser console. Ensure Email/Password is enabled in Firebase Console → Authentication → Sign-in method.', 'error');
+            } else {
+                this.showMessage('Invalid email or password', 'error');
+            }
             return false;
         }
     }
@@ -579,8 +590,11 @@ class MUNTracker {
         this.currentUser = null;
         localStorage.removeItem('munCurrentUser');
         this.showAuthButtons();
-        this.updateStatistics();
-        this.renderConferences();
+        if (document.getElementById('conferencesList')) {
+            this.updateStatistics();
+            this.renderConferences();
+        }
+        this.dispatchAuthStateReady();
         this.showMessage('Logged out successfully', 'success');
     }
 
@@ -666,19 +680,29 @@ class MUNTracker {
             themeToggle.addEventListener('click', () => this.toggleTheme());
         }
 
-        // Login button
+        // Login button - open modal if present, else redirect to index with ?open=login
         const loginBtn = document.getElementById('loginBtn');
         if (loginBtn) {
             loginBtn.addEventListener('click', () => {
-                this.openModal('loginModal');
+                if (document.getElementById('loginModal')) {
+                    this.openModal('loginModal');
+                } else {
+                    var base = (window.location.pathname || '').indexOf('/pages/') !== -1 ? '../' : '';
+                    window.location.href = base + 'index.html?open=login';
+                }
             });
         }
 
-        // Signup button
+        // Signup button - open modal if present, else redirect to index with ?open=signup
         const signupBtn = document.getElementById('signupBtn');
         if (signupBtn) {
             signupBtn.addEventListener('click', () => {
-                this.openModal('signupModal');
+                if (document.getElementById('signupModal')) {
+                    this.openModal('signupModal');
+                } else {
+                    var base = (window.location.pathname || '').indexOf('/pages/') !== -1 ? '../' : '';
+                    window.location.href = base + 'index.html?open=signup';
+                }
             });
         }
 
@@ -1641,24 +1665,19 @@ class MUNTracker {
 
     // UI Management
     openModal(modalId, conference = null) {
+        if (modalId === 'conferenceModal') return;
         const modal = document.getElementById(modalId);
-        const form = document.getElementById(modalId.replace('Modal', 'Form'));
-        const title = modal.querySelector('h2');
-
-        if (modalId === 'conferenceModal') {
-            // Feature disabled; ignore open
-            return;
-        }
-
+        if (!modal) return;
         modal.classList.add('show');
         modal.style.display = 'flex';
     }
 
     closeModal(modalId) {
         const modal = document.getElementById(modalId);
-        modal.classList.remove('show');
-        modal.style.display = 'none';
-        
+        if (modal) {
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+        }
         if (modalId === 'loginModal') {
             const loginForm = document.getElementById('loginForm');
             if (loginForm) loginForm.reset();
@@ -3032,27 +3051,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Initialize Google Sign-In buttons on all pages
         initGoogleSignInButtons();
         
-        // Initialize MUNTracker if on index.html or conference detail pages
-        // Check for various page indicators
-        const isIndexPage = document.getElementById('conferencesList');
-        const isConferenceDetailPage = document.getElementById('conferenceName') && document.getElementById('location');
-        const isConferenceDetailPageAlt = document.getElementById('conferenceDetail');
-        const isProfilePage = document.getElementById('profileContent') || document.getElementById('profileNotLoggedIn');
-        
-        if (isIndexPage || isConferenceDetailPage || isConferenceDetailPageAlt || isProfilePage) {
-            try {
-                console.log('Initializing MUNTracker...');
-                munTracker = new MUNTracker();
-                console.log('MUNTracker created, calling init()...');
-                munTracker.init();
-                console.log('MUNTracker initialized successfully');
-            } catch (error) {
-                console.error('Error initializing MUNTracker:', error);
-                console.error('Error stack:', error.stack);
-                // Don't block page load if MUNTracker fails
-            }
-        } else {
-            console.log('MUNTracker not initialized - not on index or conference detail page');
+        // Initialize MUNTracker on ALL pages so login status and auth UI stay in sync everywhere
+        try {
+            console.log('Initializing MUNTracker...');
+            munTracker = new MUNTracker();
+            munTracker.init();
+            console.log('MUNTracker initialized');
+        } catch (error) {
+            console.error('Error initializing MUNTracker:', error);
         }
     } catch (error) {
         console.error('Error during page initialization:', error);
