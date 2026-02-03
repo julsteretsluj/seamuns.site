@@ -71,13 +71,26 @@ A modern web app for tracking Model United Nations (MUN) conferences across **So
 
 ### Run locally
 1. Clone or download the project.
-2. (Optional) Copy `env.example.js` to `env.js` and add Firebase credentials.
+2. (Optional) Copy `env.example.js` to `env.js` and add Firebase credentials. If the repo has an encrypted `env.js.enc` instead, see **Encrypted env (env.js.enc)** below to decrypt it.
 3. Open `index.html` in a browser or serve the folder with any static server.
 
 No build step required.
 
 ### Production / deploy (login and Firebase)
 `env.js` is gitignored, so it is not deployed with the repo. To enable login on your live site, **upload `env.js`** (with your Firebase credentials) to your **site root** (same folder as `index.html`). The app requests `/env.js` or `../env.js` from pages, so the file must be at the root. Without it you’ll see a 404 for `env.js` and “Firebase config missing” in the console; the rest of the site works, but login won’t.
+
+### Encrypted env (env.js.enc)
+You can store Firebase credentials in the repo as an encrypted file so only people with the passphrase can get plain `env.js`.
+
+- **Encrypt** (after creating or editing `env.js`):  
+  `./scripts/encrypt-env.sh`  
+  Prompts for a passphrase, or set `ENV_ENCRYPT_KEY=yourpassphrase` to run non-interactively. Creates `env.js.enc` in the project root. Commit `env.js.enc`; keep the passphrase secret.
+
+- **Decrypt** (for local run or before deploy):  
+  `./scripts/decrypt-env.sh`  
+  Prompts for the same passphrase (or use `ENV_ENCRYPT_KEY`). Produces `env.js` in the project root. Then run the app or upload `env.js` to your server as above.
+
+- **Repo layout**: `env.js` stays in `.gitignore`; only `env.js.enc` is committed. New clones: run `decrypt-env.sh` with the shared passphrase to get `env.js`.
 
 ### Why isn’t Google sign-in working?
 
@@ -108,6 +121,10 @@ No build step required.
 mun-tracker/
 ├── index.html               # Home: conference list, search, filters, tabs
 ├── env.example.js           # Example env (Firebase keys)
+├── env.js.enc               # Optional: encrypted env.js (decrypt with scripts/decrypt-env.sh)
+├── scripts/
+│   ├── encrypt-env.sh       # Encrypt env.js → env.js.enc (passphrase)
+│   └── decrypt-env.sh       # Decrypt env.js.enc → env.js (passphrase)
 ├── README.md
 ├── database-schema.sql      # API database schema reference
 ├── munsimulation/   # MUN Simulation Game (munsimulation)
