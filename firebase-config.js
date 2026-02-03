@@ -419,4 +419,3 @@ const FirebaseArchive = {
         }
     }
 };
-

@@ -146,6 +146,7 @@ mun-tracker/
 ├── env.example.js           # Example env (Firebase keys)
 ├── env.js.enc               # Optional: encrypted env.js (decrypt with scripts/decrypt-env.sh)
 ├── firestore.rules.example  # Firestore security rules (copy to Firebase Console if Google sign-in shows "insufficient permissions")
+├── firebase-config.js       # Firebase init (uses env.js); archive helpers (Firestore + Storage)
 ├── scripts/
 │   ├── encrypt-env.sh       # Encrypt env.js → env.js.enc (passphrase)
 │   ├── decrypt-env.sh       # Decrypt env.js.enc → env.js (passphrase)
@@ -178,7 +179,6 @@ mun-tracker/
 │   ├── script.js            # Conference list, filters, tabs, sample data
 │   ├── conference-detail.js  # Conference detail page logic
 │   ├── profile.js           # Profile page logic
-│   ├── firebase-config.js   # Firebase init (uses env.js); archive helpers (Firestore + Storage)
 │   ├── archive.js           # Archive page: load, filter, upload
 │   └── theme-init.js        # Theme (dark/light + colour) persistence
 ├── css/
