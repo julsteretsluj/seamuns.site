@@ -150,6 +150,9 @@
                 <div class="nav-item">
                     <a href="pages/about.html" class="nav-link"><i class="fas fa-info-circle"></i> ℹ️ About & Contact</a>
                 </div>
+                <div class="nav-item">
+                    <a href="pages/privacy.html" class="nav-link"><i class="fas fa-shield-alt"></i> 🔒 Privacy Policy</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -399,6 +402,10 @@
                     <button type="button" class="btn btn-secondary" id="cancelSignupBtn">Cancel</button>
                     <button type="submit" class="btn btn-primary">Sign Up</button>
                 </div>
+
+                <p id="signupPolicyText" class="form-policy-text" style="display: none; margin-top: 16px; font-size: 13px; color: var(--text-secondary);">
+                    By signing up you agree to our <a id="signupPrivacyLink" href="#" target="_blank" rel="noopener">Privacy Policy</a><span id="signupTermsSpan"></span>.
+                </p>
             </form>
 
             <!-- Divider -->
@@ -508,6 +515,13 @@
             </form>
         </div>
     </div>
+
+    <!-- Optional footer: Privacy / Terms (links set from env.js) -->
+    <footer id="appFooter" class="app-footer" style="display: none;">
+        <div class="container">
+            <span id="footerPrivacyWrap"></span><span id="footerTermsWrap"></span>
+        </div>
+    </footer>
 
     <!-- Load env.js without 404 when missing (then load scripts below) -->
     <script src="js/env-loader.js" data-env-path="env.js"></script>

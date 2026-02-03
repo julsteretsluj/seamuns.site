@@ -19,6 +19,7 @@ class MUNTracker {
             this.loadUsers();
             this.loadTheme();
             this.bindEvents();
+            this.applyPolicyLinks();
             this.checkAuthState();
             var hasConferenceList = document.getElementById('conferencesList');
             if (hasConferenceList) {
@@ -38,6 +39,48 @@ class MUNTracker {
         } catch (error) {
             console.error('Error in MUNTracker.init():', error);
             console.error('Error stack:', error.stack);
+        }
+    }
+
+    applyPolicyLinks() {
+        const env = (typeof window !== 'undefined' && window.__ENV__) ? window.__ENV__ : {};
+        const resolveUrl = (url) => {
+            const u = (url || '').trim();
+            if (!u) return u;
+            if (/^https?:\/\//i.test(u)) return u;
+            return window.location.origin + (u.startsWith('/') ? u : '/' + u);
+        };
+        const privacyUrl = resolveUrl(env.PRIVACY_POLICY_URL);
+        const termsUrl = resolveUrl(env.TERMS_URL);
+
+        const signupPolicyText = document.getElementById('signupPolicyText');
+        const signupPrivacyLink = document.getElementById('signupPrivacyLink');
+        const signupTermsSpan = document.getElementById('signupTermsSpan');
+        if (signupPolicyText && signupPrivacyLink) {
+            if (privacyUrl) {
+                signupPrivacyLink.href = privacyUrl;
+                signupPolicyText.style.display = 'block';
+                if (termsUrl && signupTermsSpan) {
+                    signupTermsSpan.innerHTML = ' and <a href="' + termsUrl.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener">Terms of Service</a>';
+                } else if (signupTermsSpan) {
+                    signupTermsSpan.textContent = '';
+                }
+            } else {
+                signupPolicyText.style.display = 'none';
+            }
+        }
+
+        const footer = document.getElementById('appFooter');
+        const footerPrivacyWrap = document.getElementById('footerPrivacyWrap');
+        const footerTermsWrap = document.getElementById('footerTermsWrap');
+        if (footer && footerPrivacyWrap) {
+            const privacyLink = privacyUrl ? '<a href="' + privacyUrl.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener">Privacy Policy</a>' : '';
+            const termsLink = termsUrl ? '<a href="' + termsUrl.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener">Terms of Service</a>' : '';
+            if (privacyLink || termsLink) {
+                footerPrivacyWrap.innerHTML = privacyLink;
+                if (footerTermsWrap) footerTermsWrap.innerHTML = (privacyLink && termsLink) ? ' &middot; ' + termsLink : termsLink;
+                footer.style.display = 'block';
+            }
         }
     }
 
@@ -2148,24 +2191,20 @@ class MUNTracker {
 
     // Rendering
     renderConferences() {
+        const container = document.getElementById('conferencesList');
+        if (!container) {
+            // Expected on subpages (profile, about, conference detail, etc.) — no list on this page
+            const isIndexPage = !window.location.pathname || window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
+            if (isIndexPage) {
+                setTimeout(() => {
+                    if (document.getElementById('conferencesList')) this.renderConferences();
+                }, 100);
+            }
+            return;
+        }
         console.log('renderConferences called');
         console.log('Total conferences:', this.conferences.length);
         console.log('Conferences data:', this.conferences);
-        
-        const container = document.getElementById('conferencesList');
-        if (!container) {
-            // Expected on conference detail page; only log on pages that should have the list
-            if (!document.getElementById('conferenceName') || !document.getElementById('location')) {
-                console.warn('Container #conferencesList not found.');
-            }
-            setTimeout(() => {
-                const retryContainer = document.getElementById('conferencesList');
-                if (retryContainer) {
-                    this.renderConferences();
-                }
-            }, 100);
-            return;
-        }
         
         // Ensure conferences are loaded
         if (this.conferences.length === 0) {

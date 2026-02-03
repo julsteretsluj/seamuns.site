@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://*.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://www.gstatic.com https://*.firebaseio.com https://*.cloudfunctions.net https://*.firebaseapp.com wss://*.firebaseio.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' https: data: blob:;">
-    <title>About - SEAMUNs</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://*.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com https://*.cloudfunctions.net https://*.firebaseapp.com wss://*.firebaseio.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' https: data: blob:;">
+    <title>Privacy Policy - SEAMUNs</title>
     <link rel="icon" type="image/png" href="../assets/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css?v=3">
@@ -13,12 +13,9 @@
 <body>
     <!-- Theme Controls Container -->
     <div class="theme-controls">
-        <!-- Dark Mode Toggle -->
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode" type="button">
             <i class="fas fa-moon" id="themeIcon"></i>
         </button>
-
-        <!-- Theme Color Selector -->
         <div class="theme-selector" id="themeSelector">
             <span class="theme-selector-label">Theme</span>
             <div class="color-swatch" data-color="red" title="Red Theme"></div>
@@ -33,45 +30,27 @@
         </div>
     </div>
 
-    <!-- User Menu -->
     <div class="user-menu" id="userMenu" style="display: none;">
         <div class="user-info">
             <img id="userProfileImg" src="" alt="Profile" style="width: 36px; height: 36px; border-radius: 50%; margin-right: 8px; object-fit: cover;">
             <span id="userEmail"></span>
         </div>
-        <button class="edit-profile-btn" id="editProfileBtn" title="Edit Profile">
-            <i class="fas fa-user-edit"></i>
-        </button>
-        <button class="logout-btn" id="logoutBtn">
-            <i class="fas fa-sign-out-alt"></i>
-            Logout
-        </button>
+        <button class="edit-profile-btn" id="editProfileBtn" title="Edit Profile"><i class="fas fa-user-edit"></i></button>
+        <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
     </div>
-
-    <!-- Auth Buttons -->
     <div class="auth-buttons" id="authButtons">
-        <button class="btn btn-secondary" id="loginBtn">
-            <i class="fas fa-sign-in-alt"></i>
-            Login
-        </button>
-        <button class="btn btn-primary" id="signupBtn">
-            <i class="fas fa-user-plus"></i>
-            Sign Up
-        </button>
+        <button class="btn btn-secondary" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <button class="btn btn-primary" id="signupBtn"><i class="fas fa-user-plus"></i> Sign Up</button>
     </div>
 
     <header class="header">
         <div class="container">
             <h1 style="display: flex; align-items: center; justify-content: center; gap: 12px;"><a href="../index.html" style="display: flex; align-items: center; gap: 12px; color: inherit; text-decoration: none;"><img src="../assets/logo.png" alt="SEAMUNs Logo" style="height: 60px; width: auto;"><span>SEAMUNs</span></a></h1>
             <p>Track upcoming and previous Model United Nations conferences across South East Asia 🌏</p>
-            <div class="current-datetime" id="currentDateTime">
-                <i class="fas fa-clock"></i>
-                <span id="dateTimeDisplay"></span>
-            </div>
+            <div class="current-datetime" id="currentDateTime"><i class="fas fa-clock"></i> <span id="dateTimeDisplay"></span></div>
         </div>
     </header>
 
-    <!-- Navigation Menu -->
     <nav class="main-nav">
         <div class="container">
             <div class="nav-wrapper">
@@ -83,7 +62,6 @@
                         <a href="how-to-host.html"><i class="fas fa-building"></i> 🏢 How to Host an MUN</a>
                     </div>
                 </div>
-
                 <div class="nav-item dropdown">
                     <button class="nav-link">🏫 Schools & Advisors <i class="fas fa-chevron-down"></i></button>
                     <div class="dropdown-content">
@@ -92,7 +70,6 @@
                         <a href="advisor-guide.html"><i class="fas fa-chalkboard-teacher"></i> 👩‍🏫 Advisor Guide</a>
                     </div>
                 </div>
-
                 <div class="nav-item dropdown">
                     <button class="nav-link">👥 Delegates & Chairs <i class="fas fa-chevron-down"></i></button>
                     <div class="dropdown-content">
@@ -107,7 +84,6 @@
                         <a href="support.html"><i class="fas fa-hands-helping"></i> Support at Conferences</a>
                     </div>
                 </div>
-
                 <div class="nav-item dropdown">
                     <button class="nav-link">📚 Resources <i class="fas fa-chevron-down"></i></button>
                     <div class="dropdown-content">
@@ -130,29 +106,12 @@
                         <a href="../munsimulation/" target="_blank" rel="noopener noreferrer"><i class="fas fa-gamepad"></i> MUN Simulation Game</a>
                     </div>
                 </div>
-
-                <div class="nav-item">
-                    <a href="../munsimulation/" target="_blank" rel="noopener noreferrer" class="nav-link"><i class="fas fa-gamepad"></i> MUN Simulation</a>
-                </div>
-
-                <div class="nav-item">
-                    <a href="https://thedashboard.seamuns.site" target="_blank" rel="noopener noreferrer" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-                </div>
-
-                <div class="nav-item">
-                    <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> 👤 My Profile</a>
-                </div>
-
-                <div class="nav-item">
-                    <a href="announcements.html" class="nav-link"><i class="fas fa-bullhorn"></i> 📢 Announcements</a>
-                </div>
-
-                <div class="nav-item">
-                    <a href="about.html" class="nav-link"><i class="fas fa-info-circle"></i> ℹ️ About & Contact</a>
-                </div>
-                <div class="nav-item">
-                    <a href="privacy.html" class="nav-link"><i class="fas fa-shield-alt"></i> 🔒 Privacy Policy</a>
-                </div>
+                <div class="nav-item"><a href="../munsimulation/" target="_blank" rel="noopener noreferrer" class="nav-link"><i class="fas fa-gamepad"></i> MUN Simulation</a></div>
+                <div class="nav-item"><a href="https://thedashboard.seamuns.site" target="_blank" rel="noopener noreferrer" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a></div>
+                <div class="nav-item"><a href="profile.html" class="nav-link"><i class="fas fa-user"></i> 👤 My Profile</a></div>
+                <div class="nav-item"><a href="announcements.html" class="nav-link"><i class="fas fa-bullhorn"></i> 📢 Announcements</a></div>
+                <div class="nav-item"><a href="about.html" class="nav-link"><i class="fas fa-info-circle"></i> ℹ️ About & Contact</a></div>
+                <div class="nav-item"><a href="privacy.html" class="nav-link"><i class="fas fa-shield-alt"></i> 🔒 Privacy Policy</a></div>
             </div>
         </div>
     </nav>
@@ -160,31 +119,42 @@
     <main class="main">
         <div class="container">
             <section class="content-section">
-                <h2>ℹ️ About & Contact</h2>
-                <div class="info-card" style="margin-top: 24px;">
-                    <h3 style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-                        <i class="fas fa-link" style="color: var(--accent-green);"></i>
-                        Additional Resources
-                    </h3>
-                    <div style="display: flex; flex-wrap: wrap; gap: 12px;">
-                        <a href="../munsimulation/" target="_blank" rel="noopener noreferrer" 
-                           style="display: inline-flex; align-items: center; gap: 6px; color: var(--accent-blue); text-decoration: none; padding: 8px 12px; background: rgba(74, 144, 226, 0.1); border-radius: 6px; font-size: 0.9em;">
-                            <i class="fas fa-gamepad"></i>
-                            MUN Simulation Game
-                        </a>
-                        <a href="https://thedashboard.seamuns.site" target="_blank" rel="noopener noreferrer" 
-                           style="display: inline-flex; align-items: center; gap: 6px; color: var(--accent-blue); text-decoration: none; padding: 8px 12px; background: rgba(74, 144, 226, 0.1); border-radius: 6px; font-size: 0.9em;">
-                            <i class="fas fa-tachometer-alt"></i>
-                            SEAMUNs Dashboard
-                        </a>
-                        <a href="https://discord.gg/J5heARnZFJ" target="_blank" rel="noopener noreferrer" 
-                           style="display: inline-flex; align-items: center; gap: 6px; color: var(--accent-blue); text-decoration: none; padding: 8px 12px; background: rgba(88, 101, 242, 0.15); border-radius: 6px; font-size: 0.9em;">
-                            <i class="fab fa-discord"></i>
-                            Discord Server
-                        </a>
-                    </div>
-                    <p style="margin: 12px 0 0 0; font-size: 0.9rem; color: var(--text-tertiary);">The <strong>SEAMUNs Dashboard</strong> (thedashboard.seamuns.site) is for use during conferences — chairs and delegates can track activity and documents there.</p>
-                </div>
+                <h2>🔒 Privacy Policy</h2>
+                <p><strong>Last updated:</strong> January 2026</p>
+                <p>SEAMUNs (“we”, “our”, or “the site”) is a web app for tracking Model United Nations conferences in South East Asia. This policy describes how we handle your information when you use the site.</p>
+
+                <h3>1. Information we collect</h3>
+                <ul>
+                    <li><strong>Account data (if you sign up):</strong> email, name, pronouns, and profile picture you provide, or data from Google Sign-In (e.g. email, name, profile photo).</li>
+                    <li><strong>Usage data:</strong> which conferences you mark as “Attending” or “Attended”, and any files or text you upload to the Archive or profile.</li>
+                    <li><strong>Local data:</strong> theme preferences (e.g. dark mode, accent colour) and conference attendance may be stored in your browser (localStorage) and, when you are signed in, in our backend (Firebase).</li>
+                </ul>
+
+                <h3>2. How we use it</h3>
+                <p>We use this information to:</p>
+                <ul>
+                    <li>Provide the conference tracker, your profile, and the Archive.</li>
+                    <li>Remember your preferences and attendance across devices when you are signed in.</li>
+                    <li>Improve the site and fix issues.</li>
+                </ul>
+
+                <h3>3. Third-party services</h3>
+                <p>We use <strong>Google Firebase</strong> (Authentication, Firestore, Storage) to run accounts and store data. Firebase’s privacy practices apply: <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener noreferrer">Firebase Privacy</a>. If you sign in with Google, Google’s privacy policy also applies. We do not sell your data to third parties.</p>
+
+                <h3>4. Cookies and local storage</h3>
+                <p>We use browser local storage (and similar mechanisms) for theme settings and, when you are not signed in, for attendance data. We do not use tracking cookies for advertising. Firebase and Google Sign-In may set cookies as described in their policies.</p>
+
+                <h3>5. Your choices</h3>
+                <p>You can use most of the site without an account. If you have an account, you can update or delete profile information in My Profile. To stop using the site, you can sign out and clear your browser data for this site.</p>
+
+                <h3>6. Security</h3>
+                <p>We rely on Firebase and standard web security (HTTPS, secure auth). You are responsible for keeping your password and account secure.</p>
+
+                <h3>7. Changes</h3>
+                <p>We may update this policy from time to time. The “Last updated” date at the top will change when we do. Continued use of the site after changes means you accept the updated policy.</p>
+
+                <h3>8. Contact</h3>
+                <p>For questions about this privacy policy or your data, please use the contact details on our <a href="about.html">About & Contact</a> page.</p>
             </section>
         </div>
     </main>
@@ -193,7 +163,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
     <script src="../js/firebase-config.js"></script>
     <script src="../js/script.js"></script>
 </body>

@@ -11,7 +11,12 @@ window.__ENV__ = {
     FIREBASE_STORAGE_BUCKET: "YOUR_PROJECT_ID.appspot.com",
     FIREBASE_MESSAGING_SENDER_ID: "YOUR_SENDER_ID",
     FIREBASE_APP_ID: "YOUR_APP_ID",
-    FIREBASE_MEASUREMENT_ID: "YOUR_MEASUREMENT_ID"
+    FIREBASE_MEASUREMENT_ID: "YOUR_MEASUREMENT_ID",
+
+    // Optional: full URL to your Privacy Policy (shown in signup modal and footer)
+    PRIVACY_POLICY_URL: "",
+    // Optional: full URL to your Terms of Service
+    TERMS_URL: ""
 };
 
 

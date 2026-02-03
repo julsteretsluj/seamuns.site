@@ -79,6 +79,14 @@ No build step required.
 ### Production / deploy (login and Firebase)
 `env.js` is gitignored, so it is not deployed with the repo. To enable login on your live site, **upload `env.js`** (with your Firebase credentials) to your **site root** (same folder as `index.html`). The app requests `/env.js` or `../env.js` from pages, so the file must be at the root. Without it you’ll see a 404 for `env.js` and “Firebase config missing” in the console; the rest of the site works, but login won’t.
 
+### Privacy policy and terms links
+In `env.js` you can set optional URLs (leave as `""` to hide):
+
+- **`PRIVACY_POLICY_URL`** — Full URL to your privacy policy. When set, it appears in the Sign Up modal and in the site footer on the home page.
+- **`TERMS_URL`** — Full URL to your terms of service. When set, it appears next to the privacy link in the signup text and in the footer.
+
+Example: `PRIVACY_POLICY_URL: "https://yoursite.com/privacy"`, `TERMS_URL: "https://yoursite.com/terms"`.
+
 ### Encrypted env (env.js.enc)
 You can store Firebase credentials in the repo as an encrypted file so only people with the passphrase can get plain `env.js`.
 
