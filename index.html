@@ -182,16 +182,17 @@
                 </div>
                 
                 <div class="committee-filter-container">
-                    <label for="committeeFilter" class="committee-filter-label">
+                    <span id="committeeFilterLabel" class="committee-filter-label" role="heading" aria-level="2">
                         <i class="fas fa-users-cog"></i> Filter by Committees
-                    </label>
-                    <div class="committee-filter" id="committeeFilter">
+                    </span>
+                    <div class="committee-filter" id="committeeFilter" aria-labelledby="committeeFilterLabel" role="group">
                         <div class="committee-filter-header">
                             <span class="committee-filter-text">Select committees...</span>
                             <i class="fas fa-chevron-down"></i>
                         </div>
                         <div class="committee-filter-dropdown" id="committeeFilterDropdown" style="display: none;">
                             <div class="committee-filter-search">
+                                <label for="committeeSearchInput" class="sr-only">Search committees</label>
                                 <i class="fas fa-search"></i>
                                 <input type="text" id="committeeSearchInput" placeholder="Search committees..." aria-label="Search committees">
                             </div>
