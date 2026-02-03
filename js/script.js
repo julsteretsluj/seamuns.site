@@ -611,7 +611,7 @@ class MUNTracker {
     async signInWithGoogle() {
         const auth = typeof window !== 'undefined' ? window.auth : null;
         if (typeof FirebaseAuth === 'undefined' || !auth) {
-            this.showMessage('Google Sign-In is not available. Add env.js with Firebase config at the site root and ensure Google Sign-In is enabled in Firebase Console.', 'error');
+            this.showMessage('Login is not available on this server. You can still browse without an account.', 'error');
             return false;
         }
         

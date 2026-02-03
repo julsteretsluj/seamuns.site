@@ -6,6 +6,13 @@
 (function () {
   var loader = document.currentScript;
   var path = (loader && loader.getAttribute('data-env-path')) || 'env.js';
+  // Resolve relative path to site root over http(s) so env.js loads from root on any page (e.g. pages/about.html)
+  if (path && path.indexOf('://') === -1 && path.charAt(0) !== '/') {
+    var origin = (typeof location !== 'undefined' && location.origin) ? location.origin : '';
+    if (origin && (origin.indexOf('http:') === 0 || origin.indexOf('https:') === 0)) {
+      path = origin + '/' + path;
+    }
+  }
   var next = [];
   var s = loader && loader.nextElementSibling;
   while (s && s.tagName === 'SCRIPT') {

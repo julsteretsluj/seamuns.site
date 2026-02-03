@@ -218,6 +218,7 @@ const FirebaseAuth = {
 
     // Log out current user
     async logout() {
+        if (!auth) return { success: true };
         try {
             await auth.signOut();
             console.log('✅ User logged out');
