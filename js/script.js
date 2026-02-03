@@ -21,6 +21,7 @@ class MUNTracker {
             this.bindEvents();
             this.applyPolicyLinks();
             this.checkAuthState();
+            this.subscribeFirebaseAuthState();
             var hasConferenceList = document.getElementById('conferencesList');
             if (hasConferenceList) {
                 console.log('Loading conferences...');
@@ -244,7 +245,7 @@ class MUNTracker {
     }
 
     async checkAuthState() {
-        // Check Firebase auth first if available
+        const auth = typeof window !== 'undefined' ? window.auth : null;
         if (typeof FirebaseAuth !== 'undefined' && auth) {
             try {
                 const user = auth.currentUser;
@@ -301,6 +302,61 @@ class MUNTracker {
         this.dispatchAuthStateReady();
     }
 
+    subscribeFirebaseAuthState() {
+        const auth = typeof window !== 'undefined' ? window.auth : null;
+        if (typeof FirebaseAuth !== 'undefined' && auth && typeof FirebaseAuth.onAuthStateChanged === 'function') {
+            try {
+                FirebaseAuth.onAuthStateChanged((firebaseUser) => {
+                    this.syncAuthState(firebaseUser);
+                });
+            } catch (e) {
+                console.warn('Firebase auth state listener failed:', e);
+            }
+        }
+    }
+
+    async syncAuthState(firebaseUser) {
+        if (firebaseUser) {
+            try {
+                let profile = null;
+                if (typeof FirebaseDB !== 'undefined' && FirebaseDB.getUserProfile) {
+                    const res = await FirebaseDB.getUserProfile(firebaseUser.uid);
+                    if (res.success) profile = res.data;
+                }
+                const d = profile || {};
+                this.currentUser = {
+                    id: firebaseUser.uid,
+                    uid: firebaseUser.uid,
+                    email: firebaseUser.email,
+                    name: d.name || firebaseUser.displayName || (firebaseUser.email && firebaseUser.email.split('@')[0]) || '',
+                    profilePicture: d.profilePicture || firebaseUser.photoURL || '',
+                    pronouns: d.pronouns || '',
+                    awards: d.awards || [],
+                    bannerType: d.bannerType,
+                    bannerPreset: d.bannerPreset,
+                    bannerImage: d.bannerImage || d.banner,
+                    authProvider: firebaseUser.providerData && firebaseUser.providerData.length && firebaseUser.providerData[0].providerId.indexOf('google') !== -1 ? 'google' : 'firebase'
+                };
+                localStorage.setItem('munCurrentUser', JSON.stringify(this.currentUser));
+                this.showUserMenu();
+                await this.loadUserAttendanceData();
+                this.updateStatistics();
+                this.renderConferences();
+            } catch (e) {
+                console.error('syncAuthState error:', e);
+            }
+        } else {
+            this.currentUser = null;
+            localStorage.removeItem('munCurrentUser');
+            this.showAuthButtons();
+            if (document.getElementById('conferencesList')) {
+                this.updateStatistics();
+                this.renderConferences();
+            }
+        }
+        this.dispatchAuthStateReady();
+    }
+
     dispatchAuthStateReady() {
         try {
             window.__munAuthReady = true;
@@ -349,7 +405,7 @@ class MUNTracker {
             return false;
         }
 
-        // Try Firebase authentication first if available
+        const auth = typeof window !== 'undefined' ? window.auth : null;
         if (typeof FirebaseAuth !== 'undefined' && auth) {
             try {
                 const result = await FirebaseAuth.login(email, password);
@@ -458,7 +514,7 @@ class MUNTracker {
             try { window.dispatchEvent(new Event('userLoggedIn')); } catch (e) {}
             return true;
         } else {
-            const noFirebase = typeof FirebaseAuth === 'undefined' || typeof auth === 'undefined' || !auth;
+            const noFirebase = typeof FirebaseAuth === 'undefined' || !(typeof window !== 'undefined' && window.auth);
             const noEnv = typeof window.__ENV__ === 'undefined' || !window.__ENV__ || !window.__ENV__.FIREBASE_API_KEY;
             if (noFirebase && noEnv) {
                 this.showMessage('Login requires Firebase. Add env.js (from env.example.js) with your Firebase config and open the app over HTTP (e.g. run a local server). In Firebase Console enable Authentication → Sign-in method → Email/Password.', 'error');
@@ -553,8 +609,9 @@ class MUNTracker {
     }
 
     async signInWithGoogle() {
+        const auth = typeof window !== 'undefined' ? window.auth : null;
         if (typeof FirebaseAuth === 'undefined' || !auth) {
-            this.showMessage('Google Sign-In is not available. Please use email/password.', 'error');
+            this.showMessage('Google Sign-In is not available. Add env.js with Firebase config at the site root and ensure Google Sign-In is enabled in Firebase Console.', 'error');
             return false;
         }
         
@@ -621,8 +678,8 @@ class MUNTracker {
     }
 
     async logout() {
-        // Logout from Firebase if available
-        if (typeof FirebaseAuth !== 'undefined' && auth && this.currentUser?.authProvider === 'firebase') {
+        const auth = typeof window !== 'undefined' ? window.auth : null;
+        if (typeof FirebaseAuth !== 'undefined' && auth && this.currentUser && (this.currentUser.authProvider === 'firebase' || this.currentUser.authProvider === 'google')) {
             try {
                 await FirebaseAuth.logout();
             } catch (error) {

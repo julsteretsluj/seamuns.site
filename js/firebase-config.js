@@ -235,6 +235,7 @@ const FirebaseAuth = {
 
     // Listen for auth state changes
     onAuthStateChanged(callback) {
+        if (!auth) return function () {};
         return auth.onAuthStateChanged(callback);
     }
 };
