@@ -76,6 +76,9 @@ A modern web app for tracking Model United Nations (MUN) conferences across **So
 
 No build step required.
 
+### Production / deploy (login and Firebase)
+`env.js` is gitignored, so it is not deployed with the repo. To enable login on your live site, **upload `env.js`** (with your Firebase credentials) to your **site root** (same folder as `index.html`). The app requests `/env.js` or `../env.js` from pages, so the file must be at the root. Without it you’ll see a 404 for `env.js` and “Firebase config missing” in the console; the rest of the site works, but login won’t.
+
 ### Why isn’t Google sign-in working?
 
 1. **Firebase config**  

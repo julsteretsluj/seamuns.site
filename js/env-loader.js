@@ -31,7 +31,12 @@
     loadScript(0);
   }
   fetch(path)
-    .then(function (r) { return r.ok ? r.text() : ''; })
+    .then(function (r) {
+      if (!r.ok && typeof console !== 'undefined' && console.warn) {
+        console.warn('env.js not found (404). Add env.js at your site root for Firebase login. App will run without auth.');
+      }
+      return r.ok ? r.text() : '';
+    })
     .then(function (t) {
       if (t) try { eval(t); } catch (e) {}
       if (typeof window !== 'undefined' && !window.__ENV__) window.__ENV__ = {};

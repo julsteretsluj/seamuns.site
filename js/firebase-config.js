@@ -33,8 +33,7 @@ const REQUIRED_KEYS = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'me
 function validateFirebaseConfig(config) {
     const missing = REQUIRED_KEYS.filter((key) => !config[key]);
     if (missing.length) {
-        console.error('❌ Firebase configuration is incomplete. Missing:', missing.join(', '));
-        console.error('💡 Copy env.example.js to env.js and set your Firebase credentials.');
+        console.warn('Firebase config missing (env.js not loaded or empty). Add env.js at your site root with Firebase credentials for login. See README.');
         return false;
     }
     return true;
@@ -59,9 +58,7 @@ try {
         console.log('💾 Firestore ready:', !!db);
     }
 } catch (error) {
-    console.error('❌ Firebase initialization error:', error);
-    console.error('💡 Tip: Make sure Authentication and Firestore are enabled in Firebase Console');
-    console.error('📖 Copy env.example.js to env.js and add your Firebase credentials. See README.md.');
+    console.warn('Firebase init failed:', error.message);
 }
 
 // Firebase Authentication Helper Functions
