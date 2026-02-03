@@ -207,6 +207,8 @@ const FirebaseAuth = {
                 return { success: false, error: 'This domain is not authorized for Google Sign-In. In Firebase Console go to Authentication → Settings → Authorized domains and add this site (e.g. localhost or your production domain).' };
             } else if (error.code === 'auth/operation-not-allowed') {
                 return { success: false, error: 'Google Sign-In is not enabled. In Firebase Console go to Authentication → Sign-in method and enable Google.' };
+            } else if (error.code === 'permission-denied' || (error.message && (error.message.indexOf('insufficient permissions') !== -1 || error.message.indexOf('Missing or insufficient permissions') !== -1))) {
+                return { success: false, error: 'Sign-in succeeded but the app could not save your profile. In Firebase Console go to Firestore Database → Rules and add rules that allow users to read/write their own document in the "users" collection. See firestore.rules.example in the repo.' };
             }
             
             return { success: false, error: error.message || 'Unknown error occurred' };

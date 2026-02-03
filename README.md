@@ -117,10 +117,13 @@ You can store Firebase credentials in the repo as an encrypted file so only peop
 4. **Pop-ups**  
    Google sign-in uses a pop-up. If the browser or an extension blocks pop-ups, allow them for your site and try again.
 
-5. **Console errors**  
+5. **“Insufficient permissions” or “Missing or insufficient permissions”**  
+   This usually means **Firestore security rules** are blocking the app from creating or reading your user profile after Google sign-in. In [Firebase Console](https://console.firebase.google.com) → **Firestore Database** → **Rules**, add rules that allow authenticated users to read/write their own data. See **`firestore.rules.example`** in the repo for a ready-to-paste rules file (copy into the Rules editor and click **Publish**).
+
+6. **Console errors**  
    Open DevTools (F12) → **Console**. Firebase and `firebase-config.js` log errors (e.g. missing config, `auth/unauthorized-domain`). Fix any reported issues.
 
-6. **Other console messages**  
+7. **Other console messages**  
    A **404 for `rul?tid=G-...`** or **“Blocked a frame with origin … doubleclick.net”** usually comes from Hostinger-injected tracking or a browser extension (e.g. `content.js`), not from this app. You can ignore them or disable the host’s analytics/extensions if you want a clean console. **env.js** is loaded via `env-loader.js` so a missing `env.js` (e.g. on production) does not cause a script 404.
 
 ## Project structure (main pieces)
@@ -130,6 +133,7 @@ mun-tracker/
 ├── index.html               # Home: conference list, search, filters, tabs
 ├── env.example.js           # Example env (Firebase keys)
 ├── env.js.enc               # Optional: encrypted env.js (decrypt with scripts/decrypt-env.sh)
+├── firestore.rules.example  # Firestore security rules (copy to Firebase Console if Google sign-in shows "insufficient permissions")
 ├── scripts/
 │   ├── encrypt-env.sh       # Encrypt env.js → env.js.enc (passphrase)
 │   └── decrypt-env.sh       # Decrypt env.js.enc → env.js (passphrase)
