@@ -1778,6 +1778,20 @@ function populateConferenceDetail(conf) {
             }
         }
 
+        // SMT / Secretariat application (optional)
+        const smtSection = document.getElementById('smtApplicationSection');
+        const smtSignupEl = document.getElementById('smtSignup');
+        if (smtSection && smtSignupEl) {
+            if (conf.smtApplicationLink) {
+                smtSection.style.display = '';
+                const label = conf.smtApplicationLabel || 'Apply for SMT / Secretariat';
+                smtSignupEl.innerHTML = `<a href="${conf.smtApplicationLink}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%;"><i class="fas fa-clipboard-list"></i> ${label}</a>`;
+            } else {
+                smtSection.style.display = 'none';
+                smtSignupEl.innerHTML = '';
+            }
+        }
+
         // Advisor Signup
         const advisorSignupEl = document.getElementById('advisorSignup');
         if (advisorSignupEl) {
