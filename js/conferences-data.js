@@ -361,10 +361,10 @@ window.MUN_CONFERENCES_DATA = [
     positionPaperDeadline: "",
     status: "upcoming",
     size: "250 (200 delegates, 22 chairs, 8 SMT, 10 staff, 10 external advisors)",
-    generalEmail: "980165@verso.ac.th",
-    munAccount: "",
+    generalEmail: "info@seamuns.site",
+    munAccount: "@seamun.th.conference",
     advisorAccount: "",
-    secGenAccounts: "Jules (980165@verso.ac.th)",
+    secGenAccounts: "Jules (juleskittoastrop@gmail.com)",
     parliamentarianAccounts: "",
     pricePerDelegate: "2,500 THB (school) / 3,000 THB (independent). Chair fee: 800 THB",
     independentDelsWelcome: true,
@@ -372,8 +372,8 @@ window.MUN_CONFERENCES_DATA = [
     advisorSignupLink: "",
     smtApplicationLink: "https://forms.gle/dKEGKJmLbT86YHqU9",
     smtApplicationLabel: "Apply for SMT / Secretariat",
-    disabledSuitable: false,
-    sensorySuitable: false,
+    disabledSuitable: true,
+    sensorySuitable: true,
     committees: [
         "UNHRC (United Nations Human Rights Council) - The Question of Promoting and Accelerating the Universal Abolition of the Death Penalty and Respect for the Right to Life | The Question of The Obligation to Prevent Cruel, Inhuman or Degrading Treatment Arising from Deficiencies in Prison Administration and Justice Systems",
         "DISEC (Disarmament and International Security Committee) - The Question of Strengthening International Protocols and Logistics for Securing the Cross-Border Transport of Weapons of Mass Destruction (WMDs) and Related Materials | The Question of Developing Mechanisms to Prevent the Diversion of Legally Traded Conventional Arms to Illicit Markets and Non-State Actors",
@@ -413,7 +413,7 @@ window.MUN_CONFERENCES_DATA = [
     previousWinners: [],
     schedule: "<p><strong>28–29 January 2027:</strong> Two-day conference — Opening Ceremony, Committee Sessions, Closing Ceremony.</p>",
     venueGuide: "<p>Conference at AIT (Asian Institute of Technology) Conference Center (TBD). Pathum Thani, Thailand.</p>",
-    extraNotes: "<p><strong>SEAMUN I — Policies with a Purpose.</strong> Two-day conference. <strong>Fees:</strong> School delegate 2,500 THB; Independent delegate 3,000 THB; Chair 800 THB. <strong>Capacity:</strong> 200 delegates, 22 chairs, 8 SMT, 10 staff, 10 external advisors (250 total). Secretary General: Jules (980165@verso.ac.th). FWC universe and allocations: fill in the <a href='https://forms.gle/UjSBFFS6Y2oAcogPA' target='_blank' rel='noopener noreferrer'>FWC Topic &amp; Allocations Preference Form</a>. SMT applications: <a href='https://forms.gle/dKEGKJmLbT86YHqU9' target='_blank' rel='noopener noreferrer'>SMT Application Form</a>.</p>"
+    extraNotes: "<p><strong>SEAMUN I — Policies with a Purpose.</strong> Two-day conference. <strong>Fees:</strong> School delegate 2,500 THB; Independent delegate 3,000 THB; Chair 800 THB. <strong>Capacity:</strong> 200 delegates, 22 chairs, 8 SMT, 10 staff, 10 external advisors (250 total). Secretary General: Jules (juleskittoastrop@gmail.com). General enquiries: info@seamuns.site. Follow us on Instagram: <a href='https://www.instagram.com/seamun.th.conference/' target='_blank' rel='noopener noreferrer'>@seamun.th.conference</a>. <strong>Accessibility:</strong> Wheelchair accessible and sensory-friendly. FWC universe and allocations: fill in the <a href='https://forms.gle/UjSBFFS6Y2oAcogPA' target='_blank' rel='noopener noreferrer'>FWC Topic &amp; Allocations Preference Form</a>. SMT applications: <a href='https://forms.gle/dKEGKJmLbT86YHqU9' target='_blank' rel='noopener noreferrer'>SMT Application Form</a>.</p>"
 }
 ];
 
