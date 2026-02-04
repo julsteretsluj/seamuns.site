@@ -3902,6 +3902,7 @@ body::before {
     margin-bottom: 16px;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     position: relative;
@@ -7314,4 +7315,4 @@ i.fas, i.far, i.fab {
 .far:not(.btn .far):not(.nav-link .far):not(.dropdown-content .far):not(.user-menu .far):not(.theme-toggle .far),
 .fab:not(.btn .fab):not(.nav-link .fab):not(.dropdown-content .fab):not(.user-menu .fab):not(.theme-toggle .fab) {
     color: var(--accent-color) !important;
-}
+}}
