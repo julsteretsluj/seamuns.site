@@ -1472,10 +1472,12 @@ function populateConferenceDetail(conf) {
                     const mainContent = mainParts[0].trim();
                     const lastPart = mainParts[mainParts.length - 1].trim();
                     
+                    // Check if last part looks like a topic (e.g. "The Question of...", "Topic 2:...") — if so, don't treat as chair info
+                    const looksLikeTopic = /^(The Question of|Topic\s*\d*\s*:)/i.test(lastPart.trim());
                     // Check if last part looks like chair info (contains @, names with commas, or common chair keywords)
-                    // More comprehensive check for chair-related terms
                     const lastPartLower = lastPart.toLowerCase();
-                    const looksLikeChairs = lastPart.includes('@') || 
+                    const looksLikeChairs = !looksLikeTopic && (
+                                          lastPart.includes('@') || 
                                           (lastPart.includes(',') && !lastPartLower.includes('topic')) ||
                                           lastPartLower.includes('chair') ||
                                           lastPartLower.includes('head chair') ||
@@ -1487,7 +1489,7 @@ function populateConferenceDetail(conf) {
                                           lastPartLower.includes('deputy editor') ||
                                           lastPart === 'TBD' ||
                                           lastPart === 'A, B' ||
-                                          /^(head|deputy|president|vice president|editor)/i.test(lastPart.trim());
+                                          /^(head|deputy|president|vice president|editor)/i.test(lastPart.trim()));
                     
                     if (looksLikeChairs && mainParts.length > 1) {
                         // Last part is chair info
