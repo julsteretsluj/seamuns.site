@@ -3901,7 +3901,7 @@ body::before {
     line-height: 1.47;
     margin-bottom: 16px;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    d: 3;
     line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -4509,27 +4509,49 @@ form::-webkit-scrollbar-thumb:hover {
     flex: 1;
 }
 
+.profile-name-line {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.35em;
+    margin-bottom: 8px;
+}
+
 .profile-name {
     font-size: 32px;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 8px;
+    margin: 0;
 }
 
 .profile-pronouns {
-    font-size: 18px;
-    color: var(--text-secondary);
-    margin-bottom: 8px;
-    font-style: italic;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-tertiary);
+    margin: 0;
 }
 
-.profile-email {
-    font-size: 16px;
-    color: var(--text-secondary);
-    margin-bottom: 32px;
+.profile-email-school-line {
     display: flex;
     align-items: center;
-    gap: 8px;
+    flex-wrap: wrap;
+    gap: 0.25em;
+    margin: 0 0 32px 0;
+    font-size: 16px;
+    color: var(--text-secondary);
+}
+
+.profile-email-school-line .profile-email,
+.profile-email-school-line .profile-school {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+}
+
+.profile-email-school-sep {
+    color: var(--text-tertiary);
+    margin: 0 0.25em;
 }
 
 .profile-stats {
@@ -5192,10 +5214,10 @@ form::-webkit-scrollbar-thumb:hover {
     }
     
     .profile-pronouns {
-        font-size: 14px;
+        font-size: 13px;
     }
     
-    .profile-email {
+    .profile-email-school-line {
         font-size: 14px;
     }
     

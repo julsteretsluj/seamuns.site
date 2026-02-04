@@ -183,13 +183,16 @@ function loadUserProfile(user) {
     const profileName = document.getElementById('profileName');
     if (profileName) profileName.textContent = user.name || 'Delegate';
 
-    // Set pronouns
+    // Set pronouns (in brackets, next to name)
     const pronounsElement = document.getElementById('profilePronouns');
-    if (user.pronouns) {
-        pronounsElement.textContent = user.pronouns;
-        pronounsElement.style.display = 'block';
-    } else {
-        pronounsElement.style.display = 'none';
+    if (pronounsElement) {
+        if (user.pronouns) {
+            pronounsElement.textContent = '(' + user.pronouns + ')';
+            pronounsElement.style.display = 'inline';
+        } else {
+            pronounsElement.textContent = '';
+            pronounsElement.style.display = 'none';
+        }
     }
     
     // Set email
