@@ -199,12 +199,14 @@ function loadUserProfile(user) {
         if (span) span.textContent = user.email;
     }
 
-    // Set school
+    // Set school (always show line so users know they can add one)
     const profileSchoolEl = document.getElementById('profileSchool');
+    const profileSchoolHint = document.getElementById('profileSchoolHint');
     if (profileSchoolEl) {
-        const span = profileSchoolEl.querySelector('span');
-        if (span) span.textContent = user.school || '';
-        profileSchoolEl.style.display = user.school ? 'block' : 'none';
+        const span = document.getElementById('profileSchoolValue') || profileSchoolEl.querySelector('span');
+        if (span) span.textContent = user.school || 'Not set';
+        profileSchoolEl.style.display = 'block';
+        if (profileSchoolHint) profileSchoolHint.style.display = user.school ? 'none' : 'block';
     }
     
     // Load conference data
