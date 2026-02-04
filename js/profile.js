@@ -24,6 +24,7 @@ async function updateProfileUIFromAuth(user) {
                     user.bannerType = d.bannerType;
                     user.bannerPreset = d.bannerPreset;
                     user.bannerImage = d.bannerImage || d.banner;
+                    user.school = d.school != null ? d.school : user.school;
                     localStorage.setItem('munCurrentUser', JSON.stringify(user));
                     if (window.__munCurrentUser) window.__munCurrentUser = user;
                 }
@@ -196,6 +197,14 @@ function loadUserProfile(user) {
     if (profileEmail) {
         const span = profileEmail.querySelector('span');
         if (span) span.textContent = user.email;
+    }
+
+    // Set school
+    const profileSchoolEl = document.getElementById('profileSchool');
+    if (profileSchoolEl) {
+        const span = profileSchoolEl.querySelector('span');
+        if (span) span.textContent = user.school || '';
+        profileSchoolEl.style.display = user.school ? 'block' : 'none';
     }
     
     // Load conference data
@@ -754,6 +763,55 @@ function deleteAward(awardId) {
 }
 
 // Edit Profile Modal Functions
+function populateSchoolSelect(selectEl) {
+    if (!selectEl || selectEl.options.length > 1) return; // already populated
+    var schools = window.MUN_PARTICIPATING_SCHOOLS;
+    var list = window.MUN_UNIVERSITIES_THAILAND;
+    if (Array.isArray(schools)) {
+        var g1 = document.createElement('optgroup');
+        g1.label = 'Participating schools';
+        schools.forEach(function(s) {
+            var o = document.createElement('option');
+            o.value = s;
+            o.textContent = s;
+            g1.appendChild(o);
+        });
+        selectEl.appendChild(g1);
+    }
+    var g2 = document.createElement('optgroup');
+    g2.label = 'Other options';
+    [
+        { value: '__other__', label: 'Other (specify below)' },
+        { value: '__university__', label: 'University in Thailand (search)' },
+        { value: 'Gap year', label: 'Gap year' },
+        { value: 'GED', label: 'GED' }
+    ].forEach(function(item) {
+        var o = document.createElement('option');
+        o.value = item.value;
+        o.textContent = item.label;
+        g2.appendChild(o);
+    });
+    selectEl.appendChild(g2);
+    var datalist = document.getElementById('datalistUniversitiesThailand');
+    if (datalist && Array.isArray(list)) {
+        list.forEach(function(u) {
+            var o = document.createElement('option');
+            o.value = u;
+            datalist.appendChild(o);
+        });
+    }
+}
+
+function syncProfileSchoolFields() {
+    var sel = document.getElementById('editProfileSchool');
+    var otherWrap = document.getElementById('profileSchoolOtherWrap');
+    var uniWrap = document.getElementById('profileSchoolUniversityWrap');
+    if (!sel || !otherWrap || !uniWrap) return;
+    var v = sel.value;
+    otherWrap.style.display = v === '__other__' ? 'block' : 'none';
+    uniWrap.style.display = v === '__university__' ? 'block' : 'none';
+}
+
 function openEditProfileModal() {
     const currentUser = JSON.parse(localStorage.getItem('munCurrentUser'));
     if (!currentUser) return;
@@ -766,6 +824,35 @@ function openEditProfileModal() {
     if (editProfileName) editProfileName.value = currentUser.name || '';
     if (editProfilePronouns) editProfilePronouns.value = currentUser.pronouns || '';
     if (editProfileEmail) editProfileEmail.value = currentUser.email || '';
+    
+    // School: populate select once and set current value
+    const editProfileSchool = document.getElementById('editProfileSchool');
+    if (editProfileSchool) {
+        if (editProfileSchool.options.length <= 1) populateSchoolSelect(editProfileSchool);
+        var school = currentUser.school || '';
+        if (school.startsWith('Other: ')) {
+            editProfileSchool.value = '__other__';
+            var otherInput = document.getElementById('editProfileSchoolOther');
+            if (otherInput) otherInput.value = school.slice(7);
+            var uniInput = document.getElementById('editProfileSchoolUniversity');
+            if (uniInput) uniInput.value = '';
+        } else if (school.startsWith('University: ')) {
+            editProfileSchool.value = '__university__';
+            var uniInput = document.getElementById('editProfileSchoolUniversity');
+            if (uniInput) uniInput.value = school.slice(12);
+            var otherInput = document.getElementById('editProfileSchoolOther');
+            if (otherInput) otherInput.value = '';
+        } else {
+            editProfileSchool.value = school;
+            var otherInput = document.getElementById('editProfileSchoolOther');
+            var uniInput = document.getElementById('editProfileSchoolUniversity');
+            if (otherInput) otherInput.value = '';
+            if (uniInput) uniInput.value = '';
+        }
+        syncProfileSchoolFields();
+        editProfileSchool.removeEventListener('change', syncProfileSchoolFields);
+        editProfileSchool.addEventListener('change', syncProfileSchoolFields);
+    }
     
     // Set profile picture preview
     const previewImg = document.getElementById('editProfilePreviewImg');
@@ -862,6 +949,23 @@ function saveProfileChanges() {
         return;
     }
     
+    // School: build value from form
+    var schoolVal = '';
+    var sel = document.getElementById('editProfileSchool');
+    if (sel) {
+        var v = sel.value;
+        if (v === '__other__') {
+            var otherInput = document.getElementById('editProfileSchoolOther');
+            schoolVal = 'Other: ' + (otherInput ? otherInput.value.trim() : '');
+        } else if (v === '__university__') {
+            var uniInput = document.getElementById('editProfileSchoolUniversity');
+            schoolVal = 'University: ' + (uniInput ? uniInput.value.trim() : '');
+        } else if (v) {
+            schoolVal = v;
+        }
+    }
+    currentUser.school = schoolVal;
+
     // Update user object
     currentUser.name = name;
     currentUser.pronouns = pronouns;
@@ -880,12 +984,13 @@ function saveProfileChanges() {
     }
     
     // Save to Firebase if available
-    if (typeof FirebaseDB !== 'undefined' && db && currentUser.uid) {
+    if (typeof FirebaseDB !== 'undefined' && currentUser.uid) {
         FirebaseDB.updateUserProfile(currentUser.uid, {
             name: currentUser.name,
             pronouns: currentUser.pronouns,
             profilePicture: currentUser.profilePicture || '',
-            banner: currentUser.bannerImage || ''
+            banner: currentUser.bannerImage || '',
+            school: currentUser.school || ''
         }).catch(err => {
             console.error('Error updating Firebase profile:', err);
         });

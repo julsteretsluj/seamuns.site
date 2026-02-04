@@ -509,6 +509,23 @@
                     <small style="color: var(--text-secondary); font-size: 0.85em;">Email cannot be changed</small>
                 </div>
                 
+                <div class="form-group">
+                    <label for="editProfileSchool">School</label>
+                    <select id="editProfileSchool" aria-describedby="editProfileSchoolHint">
+                        <option value="">— Select school —</option>
+                    </select>
+                    <small id="editProfileSchoolHint" class="form-hint" style="color: var(--text-secondary); font-size: 0.85em;">Participating schools, university, or other</small>
+                    <div id="profileSchoolOtherWrap" class="form-group" style="margin-top: 0.75rem; display: none;">
+                        <label for="editProfileSchoolOther">Specify school</label>
+                        <input type="text" id="editProfileSchoolOther" placeholder="Enter your school name">
+                    </div>
+                    <div id="profileSchoolUniversityWrap" class="form-group" style="margin-top: 0.75rem; display: none;">
+                        <label for="editProfileSchoolUniversity">University in Thailand</label>
+                        <input type="text" id="editProfileSchoolUniversity" list="datalistUniversitiesThailand" placeholder="Search or type university name">
+                        <datalist id="datalistUniversitiesThailand"></datalist>
+                    </div>
+                </div>
+                
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="cancelProfileBtn">Cancel</button>
                     <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
@@ -535,7 +552,7 @@
 
     <!-- Firebase Configuration -->
     <script src="firebase-config.js"></script>
-    
+    <script src="js/participating-schools-data.js"></script>
     <!-- Main Application Script -->
     <script src="js/script.js?v=68"></script>
 </body>

@@ -157,7 +157,7 @@
         <div class="container">
             <section class="content-section">
                 <h2>🎓 Participating Schools</h2>
-                <p>Schools that have hosted or participated in MUN conferences listed on SEAMUNs. This list is built from our conference database and updates as new conferences are added.</p>
+                <p>Schools that have hosted or participated in MUN conferences listed on SEAMUNs. You can select your school on your <a href="profile.html">profile page</a>.</p>
                 <div id="participatingSchoolsList" class="info-card" style="margin-top: 1rem; padding: 1.25rem; border-radius: 12px; background: var(--bg-glass, #f8f9fa); border: 1px solid var(--border-color, #e0e0e0);">
                     <p style="margin: 0; color: var(--text-muted, #666);">Loading schools…</p>
                 </div>
@@ -165,24 +165,25 @@
         </div>
     </main>
 
-    <script src="../js/conferences-data.js"></script>
+    <script src="../js/participating-schools-data.js"></script>
     <script>
 (function() {
     var el = document.getElementById('participatingSchoolsList');
     if (!el) return;
-    var data = window.MUN_CONFERENCES_DATA;
-    if (!Array.isArray(data) || data.length === 0) {
-        el.innerHTML = '<p style="margin:0;">No participating schools in the database yet. Check back after conferences are added.</p>';
+    var schools = window.MUN_PARTICIPATING_SCHOOLS;
+    if (!Array.isArray(schools) || schools.length === 0) {
+        el.innerHTML = '<p style="margin:0;">No participating schools listed yet. Check back soon.</p>';
         return;
     }
-    var orgs = [];
-    var seen = {};
-    for (var i = 0; i < data.length; i++) {
-        var o = (data[i].organization || '').trim();
-        if (o && !seen[o]) { seen[o] = true; orgs.push(o); }
+    function escapeHtml(str) {
+        if (!str) return '';
+        var div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
     }
-    orgs.sort(function(a, b) { return a.localeCompare(b); });
-    el.innerHTML = '<ul style="margin:0; padding-left:1.5rem;">' + orgs.map(function(s) { return '<li style="margin-bottom:0.35rem;">' + s + '</li>'; }).join('') + '</ul>';
+    el.innerHTML = '<ul style="margin:0; padding-left:1.5rem;">' +
+        schools.map(function(s) { return '<li style="margin-bottom:0.35rem;">' + escapeHtml(s) + '</li>'; }).join('') +
+        '</ul>';
 })();
     </script>
     <script src="../js/env-loader.js" data-env-path="../env.js"></script>

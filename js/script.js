@@ -981,28 +981,23 @@ class MUNTracker {
             });
         }
 
-        // Google Sign-In button (login modal - ID: googleLoginBtn)
-        const googleLoginBtn = document.getElementById('googleLoginBtn');
-        if (googleLoginBtn) {
-            googleLoginBtn.addEventListener('click', async () => {
-                await this.signInWithGoogle();
-            });
-        }
-
-        // Google Sign-In button (signup modal - ID: googleSignupBtn)
-        const googleSignupBtn = document.getElementById('googleSignupBtn');
-        if (googleSignupBtn) {
-            googleSignupBtn.addEventListener('click', async () => {
-                await this.signInWithGoogle();
-            });
-        }
-
-        // Legacy support for googleSignInBtn (if it exists anywhere)
-        const googleSignInBtn = document.getElementById('googleSignInBtn');
-        if (googleSignInBtn) {
-            googleSignInBtn.addEventListener('click', async () => {
-                await this.signInWithGoogle();
-            });
+        // Google Sign-In: single delegated handler so only one sign-in runs per click (avoids multiple tabs)
+        if (!document.body.hasAttribute('data-google-delegate-attached')) {
+            document.body.setAttribute('data-google-delegate-attached', 'true');
+            document.body.addEventListener('click', async (e) => {
+                const btn = e.target.closest('#googleLoginBtn, #googleSignupBtn, #googleSignInBtn');
+                if (!btn) return;
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                if (btn.hasAttribute('data-google-signin-pending')) return;
+                btn.setAttribute('data-google-signin-pending', 'true');
+                try {
+                    await this.signInWithGoogle();
+                } finally {
+                    btn.removeAttribute('data-google-signin-pending');
+                }
+            }, true);
         }
 
         // Logout
@@ -3045,96 +3040,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         
-        // Initialize global Google Sign-In button handlers (works on all pages)
-        function initGoogleSignInButtons() {
-            // Handle login modal Google button
-            const googleLoginBtn = document.getElementById('googleLoginBtn');
-            if (googleLoginBtn && !googleLoginBtn.hasAttribute('data-google-handler-attached')) {
-                googleLoginBtn.setAttribute('data-google-handler-attached', 'true');
-                googleLoginBtn.addEventListener('click', async () => {
-                    try {
-                        if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.signInWithGoogle === 'function') {
-                            const success = await munTracker.signInWithGoogle();
-                            if (success) return;
-                        }
-                        if (typeof FirebaseAuth !== 'undefined' && typeof FirebaseAuth.signInWithGoogle === 'function') {
-                            const result = await FirebaseAuth.signInWithGoogle();
-                            if (result.success) {
-                                window.location.reload();
-                            } else {
-                                if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.showMessage === 'function') {
-                                    munTracker.showMessage(result.error || 'Google Sign-In failed.', 'error');
-                                } else {
-                                    alert(result.error || 'Google Sign-In failed. Please try again.');
-                                }
-                                console.error('Google Sign-In failed:', result.error);
-                            }
-                        } else {
-                            const msg = 'Login is not available on this server. You can still browse without an account.';
-                            if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.showMessage === 'function') {
-                                munTracker.showMessage(msg, 'error');
-                            } else {
-                                alert(msg);
-                            }
-                        }
-                    } catch (error) {
-                        console.error('Google Sign-In error:', error);
-                        const errMsg = error.message || 'Unknown error';
-                        if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.showMessage === 'function') {
-                            munTracker.showMessage('Google Sign-In failed: ' + errMsg, 'error');
-                        } else {
-                            alert('Google Sign-In failed: ' + errMsg);
-                        }
-                    }
-                });
-            }
-
-            // Handle signup modal Google button
-            const googleSignupBtn = document.getElementById('googleSignupBtn');
-            if (googleSignupBtn && !googleSignupBtn.hasAttribute('data-google-handler-attached')) {
-                googleSignupBtn.setAttribute('data-google-handler-attached', 'true');
-                googleSignupBtn.addEventListener('click', async () => {
-                    try {
-                        // Try MUNTracker first (handles Firebase/auth checks and messages)
-                        if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.signInWithGoogle === 'function') {
-                            const success = await munTracker.signInWithGoogle();
-                            if (success) return;
-                        }
-                        // Fallback: FirebaseAuth (returns user-friendly error if auth not set up)
-                        if (typeof FirebaseAuth !== 'undefined' && typeof FirebaseAuth.signInWithGoogle === 'function') {
-                            const result = await FirebaseAuth.signInWithGoogle();
-                            if (result.success) {
-                                window.location.reload();
-                            } else {
-                                if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.showMessage === 'function') {
-                                    munTracker.showMessage(result.error || 'Google Sign-In failed.', 'error');
-                                } else {
-                                    alert(result.error || 'Google Sign-In failed. Please try again.');
-                                }
-                                console.error('Google Sign-In failed:', result.error);
-                            }
-                        } else {
-                            const msg = 'Login is not available on this server. You can still browse without an account.';
-                            if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.showMessage === 'function') {
-                                munTracker.showMessage(msg, 'error');
-                            } else {
-                                alert(msg);
-                            }
-                        }
-                    } catch (error) {
-                        console.error('Google Sign-In error:', error);
-                        const errMsg = error.message || 'Unknown error';
-                        if (typeof munTracker !== 'undefined' && munTracker && typeof munTracker.showMessage === 'function') {
-                            munTracker.showMessage('Google Sign-In failed: ' + errMsg, 'error');
-                        } else {
-                            alert('Google Sign-In failed: ' + errMsg);
-                        }
-                    }
-                });
-            }
-        }
+        // Google Sign-In is handled by a single delegated handler in MUNTracker.bindEvents()
+        // so only one sign-in runs per click (no duplicate tabs). No per-button setup needed here.
+        function initGoogleSignInButtons() {}
     
-        // Initialize Google Sign-In buttons on all pages
         initGoogleSignInButtons();
         
         // Initialize MUNTracker on ALL pages so login status and auth UI stay in sync everywhere

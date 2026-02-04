@@ -744,10 +744,6 @@ body::before {
         opacity: 1;
     }
 }
-    font-size: 14px;
-    display: none;
-}
-
 /* Theme Controls */
 /* Theme Controls Container - Groups dark mode toggle and theme selector */
 .theme-controls {
@@ -6052,10 +6048,13 @@ i.fas, i.far, i.fab {
     color: var(--accent-color) !important;
     font-size: 18px;
 }
+/* These seem like stray rules, remove errors and merge properties appropriately.
+.comparison-item h4 {
     color: var(--accent-color);
     font-size: 16px;
     font-weight: 600;
 }
+*/
 
 .comparison-item ul {
     margin: 0;

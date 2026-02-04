@@ -71,6 +71,9 @@ const FirebaseAuth = {
             console.warn('Auth not initialized (env.js missing or Firebase not configured).');
             return { success: false, error: 'Login is not available on this server. You can still browse without an account.' };
         }
+        if (!db) {
+            return { success: false, error: 'Login is not available on this server. You can still browse without an account.' };
+        }
         try {
             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
@@ -245,6 +248,7 @@ const FirebaseAuth = {
 const FirebaseDB = {
     // Get user profile data
     async getUserProfile(userId) {
+        if (!db) return { success: false, error: 'Firestore not available' };
         try {
             const doc = await db.collection('users').doc(userId).get();
             if (doc.exists) {
@@ -260,6 +264,7 @@ const FirebaseDB = {
 
     // Update user profile data
     async updateUserProfile(userId, data) {
+        if (!db) return { success: false, error: 'Firestore not available' };
         try {
             await db.collection('users').doc(userId).update(data);
             console.log('✅ Profile updated');
@@ -272,6 +277,7 @@ const FirebaseDB = {
 
     // Save conference attendance for user
     async saveAttendance(userId, conferenceId, attendanceStatus) {
+        if (!db) return { success: false, error: 'Firestore not available' };
         try {
             await db.collection('attendance').doc(`${userId}_${conferenceId}`).set({
                 userId,
@@ -289,6 +295,7 @@ const FirebaseDB = {
 
     // Get all attendance records for user
     async getUserAttendanceData(userId) {
+        if (!db) return { success: false, error: 'Firestore not available', data: {} };
         try {
             const snapshot = await db.collection('attendance')
                 .where('userId', '==', userId)
@@ -309,6 +316,7 @@ const FirebaseDB = {
 
     // Get specific conference attendance for user
     async getUserAttendance(userId, conferenceId) {
+        if (!db) return { success: false, error: 'Firestore not available' };
         try {
             const snapshot = await db.collection('attendance')
                 .where('userId', '==', userId)
@@ -329,6 +337,7 @@ const FirebaseDB = {
 
     // Save user attendance for specific conference
     async saveUserAttendance(userId, conferenceId, status) {
+        if (!db) return { success: false, error: 'Firestore not available' };
         try {
             const attendanceData = {
                 userId: userId,
@@ -351,6 +360,7 @@ const FirebaseDB = {
 
     // Add award to user profile
     async addAward(userId, award) {
+        if (!db) return { success: false, error: 'Firestore not available' };
         try {
             await db.collection('users').doc(userId).update({
                 awards: firebase.firestore.FieldValue.arrayUnion(award)
@@ -365,6 +375,7 @@ const FirebaseDB = {
 
     // Update award in user profile
     async updateAward(userId, awards) {
+        if (!db) return { success: false, error: 'Firestore not available' };
         try {
             await db.collection('users').doc(userId).update({
                 awards: awards

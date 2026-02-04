@@ -185,6 +185,7 @@
                             <h3 id="profileName" class="profile-name"></h3>
                             <p id="profilePronouns" class="profile-pronouns" style="display: none;"></p>
                             <p id="profileEmail" class="profile-email"><i class="fas fa-envelope"></i> <span></span></p>
+                            <p id="profileSchool" class="profile-school" style="display: none;"><i class="fas fa-school"></i> <span></span></p>
                         </div>
                     </div>
                 </section>
@@ -378,6 +379,64 @@
         </div>
     </div>
 
+    <!-- Profile Edit Modal (same structure as index.html for profile.js) -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-edit"></i> Edit Profile</h2>
+                <button class="close-btn" id="closeProfileModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="profileForm">
+                <div class="form-group" style="text-align: center;">
+                    <span class="form-group-label" style="display: block; margin-bottom: 8px; font-weight: 500;">Profile Picture</span>
+                    <div style="margin-bottom: 16px;">
+                        <img id="editProfilePreviewImg" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent-blue);" alt="Current Profile">
+                    </div>
+                    <label for="editProfilePicture" class="btn btn-secondary" style="cursor: pointer;">
+                        <i class="fas fa-camera"></i> Change Picture
+                    </label>
+                    <input type="file" id="editProfilePicture" accept="image/*" style="display: none;" aria-label="Upload profile picture">
+                </div>
+                <div class="form-group">
+                    <label for="editProfileName">Full Name *</label>
+                    <input type="text" id="editProfileName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editProfilePronouns">Pronouns</label>
+                    <input type="text" id="editProfilePronouns" placeholder="e.g., she/her, he/him, they/them">
+                </div>
+                <div class="form-group">
+                    <label for="editProfileEmail">Email</label>
+                    <input type="email" id="editProfileEmail" disabled style="opacity: 0.6; cursor: not-allowed;">
+                    <small style="color: var(--text-secondary); font-size: 0.85em;">Email cannot be changed</small>
+                </div>
+                <div class="form-group">
+                    <label for="editProfileSchool">School</label>
+                    <select id="editProfileSchool" aria-describedby="editProfileSchoolHint">
+                        <option value="">— Select school —</option>
+                    </select>
+                    <small id="editProfileSchoolHint" class="form-hint" style="color: var(--text-secondary); font-size: 0.85em;">Participating schools, university, or other</small>
+                    <div id="profileSchoolOtherWrap" class="form-group" style="margin-top: 0.75rem; display: none;">
+                        <label for="editProfileSchoolOther">Specify school</label>
+                        <input type="text" id="editProfileSchoolOther" placeholder="Enter your school name">
+                    </div>
+                    <div id="profileSchoolUniversityWrap" class="form-group" style="margin-top: 0.75rem; display: none;">
+                        <label for="editProfileSchoolUniversity">University in Thailand</label>
+                        <input type="text" id="editProfileSchoolUniversity" list="datalistUniversitiesThailand" placeholder="Search or type university name">
+                        <datalist id="datalistUniversitiesThailand"></datalist>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelProfileBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/participating-schools-data.js"></script>
     <script src="../js/env-loader.js" data-env-path="../env.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
