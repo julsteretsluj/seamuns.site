@@ -371,9 +371,24 @@ window.MUN_CONFERENCES_DATA = [
     independentSignupLink: "",
     advisorSignupLink: "",
     smtApplicationLink: "https://forms.gle/dKEGKJmLbT86YHqU9",
-    smtApplicationLabel: "Apply for SMT / Secretariat",
+    smtApplicationLabel: "SMT Application Form",
+    fwcFormLink: "https://forms.gle/UjSBFFS6Y2oAcogPA",
+    fwcFormLabel: "FWC Topic & Allocations Preference Form",
+    smtRolesHtml: "<p><strong>Needed roles (8 total):</strong></p><ul style=\"margin: 0.5rem 0 1rem 1.25rem; padding: 0;\"><li>Dep Sec Gen (1)</li><li>Parliamentarian (1)</li><li>Logistics &amp; Finance (3)</li><li>Delegate Affairs (1)</li><li>PR &amp; Advertising (2)</li><li>Head of Media (1)</li></ul><p style=\"margin: 0.75rem 0 0 0; color: var(--text-secondary); font-size: 0.95em;\"><strong>Required qualities:</strong> No required experience. Ages 14+.</p><p style=\"margin: 0.5rem 0 0 0; color: var(--text-secondary); font-size: 0.9em;\"><strong>Note:</strong> The SMT application form will close on February 28th.</p>",
     disabledSuitable: true,
     sensorySuitable: true,
+    committeeSizes: [
+        { abbrev: "UNHRC", chairLabel: "Chairs", chairs: 2, delegates: 23, total: 25, gradeRange: "9–12", gradeNote: "mature topics" },
+        { abbrev: "DISEC", chairLabel: "Chairs", chairs: 2, delegates: 23, total: 25, gradeRange: "7–12" },
+        { abbrev: "UN Women", chairLabel: "Chairs", chairs: 2, delegates: 22, total: 24, gradeRange: "9–12", gradeNote: "mature topics" },
+        { abbrev: "UNEP", chairLabel: "Chairs", chairs: 2, delegates: 22, total: 24, gradeRange: "7–12" },
+        { abbrev: "Press Corps", chairLabel: "Editor in Chief, Editor", chairs: 2, delegates: 14, total: 16, gradeRange: "7–12" },
+        { abbrev: "WHO", chairLabel: "Chairs", chairs: 2, delegates: 22, total: 24, gradeRange: "9–12", gradeNote: "mature topics" },
+        { abbrev: "UNSC", chairLabel: "Chairs", chairs: 3, delegates: 15, total: 18, gradeRange: "7–12" },
+        { abbrev: "UNODC", chairLabel: "Chairs", chairs: 2, delegates: 22, total: 24, gradeRange: "9–12", gradeNote: "mature topics" },
+        { abbrev: "FWC", chairLabel: "Chairs", chairs: 2, delegates: 10, total: 12, gradeRange: "7–12" },
+        { abbrev: "ECOSOC", chairLabel: "Chairs", chairs: 2, delegates: 22, total: 24, gradeRange: "7–12" }
+    ],
     committees: [
         "UNHRC (United Nations Human Rights Council) - The Question of Promoting and Accelerating the Universal Abolition of the Death Penalty and Respect for the Right to Life | The Question of The Obligation to Prevent Cruel, Inhuman or Degrading Treatment Arising from Deficiencies in Prison Administration and Justice Systems",
         "DISEC (Disarmament and International Security Committee) - The Question of Strengthening International Protocols and Logistics for Securing the Cross-Border Transport of Weapons of Mass Destruction (WMDs) and Related Materials | The Question of Developing Mechanisms to Prevent the Diversion of Legally Traded Conventional Arms to Illicit Markets and Non-State Actors",
@@ -407,13 +422,13 @@ window.MUN_CONFERENCES_DATA = [
         "Military Expenditure and Public Health",
         "FWC (Fantasy World Committee) — TBD via form"
     ],
-    chairsPages: "<p>Chair applications: <a href='https://forms.gle/dKEGKJmLbT86YHqU9' target='_blank' rel='noopener noreferrer'>SMT Application Form</a>. FWC topic and allocations: <a href='https://forms.gle/UjSBFFS6Y2oAcogPA' target='_blank' rel='noopener noreferrer'>FWC Topic &amp; Allocations Preference Form</a>.</p>",
+    chairsPages: "<p>Chair and FWC applications: see the <strong>Forms</strong> section below.</p>",
     allocations: ["TBD — FWC preferences via <a href='https://forms.gle/UjSBFFS6Y2oAcogPA' target='_blank' rel='noopener noreferrer'>preference form</a>; other committees TBD"],
     availableAwards: ["Best Delegate", "Outstanding Delegate", "Honorable Mention", "Best Position Paper", "Best Chair"],
     previousWinners: [],
     schedule: "<p><strong>28–29 January 2027:</strong> Two-day conference — Opening Ceremony, Committee Sessions, Closing Ceremony.</p>",
     venueGuide: "<p>Conference at AIT (Asian Institute of Technology) Conference Center (TBD). Pathum Thani, Thailand.</p>",
-    extraNotes: "<p><strong>SEAMUN I — Policies with a Purpose.</strong> Two-day conference. <strong>Fees:</strong> School delegate 2,500 THB; Independent delegate 3,000 THB; Chair 800 THB. <strong>Capacity:</strong> 200 delegates, 22 chairs, 8 SMT, 10 staff, 10 external advisors (250 total). Secretary General: Jules (juleskittoastrop@gmail.com). General enquiries: info@seamuns.site. Follow us on Instagram: <a href='https://www.instagram.com/seamun.th.conference/' target='_blank' rel='noopener noreferrer'>@seamun.th.conference</a>. <strong>Accessibility:</strong> Wheelchair accessible and sensory-friendly. FWC universe and allocations: fill in the <a href='https://forms.gle/UjSBFFS6Y2oAcogPA' target='_blank' rel='noopener noreferrer'>FWC Topic &amp; Allocations Preference Form</a>. SMT applications: <a href='https://forms.gle/dKEGKJmLbT86YHqU9' target='_blank' rel='noopener noreferrer'>SMT Application Form</a>.</p>"
+    extraNotes: "<p style=\"margin: 0 0 1rem 0; padding: 10px 14px; background: rgba(255, 193, 7, 0.15); border-left: 4px solid var(--accent-orange, #ff9800); border-radius: 6px; font-size: 0.95em;\"><strong>Planning phase:</strong> This conference is still in the planning phase. All information is subject to change.</p><p><strong>Grades:</strong> Conference open to grades 7–12 (approximately ages 12–18). Some committees have topic-based grade limits; see each committee below.</p><p><strong>SEAMUN I — Policies with a Purpose.</strong> Two-day conference. <strong>Fees:</strong> School delegate 2,500 THB; Independent delegate 3,000 THB; Chair 800 THB. <strong>Capacity:</strong> 200 delegates, 22 chairs, 8 SMT, 10 staff, 10 external advisors (250 total). Secretary General: Jules (juleskittoastrop@gmail.com). General enquiries: info@seamuns.site. Follow us on Instagram: <a href='https://www.instagram.com/seamun.th.conference/' target='_blank' rel='noopener noreferrer'>@seamun.th.conference</a>. <strong>Accessibility:</strong> Wheelchair accessible and sensory-friendly. FWC universe and allocations: fill in the <a href='https://forms.gle/UjSBFFS6Y2oAcogPA' target='_blank' rel='noopener noreferrer'>FWC Topic &amp; Allocations Preference Form</a>. SMT applications: <a href='https://forms.gle/dKEGKJmLbT86YHqU9' target='_blank' rel='noopener noreferrer'>SMT Application Form</a>.</p>"
 }
 ];
 

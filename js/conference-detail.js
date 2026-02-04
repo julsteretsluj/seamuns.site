@@ -1604,6 +1604,7 @@ function populateConferenceDetail(conf) {
             }
             
             const desc = getCommitteeDescription(committeeName, rawCommitteeName);
+            const sizeInfo = conf.committeeSizes && Array.isArray(conf.committeeSizes) && conf.committeeSizes.find(s => s.abbrev === committeeName);
             
             // Difficulty label styling for topics
             const difficultyStyles = {
@@ -1666,6 +1667,8 @@ function populateConferenceDetail(conf) {
                     <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.95em;">${desc.description}</p>
                     <p style="margin: 4px 0 0 0; color: var(--text-secondary); font-size: 0.9em;"><strong>Focus:</strong> ${desc.focus}</p>
                     ${desc.note ? `<p style="margin: 4px 0 0 0; color: var(--accent-blue); font-size: 0.9em; font-style: italic;"><strong>Note:</strong> ${desc.note}</p>` : ''}
+                    ${sizeInfo ? `<p style="margin: 8px 0 0 0; color: var(--text-secondary); font-size: 0.9em;"><strong>Size:</strong> ${sizeInfo.chairs} ${sizeInfo.chairLabel || 'Chairs'}, ${sizeInfo.delegates} Delegates, Total: ${sizeInfo.total}</p>` : ''}
+                    ${sizeInfo && sizeInfo.gradeRange ? `<p style="margin: 4px 0 0 0; color: var(--text-secondary); font-size: 0.9em;"><strong>Grades:</strong> ${sizeInfo.gradeRange}${sizeInfo.gradeNote ? ` <span style="font-style: italic;">(${sizeInfo.gradeNote})</span>` : ''}</p>` : ''}
                     ${chairInfo && chairInfo.trim() ? `
                         <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color);">
                             <div style="color: var(--accent-green); font-size: 0.9em; margin-bottom: 8px;">
@@ -1780,17 +1783,43 @@ function populateConferenceDetail(conf) {
             }
         }
 
-        // SMT / Secretariat application (optional)
-        const smtSection = document.getElementById('smtApplicationSection');
-        const smtSignupEl = document.getElementById('smtSignup');
-        if (smtSection && smtSignupEl) {
-            if (conf.smtApplicationLink) {
-                smtSection.style.display = '';
-                const label = conf.smtApplicationLabel || 'Apply for SMT / Secretariat';
-                smtSignupEl.innerHTML = `<a href="${conf.smtApplicationLink}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%;"><i class="fas fa-clipboard-list"></i> ${label}</a>`;
+        // SMT roles section (optional)
+        const smtRolesSection = document.getElementById('smtRolesSection');
+        const smtRolesContent = document.getElementById('smtRolesContent');
+        if (smtRolesSection && smtRolesContent) {
+            if (conf.smtRolesHtml) {
+                smtRolesSection.style.display = '';
+                smtRolesContent.innerHTML = conf.smtRolesHtml;
             } else {
-                smtSection.style.display = 'none';
-                smtSignupEl.innerHTML = '';
+                smtRolesSection.style.display = 'none';
+                smtRolesContent.innerHTML = '';
+            }
+        }
+
+        // Forms section (SMT, FWC, and other form links)
+        const formsSection = document.getElementById('formsSection');
+        const formsContent = document.getElementById('formsContent');
+        if (formsSection && formsContent) {
+            const forms = [];
+            if (conf.smtApplicationLink) {
+                forms.push({ label: conf.smtApplicationLabel || 'SMT Application Form', href: conf.smtApplicationLink, icon: 'fa-clipboard-list' });
+            }
+            if (conf.fwcFormLink) {
+                forms.push({ label: conf.fwcFormLabel || 'FWC Topic & Allocations Preference Form', href: conf.fwcFormLink, icon: 'fa-wand-magic-sparkles' });
+            }
+            if (conf.forms && Array.isArray(conf.forms)) {
+                conf.forms.forEach(f => {
+                    if (f.href) forms.push({ label: f.label || f.name || 'Form', href: f.href, icon: f.icon || 'fa-file-alt' });
+                });
+            }
+            if (forms.length > 0) {
+                formsSection.style.display = '';
+                formsContent.innerHTML = forms.map(f => 
+                    `<a href="${f.href}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; margin-bottom: 12px;"><i class="fas ${f.icon}"></i> ${f.label}</a>`
+                ).join('');
+            } else {
+                formsSection.style.display = 'none';
+                formsContent.innerHTML = '';
             }
         }
 
