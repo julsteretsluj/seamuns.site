@@ -30,7 +30,6 @@ class MUNTracker {
                 this.bindDetailsModalEvents();
                 this.updateStatistics();
                 this.updateLocationFilter();
-                this.populateCommitteeFilter();
                 console.log('Rendering conferences...');
                 this.renderConferences();
                 if (window.location.search.indexOf('open=login') !== -1) this.openModal('loginModal');
@@ -761,7 +760,7 @@ class MUNTracker {
 
     switchTab(tabName) {
         this.activeTab = tabName;
-        const tabs = document.querySelectorAll('.tab');
+        const tabs = document.querySelectorAll('.tab-btn');
         tabs.forEach(tab => {
             if (tab.getAttribute('data-tab') === tabName) {
                 tab.classList.add('active');
@@ -819,7 +818,7 @@ class MUNTracker {
         });
 
         // Tab navigation
-        const tabs = document.querySelectorAll('.tab');
+        const tabs = document.querySelectorAll('.tab-btn');
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 const tabName = tab.getAttribute('data-tab');
@@ -834,6 +833,10 @@ class MUNTracker {
         }
 
         // Filters
+        const statusFilter = document.getElementById('statusFilter');
+        if (statusFilter) {
+            statusFilter.addEventListener('change', () => this.renderConferences());
+        }
         const locationFilter = document.getElementById('locationFilter');
         if (locationFilter) {
             locationFilter.addEventListener('change', () => this.renderConferences());
@@ -843,116 +846,6 @@ class MUNTracker {
         if (dateFilter) {
             dateFilter.addEventListener('change', () => this.renderConferences());
         }
-
-        // Committee filter
-        const committeeFilter = document.getElementById('committeeFilter');
-        const committeeFilterHeader = committeeFilter?.querySelector('.committee-filter-header');
-        const committeeFilterDropdown = document.getElementById('committeeFilterDropdown');
-        const committeeSearchInput = document.getElementById('committeeSearchInput');
-        const selectAllBtn = document.getElementById('selectAllCommittees');
-        const clearAllBtn = document.getElementById('clearAllCommittees');
-
-        if (committeeFilterHeader && committeeFilterDropdown) {
-            // Toggle dropdown
-            committeeFilterHeader.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const isOpen = committeeFilterDropdown.style.display !== 'none';
-                committeeFilterDropdown.style.display = isOpen ? 'none' : 'block';
-                committeeFilterHeader.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
-                const chevron = committeeFilterHeader.querySelector('.fa-chevron-down');
-                if (chevron) {
-                    chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
-                }
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!committeeFilter.contains(e.target)) {
-                    committeeFilterDropdown.style.display = 'none';
-                    committeeFilterHeader.setAttribute('aria-expanded', 'false');
-                    const chevron = committeeFilterHeader.querySelector('.fa-chevron-down');
-                    if (chevron) {
-                        chevron.style.transform = 'rotate(0deg)';
-                    }
-                }
-            });
-        }
-
-        // Committee search
-        if (committeeSearchInput) {
-            committeeSearchInput.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                const labels = document.querySelectorAll('.committee-checkbox-label');
-                const categoryHeaders = document.querySelectorAll('.committee-category-header');
-                
-                // Track which categories have visible items
-                const visibleCategories = new Set();
-                
-                labels.forEach(label => {
-                    const text = label.textContent.toLowerCase();
-                    const isVisible = text.includes(searchTerm);
-                    label.style.display = isVisible ? 'flex' : 'none';
-                    
-                    // If visible, find its category header
-                    if (isVisible) {
-                        let prevSibling = label.previousElementSibling;
-                        while (prevSibling) {
-                            if (prevSibling.classList.contains('committee-category-header')) {
-                                visibleCategories.add(prevSibling);
-                                break;
-                            }
-                            prevSibling = prevSibling.previousElementSibling;
-                        }
-                    }
-                });
-                
-                // Show/hide category headers based on whether they have visible items
-                categoryHeaders.forEach(header => {
-                    let hasVisibleItems = false;
-                    let nextSibling = header.nextElementSibling;
-                    while (nextSibling) {
-                        if (nextSibling.classList.contains('committee-category-header')) {
-                            break; // Reached next category
-                        }
-                        if (nextSibling.classList.contains('committee-checkbox-label') && 
-                            nextSibling.style.display !== 'none') {
-                            hasVisibleItems = true;
-                            break;
-                        }
-                        nextSibling = nextSibling.nextElementSibling;
-                    }
-                    header.style.display = hasVisibleItems || searchTerm === '' ? 'block' : 'none';
-                });
-            });
-        }
-
-        // Select all committees
-        if (selectAllBtn) {
-            selectAllBtn.addEventListener('click', () => {
-                const checkboxes = document.querySelectorAll('.committee-checkbox');
-                checkboxes.forEach(cb => cb.checked = true);
-                this.updateCommitteeFilterText();
-                this.renderConferences();
-            });
-        }
-
-        // Clear all committees
-        if (clearAllBtn) {
-            clearAllBtn.addEventListener('click', () => {
-                const checkboxes = document.querySelectorAll('.committee-checkbox');
-                checkboxes.forEach(cb => cb.checked = false);
-                this.updateCommitteeFilterText();
-                this.renderConferences();
-            });
-        }
-
-        // Committee checkbox change
-        document.addEventListener('change', (e) => {
-            if (e.target.classList.contains('committee-checkbox')) {
-                this.updateCommitteeFilterText();
-                this.renderConferences();
-            }
-        });
 
         // Login form
         const loginForm = document.getElementById('loginForm');
@@ -1524,7 +1417,6 @@ class MUNTracker {
         this.saveConferences();
         this.updateStatistics();
         this.updateLocationFilter();
-        this.populateCommitteeFilter();
         this.renderConferences();
     }
 
@@ -1540,7 +1432,6 @@ class MUNTracker {
             this.saveConferences();
             this.updateStatistics();
             this.updateLocationFilter();
-            this.populateCommitteeFilter();
             this.renderConferences();
         }
     }
@@ -1695,7 +1586,6 @@ class MUNTracker {
             this.saveConferences();
             this.updateStatistics();
             this.updateLocationFilter();
-            this.populateCommitteeFilter();
             this.renderConferences();
             this.closeDetailsModal();
         }
@@ -2391,24 +2281,6 @@ class MUNTracker {
             const cardClasses = `conference-card ${conference.status} ${conference.attendanceStatus || 'not-attending'}`;
             const flag = this.getCountryFlag(conference.countryCode);
             
-            // Get matching committees if filter is active
-            const matchingCommittees = this.getMatchingCommittees(conference);
-            const matchingCommitteesHTML = matchingCommittees.length > 0 ? `
-                <div class="matching-committees-badge" style="margin-top: 12px; padding: 10px 14px; background: rgba(30, 136, 229, 0.1); border-left: 3px solid var(--accent-color); border-radius: 6px;">
-                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px; color: var(--accent-color); font-weight: 600; font-size: 13px;">
-                        <i class="fas fa-filter"></i>
-                        <span>Includes Selected Committee${matchingCommittees.length > 1 ? 's' : ''}:</span>
-                    </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-                        ${matchingCommittees.map(committee => {
-                            // Extract short name (acronym) for display
-                            const shortName = committee.split(/[–—]/)[0].trim().split('/')[0].trim();
-                            return `<span style="display: inline-block; padding: 4px 10px; background: var(--accent-color); color: white; border-radius: 4px; font-size: 12px; font-weight: 500;">${shortName}</span>`;
-                        }).join('')}
-                    </div>
-                </div>
-            ` : '';
-            
             console.log('Card data prepared, generating HTML...');
 
         return `
@@ -2447,8 +2319,6 @@ class MUNTracker {
                         ${conference.description}
                     </div>
                 ` : ''}
-                
-                ${matchingCommitteesHTML}
                 
                 <div class="conference-actions">
                     <a href="${getConferenceDetailPath()}conference-template.html?id=${conference.id}" class="btn btn-primary">
@@ -2524,11 +2394,7 @@ class MUNTracker {
 
             const matchesLocation = locationValue === 'all' || conf.location === locationValue;
             
-            // Committee filter - use helper function for consistency
-            const selectedCommittees = this.getSelectedCommittees();
-            const matchesCommittee = selectedCommittees.length === 0 || this.getMatchingCommittees(conf).length > 0;
-            
-            return matchesSearch && matchesStatus && matchesLocation && matchesCommittee;
+            return matchesSearch && matchesStatus && matchesLocation;
         });
 
         // Sort upcoming first by soonest, then previous by most recent

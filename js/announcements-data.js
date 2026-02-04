@@ -4,6 +4,24 @@
  */
 window.SEAMUNS_ANNOUNCEMENTS = [
     {
+        date: '2026-02-04',
+        icon: 'fas fa-wand-magic-sparkles',
+        title: 'FWC — Topic & Allocations Preference Form',
+        body: 'Share your preferred universe and allocations for the <strong>Fantasy World Committee (FWC)</strong> at SEAMUN I 2027. Your responses help the Secretariat balance the committee.',
+        linkText: 'Open FWC form →',
+        linkHref: 'https://forms.gle/UjSBFFS6Y2oAcogPA',
+        external: true
+    },
+    {
+        date: '2026-02-04',
+        icon: 'fas fa-clipboard-list',
+        title: 'SMT Application Form',
+        body: 'Apply to join the Secretariat (SMT) for SEAMUN. Use the form to submit your application.',
+        linkText: 'Open SMT application →',
+        linkHref: 'https://forms.gle/dKEGKJmLbT86YHqU9',
+        external: true
+    },
+    {
         date: '2026-01-29',
         icon: 'fas fa-tachometer-alt',
         title: 'SEAMUNs Dashboard',
