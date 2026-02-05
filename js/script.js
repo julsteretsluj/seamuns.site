@@ -372,11 +372,11 @@ class MUNTracker {
         
         const userEmailElement = document.getElementById('userEmail');
         
-        // Set user email/name
+        // Set user email/name (pronouns in brackets)
         if (userEmailElement) {
             const displayName = this.currentUser.name || this.currentUser.email;
             const pronouns = this.currentUser.pronouns;
-            userEmailElement.textContent = displayName + pronouns;
+            userEmailElement.textContent = displayName + (pronouns ? ' (' + pronouns + ')' : '');
         }
         
         // Set profile picture
