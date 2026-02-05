@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://*.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://www.gstatic.com https://*.firebaseio.com https://*.cloudfunctions.net https://*.firebaseapp.com wss://*.firebaseio.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' https: data: blob:;">
-    <title>Points - SEAMUNs</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://*.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com https://*.cloudfunctions.net https://*.firebaseapp.com wss://*.firebaseio.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' https: data: blob:;">
+    <title>Points &amp; Motions - SEAMUNs</title>
     <link rel="icon" type="image/png" href="../assets/logo.png">
     <link rel="stylesheet" href="../css/styles.css?v=3">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -111,8 +111,7 @@
                 <div class="nav-item dropdown">
                     <button class="nav-link">📚 Resources <i class="fas fa-chevron-down"></i></button>
                     <div class="dropdown-content">
-                        <a href="points.html"><i class="fas fa-list-ol"></i> Points</a>
-                        <a href="motions.html"><i class="fas fa-hand-paper"></i> Motions</a>
+                        <a href="points.html"><i class="fas fa-gavel"></i> Points &amp; Motions</a>
                         <a href="committees.html"><i class="fas fa-users-cog"></i> Committees</a>
                         <a href="committees.html#traditional" class="sub-item"><i class="fas fa-landmark"></i> Traditional Committees</a>
                         <a href="committees.html#special" class="sub-item"><i class="fas fa-star"></i> Special Committees</a>
@@ -153,20 +152,78 @@
             </div>
         </div>
     </nav>
+
     <main class="main">
         <div class="container">
+            <a href="../munsimulation/" target="_blank" rel="noopener noreferrer" class="mun-simulation-ad" style="display: block; text-decoration: none; margin-bottom: 24px; padding: 24px 28px; background: linear-gradient(135deg, rgba(43, 95, 166, 0.95) 0%, rgba(107, 76, 154, 0.95) 100%); color: #fff; border-radius: 16px;">
+                <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex-shrink: 0; width: 56px; height: 56px; border-radius: 12px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-gamepad" style="font-size: 28px;"></i>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <strong style="display: block; font-size: 1.1rem; margin-bottom: 4px; font-weight: 600;">MUN Procedure Simulation</strong>
+                        <span style="opacity: 0.95; font-size: 0.95rem; line-height: 1.5;">Single-player game to practice MUN procedure at your own pace — try it at munsimulation</span>
+                    </div>
+                    <span style="flex-shrink: 0; padding: 10px 20px; background: rgba(255,255,255,0.25); border-radius: 10px; font-weight: 600; font-size: 0.9rem;">Play now →</span>
+                </div>
+            </a>
+
+            <section class="content-section">
+                <h2>📋 Motions</h2>
+                <p>Motions are proposals to change what the committee is doing. They require a second, and often a vote.</p>
+                <p class="points-motions-legend" style="margin-bottom: 1rem;">
+                    <span class="legend-dot legend-simple" aria-hidden="true"></span> <strong>Requires Simple Majority (50%+1)</strong> &nbsp;|&nbsp;
+                    <span class="legend-dot legend-two-thirds" aria-hidden="true"></span> <strong>Requires Two-Thirds Majority (⅔)</strong>
+                </p>
+                <ul class="points-motions-list">
+                    <li><span class="dot dot-simple" aria-hidden="true"></span> <strong>Motion to open debate</strong> — Begin debate on the topic or agenda.</li>
+                    <li><span class="dot dot-simple" aria-hidden="true"></span> <strong>Motion to set speaker time</strong> — A motion to change the default speakers time of the general speakers list.</li>
+                    <li><span class="dot dot-simple" aria-hidden="true"></span> <strong>Motion to set the agenda</strong> — Choose the order of topics when multiple topics are on the floor.</li>
+                    <li><span class="dot dot-simple" aria-hidden="true"></span> <strong>Motion for a moderated caucus</strong> — Timed debate on a given topic with a speaking time; chair calls on speakers.</li>
+                    <li><span class="dot dot-simple" aria-hidden="true"></span> <strong>Motion for an unmoderated caucus</strong> — Informal time to talk and form blocs (no formal speakers’ list).</li>
+                    <li><span class="dot dot-simple" aria-hidden="true"></span> <strong>Motion for a consultation of the whole</strong> — Untimed and unlimited speeches, yield from delegate to delegate. Set motion time.</li>
+                    <li><span class="dot dot-two-thirds" aria-hidden="true"></span> <strong>Motion to table</strong> — Postpone discussion of the current matter.</li>
+                    <li><span class="dot dot-simple" aria-hidden="true"></span> <strong>Motion to introduce a draft resolution</strong> — Bring a resolution to the floor for debate.</li>
+                    <li><span class="dot dot-two-thirds" aria-hidden="true"></span> <strong>Motion to close debate</strong> — A motion for the committee to end debate and move into voting procedure.</li>
+                    <li><span class="dot dot-two-thirds" aria-hidden="true"></span> <strong>Motion to move to voting procedure</strong> — End debate and vote on the resolution.</li>
+                    <li><span class="dot dot-simple" aria-hidden="true"></span> <strong>Motion to vote clause by clause</strong> — A motion to vote on each clause of the resolution individually in numeric order.</li>
+                    <li><span class="dot dot-simple" aria-hidden="true"></span> <strong>Motion to divide the question</strong> — A motion to vote on a set of specifically chosen operative clauses separately from the entire resolution.</li>
+                    <li><span class="dot dot-two-thirds" aria-hidden="true"></span> <strong>Motion to adjourn</strong> — End the session.</li>
+                    <li><strong>Motion to appeal the decision of the chair</strong> — This motion is made when a delegate feels the chair has made an incorrect decision.</li>
+                </ul>
+            </section>
+
             <section class="content-section">
                 <h2>✋ Points</h2>
                 <p>Points are formal requests to the chair during debate. Raise your placard and wait to be recognized before speaking.</p>
-                <h3>📌 Common points</h3>
-                <ul>
-                    <li><strong>Point of Order</strong> — Correct a procedural error (e.g. wrong speaker, wrong motion). No debate.</li>
-                    <li><strong>Point of Information</strong> — Question to the speaker. Usually allowed after a speech if the speaker accepts.</li>
-                    <li><strong>Point of Inquiry (or Parliamentary Inquiry)</strong> — Question to the chair about procedure or rules.</li>
-                    <li><strong>Point of Personal Privilege</strong> — Request about comfort or safety (e.g. cannot hear, room temperature).</li>
-                    <li><strong>Point of Clarification</strong> — Request clarification of something said; often used like Point of Information.</li>
+                <p class="points-motions-legend" style="margin-bottom: 1rem;">
+                    <span class="legend-dot legend-simple" aria-hidden="true"></span> <strong>Must be recognized at all times</strong> &nbsp;|&nbsp;
+                    <span class="legend-dot legend-two-thirds" aria-hidden="true"></span> <strong>Can be recognised by the chairs through the suggestion of opening a speech up to POIs and POCs</strong>
+                </p>
+                <ul class="points-motions-list">
+                    <li><span class="dot dot-simple" aria-hidden="true"></span> <strong>Point of Personal Privilege</strong> — Used when a delegate is physically uncomfortable (e.g. temperature too high or low).</li>
+                    <li><span class="dot dot-simple" aria-hidden="true"></span> <strong>Point of Parliamentary Inquiry</strong> — Used when a delegate is confused about procedures or wants clarity.</li>
+                    <li><span class="dot dot-simple" aria-hidden="true"></span> <strong>Point of Order</strong> — Used when a delegate feels that the chairs have made a mistake.</li>
+                    <li><span class="dot dot-two-thirds" aria-hidden="true"></span> <strong>Point of Information (POI)</strong> — Used for numerous reasons both positive and negative. Generally used to inquire further about a speech or resolution.</li>
+                    <li><span class="dot dot-two-thirds" aria-hidden="true"></span> <strong>Point of Clarification (POC)</strong> — Used to clarify the meaning of a term or phrase or statistic.</li>
                 </ul>
-                <p>Rules vary by conference. Follow the chair’s ruling and the conference’s rules of procedure.</p>
+            </section>
+
+            <section class="content-section">
+                <h2>📌 Other procedures</h2>
+                <h3>Yielding</h3>
+                <p>Delegates must yield after speaking in formal contexts including consultation of the whole. Delegates can yield to the following:</p>
+                <ul>
+                    <li><strong>Yield to questions</strong> (only if there is time) — Used when a delegate is eager to answer questions regarding their speech or resolution.</li>
+                    <li><strong>Yield to another delegate</strong> (only if there is time) — Used when delegates need assistance in explaining a certain thing – for example when a POI or POC targets a clause written by co-submitters that the main submitters cannot answer.</li>
+                    <li><strong>Yield to chairs</strong> (default) — Used by delegates if they determine that they do not want to answer questions or do not have enough time to do so.</li>
+                </ul>
+                <h3>Right of reply</h3>
+                <p>Used when a delegate has been explicitly slandered or when untruthful or negative implications of behaviour have been shared about another delegate.</p>
+            </section>
+
+            <section class="content-section">
+                <p class="text-secondary" style="font-size: 0.95em;">Rules vary by conference. Follow the chair’s ruling and the conference’s rules of procedure.</p>
             </section>
         </div>
     </main>

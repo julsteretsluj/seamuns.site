@@ -7353,4 +7353,21 @@ i.fas, i.far, i.fab {
 .far:not(.btn .far):not(.nav-link .far):not(.dropdown-content .far):not(.user-menu .far):not(.theme-toggle .far),
 .fab:not(.btn .fab):not(.nav-link .fab):not(.dropdown-content .fab):not(.user-menu .fab):not(.theme-toggle .fab) {
     color: var(--accent-color) !important;
-}}
+}
+
+/* Points & Motions page: majority indicators */
+.points-motions-legend { font-size: 0.95em; }
+.legend-dot, .dot {
+    display: inline-block;
+    width: 0.75em;
+    height: 0.75em;
+    border-radius: 50%;
+    margin-right: 0.35em;
+    vertical-align: middle;
+}
+.dot { margin-right: 0.5em; }
+.legend-simple, .dot-simple { background: #22c55e; }
+.legend-two-thirds, .dot-two-thirds { background: #eab308; }
+.points-motions-list { list-style: none; padding-left: 0; }
+.points-motions-list li { margin-bottom: 0.5rem; padding-left: 0; }
+.points-motions-list li::before { content: none; }
