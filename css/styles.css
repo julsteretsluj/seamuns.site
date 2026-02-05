@@ -7372,18 +7372,40 @@ i.fas, i.far, i.fab {
 .points-motions-list li { margin-bottom: 0.5rem; padding-left: 0; }
 .points-motions-list li::before { content: none; }
 
-/* Inline tags for majority / recognition */
+/* Inline tags for majority / recognition – pill style, contrasted from motion/point names */
 .req-tag {
     display: inline-block;
-    font-size: 0.75em;
+    font-size: 0.7em;
     font-weight: 600;
-    padding: 0.15em 0.5em;
-    border-radius: 4px;
-    margin-left: 0.25em;
+    padding: 0.2em 0.6em;
+    border-radius: 999px;
+    margin-left: 0.35em;
     vertical-align: middle;
+    letter-spacing: 0.02em;
+    border: 1px solid transparent;
 }
-.req-tag.req-simple { background: rgba(34, 197, 94, 0.2); color: #166534; }
-.req-tag.req-two-thirds { background: rgba(234, 179, 8, 0.25); color: #854d0e; }
-.req-tag.req-note { background: var(--bg-secondary, rgba(0,0,0,0.06)); color: var(--text-secondary); }
-.req-tag.req-immediate { background: rgba(34, 197, 94, 0.2); color: #166534; }
-.req-tag.req-after-speech { background: rgba(234, 179, 8, 0.25); color: #854d0e; }
+.req-tag.req-simple {
+    background: rgba(34, 197, 94, 0.28) !important;
+    color: #166534 !important;
+    border-color: rgba(34, 197, 94, 0.45);
+}
+.req-tag.req-two-thirds {
+    background: rgba(234, 179, 8, 0.35) !important;
+    color: #854d0e !important;
+    border-color: rgba(234, 179, 8, 0.5);
+}
+.req-tag.req-note {
+    background: var(--bg-secondary, rgba(0,0,0,0.08)) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color, rgba(0,0,0,0.12));
+}
+.req-tag.req-immediate {
+    background: rgba(34, 197, 94, 0.28) !important;
+    color: #166534 !important;
+    border-color: rgba(34, 197, 94, 0.45);
+}
+.req-tag.req-after-speech {
+    background: rgba(234, 179, 8, 0.35) !important;
+    color: #854d0e !important;
+    border-color: rgba(234, 179, 8, 0.5);
+}
