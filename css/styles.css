@@ -2696,7 +2696,125 @@ body::before {
     align-items: flex-start;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
+}
+
+.conference-detail-title-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+}
+
+.conference-detail-logo {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--bg-glass);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.conference-detail-logo-placeholder {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+.conference-detail-badges-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.conference-detail-website-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.conference-detail-website-link:hover {
+    text-decoration: underline;
+}
+
+.conference-detail-email-help {
+    color: var(--text-secondary);
+    font-size: 18px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.conference-detail-email-help:hover {
+    color: var(--accent-color);
+}
+
+.conference-detail-key-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px 32px;
+    padding: 16px 0;
+    margin-bottom: 12px;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.conference-detail-key-bar-item {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 15px;
+    color: var(--text-primary);
+}
+
+.conference-detail-key-bar-item .conference-detail-key-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+}
+
+.conference-detail-key-bar-item i {
+    color: var(--accent-color);
+    font-size: 14px;
+}
+
+.conference-detail-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.conference-detail-tag {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .conference-detail-tag {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.conference-detail-info-cards-secondary {
+    margin-top: 0;
 }
 
 .conference-detail-title {
@@ -2956,6 +3074,13 @@ body::before {
         grid-template-columns: 1fr;
         gap: 12px;
     }
+    .conference-detail-key-bar {
+        flex-direction: column;
+        gap: 12px;
+    }
+    .conference-detail-title-row {
+        flex-wrap: wrap;
+    }
     .detail-section {
         padding: 20px 22px;
     }
@@ -3204,6 +3329,75 @@ body::before {
 .detail-section-title i {
     font-size: 1.1rem;
     color: var(--accent-color);
+}
+
+/* Wireframe-style section banners */
+.detail-section-banner {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-color);
+    margin: 0 0 16px 0;
+    padding: 12px 20px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-color);
+}
+
+[data-theme="dark"] .detail-section-banner {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.detail-section-banner-cloud {
+    border-radius: 24px 24px 24px 4px;
+}
+
+.detail-section-banner-oval {
+    border-radius: 24px;
+    text-align: center;
+}
+
+.detail-section-see-more {
+    margin: 12px 0 0 0;
+    font-size: 0.9em;
+}
+
+.detail-section-see-more a {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+/* Sign up CTA and registration type tags */
+.conference-detail-signup-cta {
+    margin-bottom: 20px;
+}
+
+.btn-signup-now {
+    font-size: 1.1rem;
+    padding: 14px 28px;
+    margin-bottom: 12px;
+}
+
+.conference-detail-reg-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.conference-detail-reg-tag {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .conference-detail-reg-tag {
+    background: rgba(255, 255, 255, 0.06);
 }
 
 .detail-section-content {

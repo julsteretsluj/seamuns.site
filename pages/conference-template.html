@@ -158,39 +158,35 @@
 
             <header class="conference-detail-hero">
                 <div class="conference-detail-hero-top">
-                    <h1 class="conference-detail-title" id="conferenceName">Loading...</h1>
-                    <div class="conference-detail-badges" aria-label="Conference status and size">
-                        <span class="conference-detail-badge conference-detail-badge-status" id="conferenceStatus"></span>
-                        <span class="conference-detail-badge conference-detail-badge-size" id="conferenceSize"></span>
+                    <div class="conference-detail-title-row">
+                        <h1 class="conference-detail-title" id="conferenceName">Loading...</h1>
+                        <div class="conference-detail-logo" aria-hidden="true"><span class="conference-detail-logo-placeholder">LOGO</span></div>
+                    </div>
+                    <div class="conference-detail-badges-row">
+                        <div class="conference-detail-badges" aria-label="Conference status and size">
+                            <span class="conference-detail-badge conference-detail-badge-status" id="conferenceStatus"></span>
+                            <span class="conference-detail-badge conference-detail-badge-size" id="conferenceSize"></span>
+                        </div>
+                        <a href="#" id="conferenceWebsiteLink" class="conference-detail-website-link" target="_blank" rel="noopener noreferrer" style="display: none;"><i class="fas fa-external-link-alt"></i> WEBSITE</a>
+                        <a href="#contact-section" class="conference-detail-email-help" title="Contact &amp; Secretariat"><i class="fas fa-question-circle"></i></a>
                     </div>
                 </div>
-                <div class="conference-detail-info-cards">
+                <div class="conference-detail-key-bar">
+                    <span class="conference-detail-key-bar-item"><i class="fas fa-calendar-alt"></i> <span class="conference-detail-key-label">DATE</span> <span id="dates"></span></span>
+                    <span class="conference-detail-key-bar-item"><i class="fas fa-map-marker-alt"></i> <span class="conference-detail-key-label">LOCATION</span> <span id="location"></span></span>
+                    <span class="conference-detail-key-bar-item"><i class="fas fa-tag"></i> <span class="conference-detail-key-label">FEE</span> <span id="pricePerDelegate"></span></span>
+                </div>
+                <div class="conference-detail-tags">
+                    <span class="conference-detail-tag" id="delegateCountTag"></span>
+                    <span class="conference-detail-tag" id="sensoryTag"></span>
+                    <span class="conference-detail-tag" id="wheelchairTag"></span>
+                </div>
+                <div class="conference-detail-info-cards conference-detail-info-cards-secondary">
                     <div class="info-card">
                         <i class="fas fa-university" aria-hidden="true"></i>
                         <div class="info-card-body">
                             <span class="info-card-label">Organization <i class="fas fa-circle-question help-icon" title="The school or organization hosting this conference" aria-label="Learn more about organization"></i></span>
                             <span class="info-card-value" id="organization"></span>
-                        </div>
-                    </div>
-                    <div class="info-card">
-                        <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-                        <div class="info-card-body">
-                            <span class="info-card-label">Location <i class="fas fa-circle-question help-icon" title="Where the conference will be held (venue and city)" aria-label="Learn more about location"></i></span>
-                            <span class="info-card-value" id="location"></span>
-                        </div>
-                    </div>
-                    <div class="info-card">
-                        <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                        <div class="info-card-body">
-                            <span class="info-card-label">Dates <i class="fas fa-circle-question help-icon" title="The start and end dates of the conference" aria-label="Learn more about dates"></i></span>
-                            <span class="info-card-value" id="dates"></span>
-                        </div>
-                    </div>
-                    <div class="info-card">
-                        <i class="fas fa-tag" aria-hidden="true"></i>
-                        <div class="info-card-body">
-                            <span class="info-card-label">Price <i class="fas fa-circle-question help-icon" title="Delegate and chair registration fees" aria-label="Learn more about price"></i></span>
-                            <span class="info-card-value" id="pricePerDelegate"></span>
                         </div>
                     </div>
                     <div class="info-card">
@@ -208,14 +204,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="conference-detail-hero-actions">
-                    <button type="button" class="btn btn-primary" id="attendanceBtn" title="Save this conference to your profile and track your attendance"><i class="fas fa-user-check"></i> Mark as Attending</button>
-                </div>
             </header>
 
             <div class="conference-detail-grid">
-                <section class="detail-section">
-                    <h3 class="detail-section-title"><i class="fas fa-envelope"></i> Contact <i class="fas fa-circle-question help-icon" title="Email addresses and social media for enquiries" aria-label="Learn more about contact"></i></h3>
+                <section class="detail-section detail-section-blurb">
+                    <h2 class="detail-section-banner">Conference intro &amp; aims</h2>
+                    <div class="detail-section-content" id="conferenceBlurb"></div>
+                    <p class="conference-quote" id="conferenceQuote" style="display: none;"></p>
+                </section>
+                <section class="detail-section" id="contact-section">
+                    <h2 class="detail-section-banner">Secretariat</h2>
                     <div class="detail-section-content">
                         <p id="website"></p>
                         <p id="generalEmail"></p>
@@ -224,42 +222,7 @@
                         <p id="secGenAccounts"></p>
                         <p id="parliamentarianAccounts"></p>
                     </div>
-                </section>
-                <section class="detail-section">
-                    <h3 class="detail-section-title"><i class="fas fa-users-cog"></i> Committees <i class="fas fa-circle-question help-icon" title="UN committees simulated at this conference" aria-label="Learn more about committees"></i></h3>
-                    <div class="detail-section-content" id="committees"></div>
-                </section>
-                <section class="detail-section">
-                    <h3 class="detail-section-title"><i class="fas fa-lightbulb"></i> Unique topics <i class="fas fa-circle-question help-icon" title="Discussion topics for each committee" aria-label="Learn more about unique topics"></i></h3>
-                    <div class="detail-section-content" id="uniqueTopics"></div>
-                </section>
-                <section class="detail-section">
-                    <h3 class="detail-section-title"><i class="fas fa-gavel"></i> Chairs &amp; pages <i class="fas fa-circle-question help-icon" title="How to apply as chair or page" aria-label="Learn more about chairs and pages"></i></h3>
-                    <div class="detail-section-content" id="chairsPages"></div>
-                </section>
-                <section class="detail-section" id="smtRolesSection" style="display: none;">
-                    <h3 class="detail-section-title"><i class="fas fa-user-tie"></i> SMT roles &amp; qualities <i class="fas fa-circle-question help-icon" title="Secretariat roles available and how to apply" aria-label="Learn more about SMT roles"></i></h3>
-                    <div class="detail-section-content" id="smtRolesContent"></div>
-                </section>
-                <section class="detail-section" id="formsSection" style="display: none;">
-                    <h3 class="detail-section-title"><i class="fas fa-file-alt"></i> Forms <i class="fas fa-circle-question help-icon" title="Application and registration forms" aria-label="Learn more about forms"></i></h3>
-                    <div class="detail-section-content" id="formsContent"></div>
-                </section>
-                <section class="detail-section">
-                    <h3 class="detail-section-title"><i class="fas fa-flag"></i> Allocations <i class="fas fa-circle-question help-icon" title="Country and committee assignments for delegates" aria-label="Learn more about allocations"></i></h3>
-                    <div class="detail-section-content" id="allocations"></div>
-                </section>
-                <section class="detail-section">
-                    <h3 class="detail-section-title"><i class="fas fa-trophy"></i> Available awards <i class="fas fa-circle-question help-icon" title="Awards given at the conference" aria-label="Learn more about awards"></i></h3>
-                    <div class="detail-section-content" id="availableAwards"></div>
-                </section>
-                <section class="detail-section">
-                    <h3 class="detail-section-title"><i class="fas fa-medal"></i> Previous winners <i class="fas fa-circle-question help-icon" title="Past award recipients" aria-label="Learn more about previous winners"></i></h3>
-                    <div class="detail-section-content" id="previousWinners"></div>
-                </section>
-                <section class="detail-section">
-                    <h3 class="detail-section-title"><i class="fas fa-calendar-day"></i> Schedule <i class="fas fa-circle-question help-icon" title="Conference timetable" aria-label="Learn more about schedule"></i></h3>
-                    <div class="detail-section-content" id="schedule"></div>
+                    <p class="detail-section-see-more"><a href="#formsSection">See more</a> (forms &amp; SMT)</p>
                 </section>
                 <section class="detail-section detail-section-signup-accessibility">
                     <h3 class="detail-section-title detail-section-title-with-conference">
@@ -267,6 +230,14 @@
                         <span class="detail-section-subtitle"> — Sign up &amp; accessibility</span>
                         <i class="fas fa-circle-question help-icon" title="Delegate and advisor registration; wheelchair and sensory accommodations" aria-label="Learn more about sign up and accessibility"></i>
                     </h3>
+                    <div class="conference-detail-signup-cta">
+                        <button type="button" class="btn btn-primary btn-signup-now" id="attendanceBtn" title="Save this conference to your profile and track your attendance"><i class="fas fa-user-check"></i> Mark as Attending</button>
+                        <div class="conference-detail-reg-tags" aria-label="Registration types">
+                            <span class="conference-detail-reg-tag">delegate</span>
+                            <span class="conference-detail-reg-tag">chair</span>
+                            <span class="conference-detail-reg-tag">school</span>
+                        </div>
+                    </div>
                     <div class="detail-section-two-cols">
                         <div class="detail-section-col">
                             <h4 class="detail-section-col-title"><i class="fas fa-user-plus"></i> Independent delegates <i class="fas fa-circle-question help-icon" title="Whether non-school delegates can attend" aria-label="Learn more about independent delegates"></i></h4>
@@ -285,6 +256,43 @@
                             </div>
                         </div>
                     </div>
+                </section>
+                <section class="detail-section">
+                    <h2 class="detail-section-banner">Committees</h2>
+                    <div class="detail-section-content" id="committees"></div>
+                </section>
+                <section class="detail-section">
+                    <h2 class="detail-section-banner">Unique topics</h2>
+                    <div class="detail-section-content" id="uniqueTopics"></div>
+                </section>
+                <section class="detail-section">
+                    <h3 class="detail-section-title"><i class="fas fa-gavel"></i> Chairs &amp; pages <i class="fas fa-circle-question help-icon" title="How to apply as chair or page" aria-label="Learn more about chairs and pages"></i></h3>
+                    <div class="detail-section-content" id="chairsPages"></div>
+                </section>
+                <section class="detail-section" id="smtRolesSection" style="display: none;">
+                    <h3 class="detail-section-title"><i class="fas fa-user-tie"></i> SMT roles &amp; qualities <i class="fas fa-circle-question help-icon" title="Secretariat roles available and how to apply" aria-label="Learn more about SMT roles"></i></h3>
+                    <div class="detail-section-content" id="smtRolesContent"></div>
+                </section>
+                <section class="detail-section" id="formsSection" style="display: none;">
+                    <h3 class="detail-section-title"><i class="fas fa-file-alt"></i> Forms <i class="fas fa-circle-question help-icon" title="Application and registration forms" aria-label="Learn more about forms"></i></h3>
+                    <div class="detail-section-content" id="formsContent"></div>
+                </section>
+                <section class="detail-section">
+                    <h2 class="detail-section-banner detail-section-banner-cloud">Allocations</h2>
+                    <div class="detail-section-content" id="allocations"></div>
+                </section>
+                <section class="detail-section">
+                    <h2 class="detail-section-banner detail-section-banner-oval">Awards</h2>
+                    <h3 class="detail-section-title"><i class="fas fa-trophy"></i> Available awards <i class="fas fa-circle-question help-icon" title="Awards given at the conference" aria-label="Learn more about awards"></i></h3>
+                    <div class="detail-section-content" id="availableAwards"></div>
+                </section>
+                <section class="detail-section">
+                    <h3 class="detail-section-title"><i class="fas fa-medal"></i> Previous winners <i class="fas fa-circle-question help-icon" title="Past award recipients" aria-label="Learn more about previous winners"></i></h3>
+                    <div class="detail-section-content" id="previousWinners"></div>
+                </section>
+                <section class="detail-section">
+                    <h3 class="detail-section-title"><i class="fas fa-calendar-day"></i> Schedule <i class="fas fa-circle-question help-icon" title="Conference timetable" aria-label="Learn more about schedule"></i></h3>
+                    <div class="detail-section-content" id="schedule"></div>
                 </section>
                 <section class="detail-section">
                     <h3 class="detail-section-title"><i class="fas fa-building"></i> Venue guide <i class="fas fa-circle-question help-icon" title="Directions and venue information" aria-label="Learn more about venue guide"></i></h3>

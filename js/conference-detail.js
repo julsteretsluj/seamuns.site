@@ -1452,6 +1452,34 @@ function populateConferenceDetail(conf) {
             }
         }
 
+        // Hero: website link in badges row
+        const conferenceWebsiteLinkEl = document.getElementById('conferenceWebsiteLink');
+        if (conferenceWebsiteLinkEl && conf.website && conf.website.trim()) {
+            conferenceWebsiteLinkEl.href = conf.website;
+            conferenceWebsiteLinkEl.style.display = 'inline-flex';
+        }
+
+        // Hero: accessibility and delegate count tags
+        const delegateCountTagEl = document.getElementById('delegateCountTag');
+        if (delegateCountTagEl) {
+            delegateCountTagEl.textContent = conf.size ? 'del count: ' + (conf.size.split('(')[0].trim() || conf.size) : '';
+            if (!delegateCountTagEl.textContent) delegateCountTagEl.style.display = 'none';
+        }
+        const sensoryTagEl = document.getElementById('sensoryTag');
+        if (sensoryTagEl) {
+            sensoryTagEl.textContent = conf.sensorySuitable ? 'Sensory friendly: Yes' : 'Sensory friendly: No';
+        }
+        const wheelchairTagEl = document.getElementById('wheelchairTag');
+        if (wheelchairTagEl) {
+            wheelchairTagEl.textContent = conf.disabledSuitable ? 'Wheelchair friendly' : 'Wheelchair: contact organisers';
+        }
+
+        // Blurb (conference intro & aims)
+        const conferenceBlurbEl = document.getElementById('conferenceBlurb');
+        if (conferenceBlurbEl && conf.description) {
+            conferenceBlurbEl.innerHTML = '<p>' + escapeHtml(conf.description) + '</p>';
+        }
+
         // Contact information with Instagram copy buttons
         setContactInfoWithCopyButtons('generalEmail', conf.generalEmail || 'Not provided');
         setContactInfoWithCopyButtons('munAccount', conf.munAccount || 'Not provided');
