@@ -920,11 +920,12 @@ function setContactInfoWithCopyButtons(elementId, contactInfo) {
             html += escapeHtml(contactInfo.substring(lastIndex, handle.index));
         }
         
-        // Add handle with copy button
+        // Add handle as Instagram link + copy button
+        const instagramUrl = 'https://www.instagram.com/' + encodeURIComponent(handle.username) + '/';
         const buttonId = `copy-contact-${elementId}-${Date.now()}-${idx}`;
         html += `
             <span style="display: inline-flex; align-items: center; gap: 4px; margin: 0 2px;">
-                <span style="color: var(--accent-green);">${handle.full}</span>
+                <a href="${instagramUrl}" target="_blank" rel="noopener noreferrer" class="instagram-link" style="color: var(--accent-green);">${handle.full}</a>
                 <button 
                     id="${buttonId}"
                     onclick="copyInstagramHandle('${handle.username}', '${buttonId}')"
@@ -967,6 +968,25 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+// Turn @usernames in HTML into Instagram links (skip email addresses and content already inside <a>)
+function linkifyInstagramInHtml(html) {
+    if (!html || typeof html !== 'string') return html;
+    // Split by <a ...> and </a> so we only replace in text outside links
+    const parts = html.split(/(<a\s[^>]*>|<\/a>)/gi);
+    const emailDomainTld = /\.(com|org|net|edu|ac|co|th|uk|fr|de|jp|site|info|io)$/i;
+    // Only match @username when @ is preceded by non-username char (so we skip user@gmail.com)
+    const instagramPattern = /(^|[^a-zA-Z0-9._])@([a-zA-Z0-9._]+)/g;
+    for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+        if (/^<a\s/i.test(part) || /^<\/a>$/i.test(part)) continue; // skip tag parts
+        parts[i] = part.replace(instagramPattern, (match, before, username) => {
+            if (emailDomainTld.test(username)) return match; // e.g. gmail.com - part of email
+            return before + '<a href="https://www.instagram.com/' + escapeHtml(username) + '/" target="_blank" rel="noopener noreferrer" class="instagram-link">@' + escapeHtml(username) + '</a>';
+        });
+    }
+    return parts.join('');
 }
 
 // Format chair info with copy buttons for Instagram handles
@@ -1019,12 +1039,13 @@ function formatChairInfoWithCopyButtons(chairInfo) {
         return ''; // No Instagram handles found
     }
     
-    // Create copy buttons for each handle
+    // Create Instagram link + copy button for each handle
     const buttons = handles.map((handle, idx) => {
+        const instagramUrl = 'https://www.instagram.com/' + encodeURIComponent(handle.username) + '/';
         const buttonId = `copy-btn-${Date.now()}-${idx}`;
         return `
             <span style="display: inline-flex; align-items: center; gap: 4px; margin: 4px 8px 4px 0; padding: 4px 8px; background: var(--bg-glass); border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.85em;">
-                <span style="color: var(--accent-green);">${handle.full}</span>
+                <a href="${instagramUrl}" target="_blank" rel="noopener noreferrer" class="instagram-link" style="color: var(--accent-green);">${handle.full}</a>
                 <button 
                     id="${buttonId}"
                     onclick="copyInstagramHandle('${handle.username}', '${buttonId}')"
@@ -1386,11 +1407,13 @@ function populateConferenceDetail(conf) {
             orgEl.textContent = conf.organization || 'Not specified';
         }
         
-        // Add flag to location
+        // Add flag to location with Google Maps link
         const flag = getCountryFlag(conf.countryCode);
         const locationEl = document.getElementById('location');
         if (locationEl) {
-            locationEl.textContent = `${flag} ${conf.location || 'Not specified'}`;
+            const locationText = conf.location || 'Not specified';
+            const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(locationText);
+            locationEl.innerHTML = `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="location-map-link">${flag} ${escapeHtml(locationText)} <i class="fas fa-external-link-alt" style="font-size: 0.75em; opacity: 0.8;"></i></a>`;
         }
         
         // Dates (defensive)
@@ -1726,7 +1749,7 @@ function populateConferenceDetail(conf) {
         const chairsPagesEl = document.getElementById('chairsPages');
         if (chairsPagesEl) {
             if (conf.chairsPages) {
-                chairsPagesEl.innerHTML = conf.chairsPages;
+                chairsPagesEl.innerHTML = linkifyInstagramInHtml(conf.chairsPages);
             } else {
                 chairsPagesEl.innerHTML = '<p>Chair information will be announced soon.</p>';
             }
@@ -1781,7 +1804,7 @@ function populateConferenceDetail(conf) {
         const scheduleEl = document.getElementById('schedule');
         if (scheduleEl) {
             if (conf.schedule) {
-                scheduleEl.innerHTML = conf.schedule;
+                scheduleEl.innerHTML = linkifyInstagramInHtml(conf.schedule);
             } else {
                 scheduleEl.innerHTML = '<p>Detailed schedule will be released closer to the conference date.</p>';
             }
@@ -1808,7 +1831,7 @@ function populateConferenceDetail(conf) {
         if (smtRolesSection && smtRolesContent) {
             if (conf.smtRolesHtml) {
                 smtRolesSection.style.display = '';
-                smtRolesContent.innerHTML = conf.smtRolesHtml;
+                smtRolesContent.innerHTML = linkifyInstagramInHtml(conf.smtRolesHtml);
             } else {
                 smtRolesSection.style.display = 'none';
                 smtRolesContent.innerHTML = '';
@@ -1866,7 +1889,7 @@ function populateConferenceDetail(conf) {
         const venueGuideEl = document.getElementById('venueGuide');
         if (venueGuideEl) {
             if (conf.venueGuide) {
-                venueGuideEl.innerHTML = conf.venueGuide;
+                venueGuideEl.innerHTML = linkifyInstagramInHtml(conf.venueGuide);
             } else {
                 venueGuideEl.innerHTML = '<p>Venue information will be provided to registered participants.</p>';
             }
@@ -1876,7 +1899,7 @@ function populateConferenceDetail(conf) {
         const extraNotesEl = document.getElementById('extraNotes');
         if (extraNotesEl) {
             if (conf.extraNotes) {
-                extraNotesEl.innerHTML = conf.extraNotes;
+                extraNotesEl.innerHTML = linkifyInstagramInHtml(conf.extraNotes);
             } else {
                 extraNotesEl.innerHTML = '<p>No additional notes at this time.</p>';
             }

@@ -2875,6 +2875,34 @@ body::before {
     line-height: 1.4;
 }
 
+/* Google Maps link for locations */
+.location-map-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.location-map-link:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+.location-map-link .fa-external-link-alt {
+    margin-left: 2px;
+}
+
+/* Instagram links */
+.instagram-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.instagram-link:hover {
+    color: #e1306c;
+    text-decoration: underline;
+}
+
 /* Help icons - hover to learn more */
 .help-icon {
     font-size: 11px;

@@ -1771,7 +1771,7 @@ class MUNTracker {
                 
                 <div class="detail-item">
                     <h4>Location</h4>
-                    <p>${conference.location}</p>
+                    <p><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(conference.location)}" target="_blank" rel="noopener noreferrer" class="location-map-link">${conference.location} <i class="fas fa-external-link-alt" style="font-size: 0.75em; opacity: 0.8;"></i></a></p>
                 </div>
                 
                 <div class="detail-item">
@@ -1818,7 +1818,7 @@ class MUNTracker {
                 ${conference.munAccount ? `
                     <div class="detail-item">
                         <h4>Instagram</h4>
-                        <p>${conference.munAccount}</p>
+                        <p>${conference.munAccount.startsWith('@') ? '<a href="https://www.instagram.com/' + encodeURIComponent(conference.munAccount.slice(1)) + '/" target="_blank" rel="noopener noreferrer" class="instagram-link">' + conference.munAccount + '</a>' : conference.munAccount}</p>
                     </div>
                 ` : ''}
                 
@@ -2302,7 +2302,7 @@ class MUNTracker {
                     </div>
                     <div class="conference-info-item">
                         <i class="fas fa-map-marker-alt"></i>
-                        <span>${flag} ${conference.location}</span>
+                        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(conference.location)}" target="_blank" rel="noopener noreferrer" class="location-map-link">${flag} ${conference.location}</a>
                     </div>
                     <div class="conference-info-item">
                         <i class="fas fa-calendar"></i>
@@ -2512,9 +2512,10 @@ class MUNTracker {
         
         const buttons = handles.map((handle, idx) => {
             const buttonId = `copy-btn-script-${Date.now()}-${idx}`;
+            const instagramUrl = 'https://www.instagram.com/' + encodeURIComponent(handle.username) + '/';
             return `
                 <span style="display: inline-flex; align-items: center; gap: 4px; margin: 2px 4px 2px 0; padding: 2px 6px; background: var(--bg-glass); border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.8em;">
-                    <span style="color: var(--accent-green);">${handle.full}</span>
+                    <a href="${instagramUrl}" target="_blank" rel="noopener noreferrer" class="instagram-link" style="color: var(--accent-green);">${handle.full}</a>
                     <button 
                         id="${buttonId}"
                         onclick="window.copyInstagramHandle('${handle.username}', '${buttonId}')"

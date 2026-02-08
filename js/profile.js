@@ -460,7 +460,7 @@ function displayConferences(containerId, conferences) {
                         <div class="conference-info-row">
                             <div class="conference-info-item">
                                 <i class="fas fa-map-marker-alt"></i>
-                                <span>${flag} ${conf.location}</span>
+                                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(conf.location)}" target="_blank" rel="noopener noreferrer" class="location-map-link">${flag} ${conf.location}</a>
                             </div>
                             <div class="conference-info-item">
                                 <i class="fas fa-calendar-alt"></i>
