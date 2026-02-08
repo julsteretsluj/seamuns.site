@@ -814,8 +814,11 @@ body::before {
     z-index: 1000;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
+    row-gap: 10px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    max-width: calc(100vw - 48px);
 }
 
 .theme-controls:hover {
@@ -910,6 +913,7 @@ body::before {
     display: flex;
     align-items: center;
     gap: 6px;
+    flex-shrink: 0;
 }
 
 .language-selector-label {
@@ -927,6 +931,7 @@ body::before {
     font-weight: 600;
     outline: none;
     cursor: pointer;
+    max-width: 160px;
 }
 
 .color-swatch {
