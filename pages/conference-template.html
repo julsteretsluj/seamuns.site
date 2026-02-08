@@ -160,7 +160,7 @@
                 <div class="conference-detail-hero-top">
                     <div class="conference-detail-title-row">
                         <h1 class="conference-detail-title" id="conferenceName">Loading...</h1>
-                        <div class="conference-detail-logo" aria-hidden="true"><span class="conference-detail-logo-placeholder">LOGO</span></div>
+                        <div class="conference-detail-logo" id="conferenceLogo" style="display: none;" aria-hidden="true"></div>
                     </div>
                     <div class="conference-detail-badges-row">
                         <div class="conference-detail-badges" aria-label="Conference status and size">
@@ -199,7 +199,7 @@
                     <div class="info-card">
                         <i class="fas fa-file-alt" aria-hidden="true"></i>
                         <div class="info-card-body">
-                            <span class="info-card-label">Position paper <i class="fas fa-circle-question help-icon" title="Deadline to submit position papers (required for some committees)" aria-label="Learn more about position paper"></i></span>
+                            <span class="info-card-label">Position Paper <i class="fas fa-circle-question help-icon" title="Deadline to submit position papers (required for some committees)" aria-label="Learn more about position paper"></i></span>
                             <span class="info-card-value" id="positionPaperDeadline"></span>
                         </div>
                     </div>
@@ -222,20 +222,20 @@
                         <p id="secGenAccounts"></p>
                         <p id="parliamentarianAccounts"></p>
                     </div>
-                    <p class="detail-section-see-more"><a href="#formsSection">See more</a> (forms &amp; SMT)</p>
+                    <p class="detail-section-see-more" id="seeMoreFormsLink" style="display: none;"><a href="#formsSection">See more</a> (forms &amp; SMT)</p>
                 </section>
                 <section class="detail-section detail-section-signup-accessibility">
                     <h3 class="detail-section-title detail-section-title-with-conference">
                         <span class="conference-title-inline" id="conferenceNameSignup"></span>
-                        <span class="detail-section-subtitle"> — Sign up &amp; accessibility</span>
+                        <span class="detail-section-subtitle"> — Sign Up &amp; Accessibility</span>
                         <i class="fas fa-circle-question help-icon" title="Delegate and advisor registration; wheelchair and sensory accommodations" aria-label="Learn more about sign up and accessibility"></i>
                     </h3>
                     <div class="conference-detail-signup-cta">
                         <button type="button" class="btn btn-primary btn-signup-now" id="attendanceBtn" title="Save this conference to your profile and track your attendance"><i class="fas fa-user-check"></i> Mark as Attending</button>
                         <div class="conference-detail-reg-tags" aria-label="Registration types">
-                            <span class="conference-detail-reg-tag">delegate</span>
-                            <span class="conference-detail-reg-tag">chair</span>
-                            <span class="conference-detail-reg-tag">school</span>
+                            <span class="conference-detail-reg-tag">Delegate</span>
+                            <span class="conference-detail-reg-tag">Chair</span>
+                            <span class="conference-detail-reg-tag">School</span>
                         </div>
                     </div>
                     <div class="detail-section-two-cols">

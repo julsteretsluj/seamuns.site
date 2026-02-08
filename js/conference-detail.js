@@ -1376,6 +1376,19 @@ function formatDateSafe(value) {
     }
 }
 
+// Returns true if the given deadline string is in the past (end of that day, local time).
+function isDeadlinePast(deadlineString) {
+    if (deadlineString == null || String(deadlineString).trim() === '') return false;
+    try {
+        const d = new Date(deadlineString);
+        if (isNaN(d.getTime())) return false;
+        d.setHours(23, 59, 59, 999);
+        return Date.now() > d.getTime();
+    } catch (e) {
+        return false;
+    }
+}
+
 // Populate conference details
 function populateConferenceDetail(conf) {
     try {
@@ -1388,6 +1401,17 @@ function populateConferenceDetail(conf) {
         const conferenceNameSignupEl = document.getElementById('conferenceNameSignup');
         if (conferenceNameSignupEl) {
             conferenceNameSignupEl.textContent = conf.name || 'Conference Name';
+        }
+        const logoEl = document.getElementById('conferenceLogo');
+        if (logoEl) {
+            const logoUrl = conf.logo || conf.logoUrl || '';
+            if (logoUrl && logoUrl.trim()) {
+                logoEl.style.display = 'flex';
+                logoEl.innerHTML = '<img src="' + escapeHtml(logoUrl) + '" alt="">';
+            } else {
+                logoEl.style.display = 'none';
+                logoEl.innerHTML = '';
+            }
         }
         const statusEl = document.getElementById('conferenceStatus');
         if (statusEl) {
@@ -1844,9 +1868,13 @@ function populateConferenceDetail(conf) {
             independentDelsWelcomeEl.textContent = conf.independentDelsWelcome ? 'Yes, independent delegates are welcome! Advisors are welcome but not necessary.' : 'Currently only accepting school delegations.';
         }
         
+        const registrationClosed = isDeadlinePast(conf.registrationDeadline);
+
         const independentSignupEl = document.getElementById('independentSignup');
         if (independentSignupEl) {
-            if (conf.independentDelsWelcome && conf.independentSignupLink) {
+            if (registrationClosed) {
+                independentSignupEl.innerHTML = '<p class="text-secondary" style="margin-top: 8px;">Registration has closed.</p>';
+            } else if (conf.independentDelsWelcome && conf.independentSignupLink) {
                 independentSignupEl.innerHTML = `<a href="${conf.independentSignupLink}" class="btn btn-primary" style="width: 100%; margin-top: 12px;"><i class="fas fa-user-plus"></i> Sign Up as Independent Delegate</a>`;
             } else {
                 independentSignupEl.innerHTML = '';
@@ -1866,37 +1894,52 @@ function populateConferenceDetail(conf) {
             }
         }
 
-        // Forms section (SMT, FWC, and other form links)
+        // Forms section (SMT, FWC, and other form links) — hide if registration deadline has passed
         const formsSection = document.getElementById('formsSection');
         const formsContent = document.getElementById('formsContent');
         if (formsSection && formsContent) {
-            const forms = [];
-            if (conf.smtApplicationLink) {
-                forms.push({ label: conf.smtApplicationLabel || 'SMT Application Form', href: conf.smtApplicationLink, icon: 'fa-clipboard-list' });
-            }
-            if (conf.fwcFormLink) {
-                forms.push({ label: conf.fwcFormLabel || 'FWC Topic & Allocations Preference Form', href: conf.fwcFormLink, icon: 'fa-wand-magic-sparkles' });
-            }
-            if (conf.forms && Array.isArray(conf.forms)) {
-                conf.forms.forEach(f => {
-                    if (f.href) forms.push({ label: f.label || f.name || 'Form', href: f.href, icon: f.icon || 'fa-file-alt' });
-                });
-            }
-            if (forms.length > 0) {
-                formsSection.style.display = '';
-                formsContent.innerHTML = forms.map(f => 
-                    `<a href="${f.href}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; margin-bottom: 12px;"><i class="fas ${f.icon}"></i> ${f.label}</a>`
-                ).join('');
-            } else {
+            if (registrationClosed) {
                 formsSection.style.display = 'none';
                 formsContent.innerHTML = '';
+            } else {
+                const forms = [];
+                if (conf.smtApplicationLink) {
+                    forms.push({ label: conf.smtApplicationLabel || 'SMT Application Form', href: conf.smtApplicationLink, icon: 'fa-clipboard-list' });
+                }
+                if (conf.fwcFormLink) {
+                    forms.push({ label: conf.fwcFormLabel || 'FWC Topic & Allocations Preference Form', href: conf.fwcFormLink, icon: 'fa-wand-magic-sparkles' });
+                }
+                if (conf.forms && Array.isArray(conf.forms)) {
+                    conf.forms.forEach(f => {
+                        if (f.href) forms.push({ label: f.label || f.name || 'Form', href: f.href, icon: f.icon || 'fa-file-alt' });
+                    });
+                }
+                if (forms.length > 0) {
+                    formsSection.style.display = '';
+                    formsContent.innerHTML = forms.map(f => 
+                        `<a href="${f.href}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; margin-bottom: 12px;"><i class="fas ${f.icon}"></i> ${f.label}</a>`
+                    ).join('');
+                } else {
+                    formsSection.style.display = 'none';
+                    formsContent.innerHTML = '';
+                }
             }
         }
 
-        // Advisor Signup
+        // Show "See more (forms & SMT)" only when forms or SMT content is available and registration not closed
+        const seeMoreFormsLinkEl = document.getElementById('seeMoreFormsLink');
+        if (seeMoreFormsLinkEl) {
+            const hasForms = !registrationClosed && !!(conf.smtApplicationLink || conf.fwcFormLink || (conf.forms && conf.forms.length > 0));
+            const hasSmt = !!(conf.smtRolesHtml && conf.smtRolesHtml.trim());
+            seeMoreFormsLinkEl.style.display = (hasForms || hasSmt) ? '' : 'none';
+        }
+
+        // Advisor Signup — hide link if registration deadline has passed
         const advisorSignupEl = document.getElementById('advisorSignup');
         if (advisorSignupEl) {
-            if (conf.advisorSignupLink) {
+            if (registrationClosed) {
+                advisorSignupEl.innerHTML = '<p class="text-secondary">Registration has closed.</p>';
+            } else if (conf.advisorSignupLink) {
                 advisorSignupEl.innerHTML = `<a href="${conf.advisorSignupLink}" class="btn btn-primary" style="width: 100%;"><i class="fas fa-chalkboard-teacher"></i> Sign Up Your School</a>`;
             } else {
                 advisorSignupEl.innerHTML = '<p>Contact the conference organizers for registration information.</p>';
