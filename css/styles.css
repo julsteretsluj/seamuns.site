@@ -2645,11 +2645,21 @@ body::before {
 .conference-detail-main {
     padding: 32px 0 48px;
     min-height: 60vh;
+    width: 100%;
 }
 
 .conference-detail-main .container {
-    max-width: 1200px;
+    max-width: none;
+    width: 100%;
     margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Committees page and conference detail: use full screen width */
+.main.committees-page-full .container {
+    max-width: none;
+    width: 100%;
+    padding: 0 24px;
 }
 
 .conference-detail-back {
@@ -2972,6 +2982,18 @@ body::before {
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;
+}
+
+@media (min-width: 768px) {
+    .conference-detail-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1100px) {
+    .conference-detail-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 .detail-main-column {
