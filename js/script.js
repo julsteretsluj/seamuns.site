@@ -1675,46 +1675,10 @@ class MUNTracker {
     }
 
     openDetailsModal(conference) {
-        const modal = document.getElementById('detailsModal');
-        const title = document.getElementById('detailsTitle');
-        const details = document.getElementById('conferenceDetails');
-
-        if (!modal || !title || !details) {
-            console.error('Details modal elements not found');
-            return;
+        // Use the same conference page layout for all conferences: navigate to full page
+        if (conference && conference.id) {
+            window.location.href = getConferenceDetailPath() + `conference-template.html?id=${conference.id}`;
         }
-
-        this.currentDetailsConference = conference;
-        title.textContent = conference.name;
-        details.innerHTML = this.renderConferenceDetails(conference);
-
-        // Update attendance toggle button text and re-attach handlers
-        const toggleBtn = document.getElementById('toggleAttendanceBtn');
-        const toggleText = document.getElementById('attendanceToggleText');
-        if (toggleBtn && toggleText) {
-            toggleText.textContent = this.getAttendanceToggleText(conference.attendanceStatus || 'not-attending');
-            
-            // Remove existing listeners and re-attach to ensure it works
-            const newToggleBtn = toggleBtn.cloneNode(true);
-            toggleBtn.parentNode.replaceChild(newToggleBtn, toggleBtn);
-            newToggleBtn.addEventListener('click', () => {
-                if (this.currentDetailsConference) {
-                    this.toggleAttendance(this.currentDetailsConference.id);
-                }
-            });
-        }
-
-        // Show/hide login prompt based on auth state
-        const loginPrompt = document.getElementById('loginPrompt');
-        if (loginPrompt) {
-            loginPrompt.style.display = this.currentUser ? 'none' : 'block';
-        }
-        if (toggleBtn) {
-            toggleBtn.style.display = this.currentUser ? 'block' : 'none';
-        }
-
-        modal.classList.add('show');
-        modal.style.display = 'flex';
     }
 
     closeDetailsModal() {
