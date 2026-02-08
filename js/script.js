@@ -2849,12 +2849,64 @@ function updateThemeUI() {
 // Also call the full initialization function for UI updates
 initThemeStandalone();
 
+function initLanguageSelector() {
+    const controls = document.querySelector('.theme-controls');
+    if (!controls || controls.querySelector('.language-selector')) return;
+
+    const container = document.createElement('div');
+    container.className = 'language-selector';
+
+    const label = document.createElement('span');
+    label.className = 'language-selector-label';
+    label.textContent = 'Language';
+
+    const select = document.createElement('select');
+    select.className = 'language-selector-select';
+    select.setAttribute('aria-label', 'Language');
+
+    const options = [
+        { value: 'en', label: 'English' },
+        { value: 'th', label: 'Thai' },
+        { value: 'zh', label: 'Chinese' },
+        { value: 'ja', label: 'Japanese' },
+        { value: 'ru', label: 'Russian' },
+        { value: 'fr', label: 'French' },
+        { value: 'es', label: 'Spanish' }
+    ];
+
+    options.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt.value;
+        option.textContent = opt.label;
+        select.appendChild(option);
+    });
+
+    const savedLang = localStorage.getItem('munLanguage') || 'en';
+    select.value = savedLang;
+    document.documentElement.setAttribute('lang', savedLang);
+
+    select.addEventListener('change', (event) => {
+        const lang = event.target.value;
+        localStorage.setItem('munLanguage', lang);
+        document.documentElement.setAttribute('lang', lang);
+    });
+
+    container.appendChild(label);
+    container.appendChild(select);
+    controls.appendChild(container);
+}
+
 // Initialize the application
 let munTracker;
 document.addEventListener('DOMContentLoaded', () => {
     try {
         // Theme is already applied, but ensure UI elements are updated
         updateThemeUI();
+
+        // Initialize language selector on all pages
+        if (typeof initLanguageSelector === 'function') {
+            initLanguageSelector();
+        }
         
         // Initialize date/time display
         console.log('Initializing date/time display...');
