@@ -152,11 +152,16 @@
             </div>
         </div>
     </nav>
-    <main class="main committees-page-full">
+    <main class="main">
         <div class="container">
             <section class="content-section">
-                <h2>🏛️ Committees</h2>
+                <h2><i class="fas fa-users-cog"></i> Committees</h2>
                 <p>MUN conferences use committees to simulate different UN and international bodies. Each committee has a specific topic and rules of procedure.</p>
+                <div class="tab-navigation" role="tablist">
+                    <button class="tab-btn active" role="tab" aria-selected="true" data-tab="traditional"><i class="fas fa-landmark"></i><span>Traditional</span></button>
+                    <button class="tab-btn" role="tab" aria-selected="false" data-tab="special"><i class="fas fa-star"></i><span>Special</span></button>
+                </div>
+                <div id="tab-traditional" class="tab-content active">
                 <h3 id="traditional">📋 Traditional committees</h3>
                 <ul>
                     <li><strong>UNGA (General Assembly)</strong> — Plenary body; broad topics, large size.</li>
@@ -167,6 +172,8 @@
                     <li><strong>SPECPOL (Special Political & Decolonization)</strong> — Decolonization, special political.</li>
                     <li><strong>UNEP / WHO / UNESCO</strong> — Specialized agencies on environment, health, culture.</li>
                 </ul>
+                </div>
+                <div id="tab-special" class="tab-content">
                 <h3 id="special">⭐ Special committees</h3>
                 <ul>
                     <li><strong>ICJ (International Court of Justice)</strong> — Legal simulation; cases, judges, counsel.</li>
@@ -175,10 +182,31 @@
                     <li><strong>Press Corps</strong> — Journalists; coverage, interviews, articles.</li>
                 </ul>
                 <p>Check each conference’s committee list for topics, chairs, and size. Use <a href="../index.html">Upcoming & Previous MUNs</a> to browse conferences.</p>
+                </div>
             </section>
         </div>
     </main>
 
+    <script>
+        document.querySelectorAll(".content-section .tab-btn").forEach(function(btn) {
+            btn.addEventListener("click", function() {
+                var tabId = this.getAttribute("data-tab");
+                var section = this.closest(".content-section");
+                if (!section) return;
+                section.querySelectorAll(".tab-btn").forEach(function(b) {
+                    b.classList.remove("active");
+                    b.setAttribute("aria-selected", "false");
+                });
+                section.querySelectorAll(".tab-content").forEach(function(c) {
+                    c.classList.remove("active");
+                });
+                this.classList.add("active");
+                this.setAttribute("aria-selected", "true");
+                var content = section.querySelector("#tab-" + tabId);
+                if (content) content.classList.add("active");
+            });
+        });
+    </script>
     <script src="../js/env-loader.js" data-env-path="../env.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>

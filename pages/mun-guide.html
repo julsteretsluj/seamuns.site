@@ -46,15 +46,13 @@
         }
 
         .tab-btn.active {
-            background: var(--accent-blue);
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-purple, #6b46c1));
             color: white;
-            box-shadow: 0 4px 12px rgba(43, 95, 166, 0.3);
+            box-shadow: 0 4px 12px rgba(107, 70, 193, 0.3);
         }
 
         .tab-btn.active:hover {
-            background: var(--accent-blue);
-            color: white;
-            opacity: 0.9;
+            opacity: 0.95;
         }
 
         .tab-btn i {
@@ -269,22 +267,105 @@
     <main class="main">
         <div class="container">
             <section class="content-section">
-                <h2>📖 MUN Guide</h2>
-                <p>A short overview of Model UN and how to use SEAMUNs.</p>
-                <h3>🌐 What is MUN?</h3>
-                <p>Model United Nations (MUN) is a simulation where students take on the role of delegates representing countries or characters. They debate topics, negotiate, write resolutions, and follow rules of procedure similar to the real UN.</p>
-                <h3>🚀 Getting started</h3>
-                <ul>
-                    <li><strong>Find conferences</strong> — Use <a href="../index.html">Upcoming & Previous MUNs</a> to see conferences; open one for dates, fees, committees, and signup links.</li>
-                    <li><strong>Prepare</strong> — Read the topic, research your country’s position, and write a position paper if required. See <a href="how-to-prep.html">How to Prep</a>, <a href="position-papers.html">Position Papers</a>, and <a href="how-to-prep.html">How to Prep</a> for the MUN Simulation Game.</li>
-                    <li><strong>Procedure</strong> — Learn points, motions, and resolutions: <a href="points.html">Points &amp; Motions</a>, <a href="resolutions.html">Resolutions</a>, <a href="speeches.html">Speeches</a>.</li>
-                </ul>
-                <h3>On this site</h3>
-                <p>Use the navigation to explore <strong>Conferences</strong>, <strong>Schools & Advisors</strong>, <strong>Delegates & Chairs</strong>, and <strong>Resources</strong>. For procedure practice, try the <a href="../munsimulation/" target="_blank" rel="noopener noreferrer">MUN Simulation Game</a>.</p>
+                <h2><i class="fas fa-book"></i> MUN Guide</h2>
+                <p>Complete guide to understanding and participating in Model United Nations.</p>
+
+                <div class="tab-navigation" role="tablist">
+                    <button class="tab-btn active" role="tab" aria-selected="true" data-tab="points"><i class="fas fa-hand-pointer"></i><span>Points</span></button>
+                    <button class="tab-btn" role="tab" aria-selected="false" data-tab="motions"><i class="fas fa-hand-paper"></i><span>Motions</span></button>
+                    <button class="tab-btn" role="tab" aria-selected="false" data-tab="speeches"><i class="fas fa-microphone"></i><span>Speeches</span></button>
+                    <button class="tab-btn" role="tab" aria-selected="false" data-tab="resolutions"><i class="fas fa-file-alt"></i><span>Resolutions</span></button>
+                    <button class="tab-btn" role="tab" aria-selected="false" data-tab="resources"><i class="fas fa-download"></i><span>Resources</span></button>
+                </div>
+
+                <div id="tab-points" class="tab-content active">
+                    <h3><i class="fas fa-hand-pointer"></i> Points in MUN</h3>
+                    <p>Points are formal requests made by delegates during committee sessions. They help maintain order and allow delegates to address procedural or personal concerns. Here are the main types of points used in MUN:</p>
+                    <ul>
+                        <li><strong>Point of Order</strong> — Correct a procedural error. No debate.</li>
+                        <li><strong>Point of Information</strong> — Question to the speaker (usually after a speech if the speaker accepts).</li>
+                        <li><strong>Point of Parliamentary Inquiry</strong> — Question to the chair about procedure or rules.</li>
+                        <li><strong>Point of Personal Privilege</strong> — Request about comfort or safety (e.g. cannot hear, room temperature).</li>
+                        <li><strong>Point of Clarification</strong> — Request clarification of something said.</li>
+                    </ul>
+                    <p><a href="points.html" class="btn btn-primary"><i class="fas fa-gavel"></i> Full Points &amp; Motions guide</a></p>
+                </div>
+
+                <div id="tab-motions" class="tab-content">
+                    <h3><i class="fas fa-hand-paper"></i> Motions in MUN</h3>
+                    <p>Motions are proposals to change what the committee is doing. They require a second and often a vote. Common motions include:</p>
+                    <ul>
+                        <li>Motion to open debate — Begin debate on the topic.</li>
+                        <li>Motion to set the agenda — Choose the order of topics.</li>
+                        <li>Motion for a moderated caucus — Timed debate; chair calls on speakers.</li>
+                        <li>Motion for an unmoderated caucus — Informal time to talk and form blocs.</li>
+                        <li>Motion to introduce a draft resolution — Bring a resolution to the floor.</li>
+                        <li>Motion to close debate / move to voting procedure — End debate and vote.</li>
+                        <li>Motion to table — Postpone discussion.</li>
+                        <li>Motion to adjourn — End the session.</li>
+                    </ul>
+                    <p><a href="points.html" class="btn btn-primary"><i class="fas fa-gavel"></i> Full Points &amp; Motions guide</a></p>
+                </div>
+
+                <div id="tab-speeches" class="tab-content">
+                    <h3><i class="fas fa-microphone"></i> Speeches in MUN</h3>
+                    <p>Speeches are how delegates present their country's position and persuade others. Key tips:</p>
+                    <ul>
+                        <li><strong>Structure</strong> — Brief intro, 2–3 main points, clear conclusion or call to action.</li>
+                        <li><strong>Timing</strong> — Respect the speaker time; practice to fit your speech.</li>
+                        <li><strong>Engagement</strong> — Reference other delegates, respond to arguments, build alliances.</li>
+                        <li><strong>Clarity</strong> — State your country's position clearly; use evidence and examples.</li>
+                    </ul>
+                    <p><a href="speeches.html" class="btn btn-primary"><i class="fas fa-microphone"></i> Full Speeches guide</a></p>
+                </div>
+
+                <div id="tab-resolutions" class="tab-content">
+                    <h3><i class="fas fa-file-alt"></i> Resolutions in MUN</h3>
+                    <p>Resolutions are formal documents that propose solutions to the committee's topic. They are written by a group of delegates (signatories and sponsors) and voted on at the end of debate.</p>
+                    <ul>
+                        <li><strong>Preambulatory clauses</strong> — Context and justification (e.g. <em>Noting with concern</em>, <em>Recognizing</em>).</li>
+                        <li><strong>Operative clauses</strong> — Actions and recommendations (e.g. <em>Calls upon</em>, <em>Urges</em>, <em>Recommends</em>).</li>
+                        <li><strong>Format</strong> — Each clause ends with a semicolon; the final clause ends with a period.</li>
+                    </ul>
+                    <p><a href="resolutions.html" class="btn btn-primary"><i class="fas fa-file-alt"></i> Full Resolutions guide</a></p>
+                </div>
+
+                <div id="tab-resources" class="tab-content">
+                    <h3><i class="fas fa-download"></i> Resources</h3>
+                    <p>Use these pages to prepare and participate in MUN:</p>
+                    <ul>
+                        <li><a href="points.html">Points &amp; Motions</a> — Procedure reference</li>
+                        <li><a href="committees.html">Committees</a> — Traditional and special committees</li>
+                        <li><a href="speeches.html">Speeches</a> — How to deliver effective speeches</li>
+                        <li><a href="resolutions.html">Resolutions</a> — Format and writing</li>
+                        <li><a href="position-papers.html">Position Papers</a> — Research and writing</li>
+                        <li><a href="templates.html">Templates</a> — Downloadable formats</li>
+                        <li><a href="../munsimulation/" target="_blank" rel="noopener noreferrer">MUN Simulation Game</a> — Practice procedure</li>
+                    </ul>
+                    <p><a href="../index.html" class="btn btn-primary"><i class="fas fa-check-circle"></i> Browse Conferences</a></p>
+                </div>
             </section>
         </div>
     </main>
 
+    <script>
+        document.querySelectorAll('.tab-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var tabId = this.getAttribute('data-tab');
+                document.querySelectorAll('.tab-btn').forEach(function(b) {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-selected', 'false');
+                });
+                document.querySelectorAll('.tab-content').forEach(function(c) {
+                    c.classList.remove('active');
+                });
+                this.classList.add('active');
+                this.setAttribute('aria-selected', 'true');
+                var content = document.getElementById('tab-' + tabId);
+                if (content) content.classList.add('active');
+            });
+        });
+    </script>
     <script src="../js/env-loader.js" data-env-path="../env.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>

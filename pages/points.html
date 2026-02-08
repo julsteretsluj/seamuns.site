@@ -169,7 +169,15 @@
             </a>
 
             <section class="content-section">
-                <h2>📋 Motions</h2>
+                <h2><i class="fas fa-gavel"></i> Points &amp; Motions</h2>
+                <p>Procedure reference for points, motions, and related rules. Rules vary by conference — follow the chair&apos;s ruling.</p>
+                <div class="tab-navigation" role="tablist">
+                    <button class="tab-btn active" role="tab" aria-selected="true" data-tab="motions"><i class="fas fa-hand-paper"></i><span>Motions</span></button>
+                    <button class="tab-btn" role="tab" aria-selected="false" data-tab="points"><i class="fas fa-hand-pointer"></i><span>Points</span></button>
+                    <button class="tab-btn" role="tab" aria-selected="false" data-tab="other"><i class="fas fa-info-circle"></i><span>Other procedures</span></button>
+                </div>
+                <div id="tab-motions" class="tab-content active">
+                <h3>📋 Motions</h3>
                 <p>Motions are proposals to change what the committee is doing. They require a second, and often a vote. <strong>When multiple motions are on the floor, they are voted upon in order from most disruptive to least disruptive</strong> — the motion that would change committee business the most is voted on first.</p>
                 <p class="points-motions-legend" style="margin-bottom: 1rem;">
                     <span class="legend-dot legend-simple" aria-hidden="true"></span> <strong>Requires Simple Majority (50%+1)</strong> &nbsp;|&nbsp;
@@ -230,10 +238,10 @@
                     <li>Motion to set the agenda</li>
                 </ol>
                 <p class="text-secondary" style="font-size: 0.9em; margin-top: 0.5rem;">Motion to appeal the decision of the chair is not part of this order; the chair rules on it directly. Conferences may use slightly different hierarchies — check your rules of procedure.</p>
-            </section>
+                </div>
 
-            <section class="content-section">
-                <h2>✋ Points</h2>
+                <div id="tab-points" class="tab-content">
+                <h3>✋ Points</h3>
                 <p>Points are formal requests to the chair during debate. Raise your placard and wait to be recognized before speaking.</p>
                 <p class="points-motions-legend" style="margin-bottom: 1rem;">
                     <span class="legend-dot legend-simple" aria-hidden="true"></span> <strong>Must be recognized immediately (at all times)</strong> &nbsp;|&nbsp;
@@ -246,10 +254,10 @@
                     <li><span class="dot dot-two-thirds" aria-hidden="true"></span> <strong>Point of Information (POI)</strong> <span class="req-tag req-after-speech">After speech</span> — Used for numerous reasons both positive and negative. Generally used to inquire further about a speech or resolution.</li>
                     <li><span class="dot dot-two-thirds" aria-hidden="true"></span> <strong>Point of Clarification (POC)</strong> <span class="req-tag req-after-speech">After speech</span> — Used to clarify the meaning of a term or phrase or statistic.</li>
                 </ul>
-            </section>
+                </div>
 
-            <section class="content-section">
-                <h2>📌 Other procedures</h2>
+                <div id="tab-other" class="tab-content">
+                <h3>📌 Other procedures</h3>
                 <h3>Yielding</h3>
                 <p>Delegates must yield after speaking in formal contexts including consultation of the whole. Delegates can yield to the following:</p>
                 <ul>
@@ -259,14 +267,32 @@
                 </ul>
                 <h3>Right of reply</h3>
                 <p>Used when a delegate has been explicitly slandered or when untruthful or negative implications of behaviour have been shared about another delegate.</p>
-            </section>
-
-            <section class="content-section">
-                <p class="text-secondary" style="font-size: 0.95em;">Rules vary by conference. Follow the chair’s ruling and the conference’s rules of procedure.</p>
+                <p class="text-secondary" style="font-size: 0.95em; margin-top: 1rem;">Rules vary by conference. Follow the chair's ruling and the conference's rules of procedure.</p>
+                </div>
             </section>
         </div>
     </main>
 
+    <script>
+        document.querySelectorAll('.content-section .tab-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var tabId = this.getAttribute('data-tab');
+                var section = this.closest('.content-section');
+                if (!section) return;
+                section.querySelectorAll('.tab-btn').forEach(function(b) {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-selected', 'false');
+                });
+                section.querySelectorAll('.tab-content').forEach(function(c) {
+                    c.classList.remove('active');
+                });
+                this.classList.add('active');
+                this.setAttribute('aria-selected', 'true');
+                var content = section.querySelector('#tab-' + tabId);
+                if (content) content.classList.add('active');
+            });
+        });
+    </script>
     <script src="../js/env-loader.js" data-env-path="../env.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
