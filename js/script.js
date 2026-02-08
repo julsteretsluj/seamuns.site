@@ -2862,6 +2862,7 @@ const I18N_LANG_MAP = {
     th: 'th',
     zh: 'zh-CN',
     ja: 'ja',
+    ko: 'ko',
     ru: 'ru',
     fr: 'fr',
     es: 'es'
@@ -3076,6 +3077,7 @@ function initLanguageSelector() {
         { value: 'th', label: 'Thai' },
         { value: 'zh', label: 'Chinese' },
         { value: 'ja', label: 'Japanese' },
+        { value: 'ko', label: 'Korean' },
         { value: 'ru', label: 'Russian' },
         { value: 'fr', label: 'French' },
         { value: 'es', label: 'Spanish' }
