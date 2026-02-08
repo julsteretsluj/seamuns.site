@@ -1418,6 +1418,17 @@ function populateConferenceDetail(conf) {
             positionPaperDeadlineEl.textContent = conf.positionPaperDeadline ? formatDateSafe(conf.positionPaperDeadline) : 'Not specified - Check with organizers';
         }
 
+        // Website
+        const websiteEl = document.getElementById('website');
+        if (websiteEl) {
+            if (conf.website && conf.website.trim()) {
+                websiteEl.innerHTML = '<strong>Website:</strong> <a href="' + conf.website.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener noreferrer">' + (conf.website.replace(/^https?:\/\//, '').replace(/\/$/, '') || conf.website) + '</a>';
+            } else {
+                websiteEl.textContent = '';
+                websiteEl.style.display = 'none';
+            }
+        }
+
         // Contact information with Instagram copy buttons
         setContactInfoWithCopyButtons('generalEmail', conf.generalEmail || 'Not provided');
         setContactInfoWithCopyButtons('munAccount', conf.munAccount || 'Not provided');
