@@ -1368,10 +1368,14 @@ function populateConferenceDetail(conf) {
         if (statusEl) {
             statusEl.textContent = conf.status === 'previous' ? 'PREVIOUS' : 'UPCOMING';
             statusEl.classList.toggle('previous', conf.status === 'previous');
+            statusEl.title = conf.status === 'previous' ? 'This conference has already taken place' : 'This conference is upcoming';
+            statusEl.setAttribute('aria-label', statusEl.title);
         }
         const sizeEl = document.getElementById('conferenceSize');
         if (sizeEl) {
             sizeEl.textContent = conf.size || '100-300 attendees';
+            sizeEl.title = 'Expected total attendees (delegates, chairs, staff)';
+            sizeEl.setAttribute('aria-label', sizeEl.title);
         }
         const orgEl = document.getElementById('organization');
         if (orgEl) {
@@ -1693,11 +1697,11 @@ function populateConferenceDetail(conf) {
         }
     }
 
-        // Unique Topics
+        // Unique Topics (card-based)
         const uniqueTopicsEl = document.getElementById('uniqueTopics');
         if (uniqueTopicsEl) {
             if (conf.uniqueTopics && conf.uniqueTopics.length > 0) {
-                uniqueTopicsEl.innerHTML = `<ul class="topic-list">${conf.uniqueTopics.map(t => `<li>${t}</li>`).join('')}</ul>`;
+                uniqueTopicsEl.innerHTML = `<div class="topic-cards-grid">${conf.uniqueTopics.map(t => `<div class="topic-card">${t}</div>`).join('')}</div>`;
             } else {
                 uniqueTopicsEl.innerHTML = '<p>Topic information coming soon.</p>';
             }
@@ -1723,12 +1727,12 @@ function populateConferenceDetail(conf) {
             }
         }
 
-        // Awards with descriptions
+        // Awards with descriptions (card-based)
         if (conf.availableAwards && conf.availableAwards.length > 0) {
         const awardItems = conf.availableAwards.map(a => {
             const desc = getAwardDescription(a);
             return `
-                <div class="award-item" style="background: var(--bg-glass); border: 1px solid var(--border-color); border-left: 4px solid ${desc.color}; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+                <div class="award-card" style="border-left: 4px solid ${desc.color};">
                     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
                         <span style="font-size: 1.5em;">${desc.icon}</span>
                         <strong style="font-size: 1.1em; color: var(--text-primary);">${a}</strong>
@@ -1740,7 +1744,7 @@ function populateConferenceDetail(conf) {
         }).join('');
         const availableAwardsEl = document.getElementById('availableAwards');
         if (availableAwardsEl) {
-            availableAwardsEl.innerHTML = awardItems;
+            availableAwardsEl.innerHTML = `<div class="awards-cards-grid">${awardItems}</div>`;
         }
     } else {
         const availableAwardsEl = document.getElementById('availableAwards');
