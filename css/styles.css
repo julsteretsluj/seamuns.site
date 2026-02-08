@@ -3198,6 +3198,92 @@ body::before {
     padding-left: 1.25rem;
 }
 
+/* Sign up & accessibility: title + two columns */
+.detail-section-signup-accessibility {
+    grid-column: 1 / -1;
+}
+
+.detail-section-title-with-conference {
+    flex-wrap: wrap;
+    align-items: baseline;
+}
+
+.conference-title-inline {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.detail-section-subtitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.detail-section-two-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 8px;
+}
+
+@media (max-width: 640px) {
+    .detail-section-two-cols {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+.detail-section-col {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px 22px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .detail-section-col {
+    background: rgba(30, 30, 30, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.detail-section-col-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-section-col .detail-section-col-title + .detail-section-content {
+    margin-bottom: 20px;
+}
+
+.detail-section-col .detail-section-col-title:not(:first-child) {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Committees / delegations: two columns */
+.conference-detail-grid #committees {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.conference-detail-grid #committees .committee-item {
+    margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+    .conference-detail-grid #committees {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Topic cards - each topic in its own card */
 .topic-cards-grid {
     display: grid;

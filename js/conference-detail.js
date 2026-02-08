@@ -1364,6 +1364,10 @@ function populateConferenceDetail(conf) {
         if (conferenceNameEl) {
             conferenceNameEl.textContent = conf.name || 'Conference Name';
         }
+        const conferenceNameSignupEl = document.getElementById('conferenceNameSignup');
+        if (conferenceNameSignupEl) {
+            conferenceNameSignupEl.textContent = conf.name || 'Conference Name';
+        }
         const statusEl = document.getElementById('conferenceStatus');
         if (statusEl) {
             statusEl.textContent = conf.status === 'previous' ? 'PREVIOUS' : 'UPCOMING';
