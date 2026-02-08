@@ -459,12 +459,15 @@ window.MUN_CONFERENCES_DATA = [
         "ECOSOC - The Question of Regulating the Influence of Foreign Investment on Developing Economies",
         "HCC - The Indochinese Independence Wars Against French Colonialism",
         "WHO - Tackling Antimicrobial Resistance in Global Health",
-        "EU (FR) — conducted entirely in French — La question de la gestion des migrations et des politiques d'asile au sein de l'Union Européenne",
+        "EU (FR) - La question de la gestion des migrations et des politiques d'asile au sein de l'Union Européenne",
         "PRESS - Addressing the Protection of Journalists in Active Conflict Zones"
     ],
     uniqueTopics: ["Foreign Investment in Developing Economies", "Indochinese Independence Wars", "Antimicrobial Resistance", "EU Migration and Asylum Policies", "Protection of Journalists in Conflict Zones"],
     chairsPages: "",
     allocations: [],
+    committeeTags: {
+        "EU (FR)": { tag: "In French", tooltip: "This committee is conducted entirely in French for the purpose of including LFIB students." }
+    },
     forms: [
         { label: "Page Application Form", href: "https://forms.gle/X5YkB9vRQiFRCEiS8", icon: "fa-file-lines" },
         { label: "Chair Application Form", href: "https://forms.gle/k1iERQmsPqyr4ca27", icon: "fa-gavel" }

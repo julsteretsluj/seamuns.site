@@ -1699,6 +1699,9 @@ function populateConferenceDetail(conf) {
             
             const desc = getCommitteeDescription(committeeName, rawCommitteeName);
             const sizeInfo = conf.committeeSizes && Array.isArray(conf.committeeSizes) && conf.committeeSizes.find(s => s.abbrev === committeeName);
+            // Display name: keep parenthetical e.g. "EU (FR)" when present in the raw string
+            const displayName = (typeof c === 'string' && c.includes(' - ')) ? c.split(' - ')[0].trim() : committeeName;
+            const tagInfo = conf.committeeTags && conf.committeeTags[displayName];
             
             // Difficulty label styling for topics
             const difficultyStyles = {
@@ -1719,8 +1722,9 @@ function populateConferenceDetail(conf) {
                         <span style="font-size: 1.5em;">${desc.icon}</span>
                         <div style="flex: 1;">
                             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
-                                <strong style="font-size: 1.1em; color: var(--text-primary);">${committeeName}</strong>
+                                <strong style="font-size: 1.1em; color: var(--text-primary);">${displayName}</strong>
                                 ${desc.type ? `<span style="font-size: 0.7em; padding: 2px 6px; border-radius: 10px; font-weight: bold; text-transform: uppercase; ${desc.type === 'traditional' ? 'background: #e3f2fd; color: #1976d2; border: 1px solid #bbdefb;' : 'background: #f3e5f5; color: #7b1fa2; border: 1px solid #ce93d8;'}">${desc.type === 'traditional' ? '🏛️ Traditional' : '⭐ Specialized'}</span>` : ''}
+                                ${tagInfo ? `<span style="font-size: 0.7em; padding: 2px 6px; border-radius: 10px; font-weight: bold; background: #e8f5e9; color: #2e7d32; border: 1px solid #81c784;">${tagInfo.tag}</span><i class="fas fa-circle-question" style="color: var(--text-secondary); font-size: 0.85em; cursor: help;" title="${(tagInfo.tooltip || '').replace(/"/g, '&quot;')}" aria-label="${(tagInfo.tooltip || '').replace(/"/g, '&quot;')}"></i>` : ''}
                             </div>
                             <div style="font-size: 0.9em; color: var(--text-secondary);">(${desc.name})</div>
                         </div>
