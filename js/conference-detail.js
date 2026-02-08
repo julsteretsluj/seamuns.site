@@ -2148,6 +2148,9 @@ function populateConferenceDetail(conf) {
                 hideDetailSectionFor(extraNotesEl);
             }
         }
+
+        // Notify translation system so committees, topics, awards, and all dynamic content get translated
+        window.dispatchEvent(new CustomEvent('mun-dynamic-content-ready'));
     } catch (error) {
         console.error('Error in populateConferenceDetail:', error);
         const conferenceNameEl = document.getElementById('conferenceName');

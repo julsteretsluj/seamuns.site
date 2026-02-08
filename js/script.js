@@ -3050,6 +3050,13 @@ function startTranslationObserver() {
     I18N_STATE.observer.observe(document.body, { childList: true, subtree: true, characterData: true });
 }
 
+// Re-translate when dynamic content is added (e.g. conference detail: committees, topics, awards)
+function onDynamicContentReady() {
+    if (I18N_STATE.lang && I18N_STATE.lang !== 'en') {
+        translatePage(I18N_STATE.lang);
+    }
+}
+
 function stopTranslationObserver() {
     if (I18N_STATE.observer) {
         I18N_STATE.observer.disconnect();
@@ -3124,6 +3131,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof initLanguageSelector === 'function') {
             initLanguageSelector();
         }
+
+        // Re-translate when dynamic content is ready (conference detail: committees, topics, awards, etc.)
+        window.addEventListener('mun-dynamic-content-ready', onDynamicContentReady);
         
         // Initialize date/time display
         console.log('Initializing date/time display...');
