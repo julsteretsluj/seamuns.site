@@ -1709,44 +1709,60 @@ class MUNTracker {
 
     // Rendering
     renderConferenceDetails(conference) {
-        const startDate = new Date(conference.startDate).toLocaleDateString('en-US', {
+        const startDate = conference.startDate ? new Date(conference.startDate).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
-        });
-        const endDate = new Date(conference.endDate).toLocaleDateString('en-US', {
+        }) : '';
+        const endDate = conference.endDate ? new Date(conference.endDate).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
-        });
+        }) : '';
         const registrationDeadline = conference.registrationDeadline ? 
             new Date(conference.registrationDeadline).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
-            }) : 'Not specified';
+            }) : '';
 
-        return `
-            <div class="conference-details">
+        const detailItems = [];
+        if (conference.organization) {
+            detailItems.push(`
                 <div class="detail-item">
                     <h4>Organization</h4>
                     <p>${conference.organization}</p>
                 </div>
-                
+            `);
+        }
+        if (conference.location) {
+            detailItems.push(`
                 <div class="detail-item">
                     <h4>Location</h4>
                     <p><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(conference.location)}" target="_blank" rel="noopener noreferrer" class="location-map-link">${conference.location} <i class="fas fa-external-link-alt" style="font-size: 0.75em; opacity: 0.8;"></i></a></p>
                 </div>
-                
+            `);
+        }
+        if (startDate || endDate) {
+            detailItems.push(`
                 <div class="detail-item">
                     <h4>Conference Dates</h4>
-                    <p>${startDate} - ${endDate}</p>
+                    <p>${startDate && endDate ? `${startDate} - ${endDate}` : (startDate || endDate)}</p>
                 </div>
-                
+            `);
+        }
+        if (registrationDeadline) {
+            detailItems.push(`
                 <div class="detail-item">
                     <h4>Registration Deadline</h4>
                     <p>${registrationDeadline}</p>
                 </div>
+            `);
+        }
+
+        return `
+            <div class="conference-details">
+                ${detailItems.join('')}
                 
                 ${conference.description ? `
                     <div class="detail-item">
@@ -1835,13 +1851,13 @@ class MUNTracker {
                                         <h5>${committeeName}</h5>
                                     </div>
                                     <div class="topics-section">
-                                        ${committeeTopic ? `<h6>Topic</h6><p>${committeeTopic}</p>` : '<h6>Details</h6><p>Information coming soon</p>'}
+                                        ${committeeTopic ? `<h6>Topic</h6><p>${committeeTopic}</p>` : ''}
                                         ${chairInfo ? `
                                             <div style="margin-top: 8px;">
                                                 <p style="color: var(--accent-green); margin-bottom: 4px;"><strong><i class="fas fa-user-tie"></i> Chairs:</strong> ${chairInfo}</p>
                                                 ${this.formatChairInfoWithCopyButtonsForScript(chairInfo)}
                                             </div>
-                                        ` : '<p style="margin-top: 8px; color: var(--text-tertiary);"><strong><i class="fas fa-user-tie"></i> Chairs:</strong> TBD</p>'}
+                                        ` : ''}
                                     </div>
                                 </div>
                             `;
@@ -2237,10 +2253,10 @@ class MUNTracker {
     renderConferenceCard(conference) {
         console.log('Rendering card for:', conference.name);
         try {
-            const startDate = new Date(conference.startDate).toLocaleDateString();
-            const endDate = new Date(conference.endDate).toLocaleDateString();
+            const startDate = conference.startDate ? new Date(conference.startDate).toLocaleDateString() : '';
+            const endDate = conference.endDate ? new Date(conference.endDate).toLocaleDateString() : '';
             const registrationDeadline = conference.registrationDeadline ? 
-                new Date(conference.registrationDeadline).toLocaleDateString() : 'Not specified';
+                new Date(conference.registrationDeadline).toLocaleDateString() : '';
 
             const cardClasses = `conference-card ${conference.status} ${conference.attendanceStatus || 'not-attending'}`;
             const flag = this.getCountryFlag(conference.countryCode);
@@ -2260,22 +2276,30 @@ class MUNTracker {
                 </div>
                 
                 <div class="conference-info">
-                    <div class="conference-info-item">
-                        <i class="fas fa-university"></i>
-                        <span>${conference.organization}</span>
-                    </div>
-                    <div class="conference-info-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(conference.location)}" target="_blank" rel="noopener noreferrer" class="location-map-link">${flag} ${conference.location}</a>
-                    </div>
-                    <div class="conference-info-item">
-                        <i class="fas fa-calendar"></i>
-                        <span>${startDate} - ${endDate}</span>
-                    </div>
-                    <div class="conference-info-item">
-                        <i class="fas fa-clock"></i>
-                        <span>Registration: ${registrationDeadline}</span>
-                    </div>
+                    ${conference.organization ? `
+                        <div class="conference-info-item">
+                            <i class="fas fa-university"></i>
+                            <span>${conference.organization}</span>
+                        </div>
+                    ` : ''}
+                    ${conference.location ? `
+                        <div class="conference-info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(conference.location)}" target="_blank" rel="noopener noreferrer" class="location-map-link">${flag} ${conference.location}</a>
+                        </div>
+                    ` : ''}
+                    ${(startDate || endDate) ? `
+                        <div class="conference-info-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>${startDate && endDate ? `${startDate} - ${endDate}` : (startDate || endDate)}</span>
+                        </div>
+                    ` : ''}
+                    ${registrationDeadline ? `
+                        <div class="conference-info-item">
+                            <i class="fas fa-clock"></i>
+                            <span>Registration: ${registrationDeadline}</span>
+                        </div>
+                    ` : ''}
                 </div>
                 
                 ${conference.description ? `

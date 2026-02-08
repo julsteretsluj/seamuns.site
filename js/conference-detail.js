@@ -858,11 +858,14 @@ function getAwardDescription(award) {
 // Set contact info with copy buttons for Instagram handles
 function setContactInfoWithCopyButtons(elementId, contactInfo) {
     const element = document.getElementById(elementId);
-    if (!element) return;
+    if (!element) return false;
     
-    if (!contactInfo || contactInfo === 'Not provided') {
-        element.textContent = contactInfo || 'Not provided';
-        return;
+    if (!contactInfo || String(contactInfo).trim() === '') {
+        element.textContent = '';
+        const parent = element.closest('p');
+        if (parent) parent.style.display = 'none';
+        element.style.display = 'none';
+        return false;
     }
     
     // First, find and mark all email addresses to exclude them
@@ -903,64 +906,106 @@ function setContactInfoWithCopyButtons(elementId, contactInfo) {
             }
         }
     }
-    
-    if (handles.length === 0) {
-        // No Instagram handles, just display text
+
+    const emails = emailRanges.map(range => ({
+        email: contactInfo.substring(range.start, range.end),
+        index: range.start,
+        length: range.end - range.start
+    }));
+
+    if (handles.length === 0 && emails.length === 0) {
+        // No Instagram handles or emails, just display text
         element.textContent = contactInfo;
-        return;
+        return true;
     }
-    
+
+    const matches = [
+        ...handles.map(handle => ({ type: 'instagram', ...handle, length: handle.full.length })),
+        ...emails.map(email => ({ type: 'email', ...email }))
+    ].sort((a, b) => a.index - b.index);
+
     // Build HTML with copy buttons
     let html = '';
     let lastIndex = 0;
     
-    handles.forEach((handle, idx) => {
-        // Add text before this handle
-        if (handle.index > lastIndex) {
-            html += escapeHtml(contactInfo.substring(lastIndex, handle.index));
+    matches.forEach((item, idx) => {
+        if (item.index > lastIndex) {
+            html += escapeHtml(contactInfo.substring(lastIndex, item.index));
         }
-        
-        // Add handle as Instagram link + copy button
-        const instagramUrl = 'https://www.instagram.com/' + encodeURIComponent(handle.username) + '/';
-        const buttonId = `copy-contact-${elementId}-${Date.now()}-${idx}`;
-        html += `
-            <span style="display: inline-flex; align-items: center; gap: 4px; margin: 0 2px;">
-                <a href="${instagramUrl}" target="_blank" rel="noopener noreferrer" class="instagram-link" style="color: var(--accent-green);">${handle.full}</a>
-                <button 
-                    id="${buttonId}"
-                    onclick="copyInstagramHandle('${handle.username}', '${buttonId}')"
-                    style="
-                        background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-                        border: none;
-                        color: white;
-                        padding: 2px 6px;
-                        border-radius: 6px;
-                        cursor: pointer;
-                        font-size: 0.75em;
-                        display: inline-flex;
-                        align-items: center;
-                        gap: 3px;
-                        transition: transform 0.2s ease;
-                        vertical-align: middle;
-                    "
-                    onmouseover="this.style.transform='scale(1.05)'"
-                    onmouseout="this.style.transform='scale(1)'"
-                    title="Copy ${handle.username}"
-                >
-                    <i class="fas fa-copy" style="font-size: 0.7em;"></i>
-                </button>
-            </span>
-        `;
-        
-        lastIndex = handle.index + handle.full.length;
+
+        if (item.type === 'instagram') {
+            const instagramUrl = 'https://www.instagram.com/' + encodeURIComponent(item.username) + '/';
+            const buttonId = `copy-contact-${elementId}-${Date.now()}-${idx}`;
+            html += `
+                <span style="display: inline-flex; align-items: center; gap: 4px; margin: 0 2px;">
+                    <a href="${instagramUrl}" target="_blank" rel="noopener noreferrer" class="instagram-link" style="color: var(--accent-green);">${item.full}</a>
+                    <button 
+                        id="${buttonId}"
+                        onclick="copyInstagramHandle('${item.username}', '${buttonId}')"
+                        style="
+                            background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+                            border: none;
+                            color: white;
+                            padding: 2px 6px;
+                            border-radius: 6px;
+                            cursor: pointer;
+                            font-size: 0.75em;
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 3px;
+                            transition: transform 0.2s ease;
+                            vertical-align: middle;
+                        "
+                        onmouseover="this.style.transform='scale(1.05)'"
+                        onmouseout="this.style.transform='scale(1)'"
+                        title="Copy ${item.username}"
+                    >
+                        <i class="fas fa-copy" style="font-size: 0.7em;"></i>
+                    </button>
+                </span>
+            `;
+        } else {
+            const buttonId = `copy-email-${elementId}-${Date.now()}-${idx}`;
+            const mailto = `mailto:${item.email}`;
+            html += `
+                <span style="display: inline-flex; align-items: center; gap: 4px; margin: 0 2px;">
+                    <a href="${mailto}" class="instagram-link" style="color: var(--accent-blue);">${escapeHtml(item.email)}</a>
+                    <button 
+                        id="${buttonId}"
+                        onclick="copyEmailAddress('${item.email}', '${buttonId}')"
+                        style="
+                            background: var(--accent-blue);
+                            border: none;
+                            color: white;
+                            padding: 2px 6px;
+                            border-radius: 6px;
+                            cursor: pointer;
+                            font-size: 0.75em;
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 3px;
+                            transition: transform 0.2s ease, opacity 0.2s ease;
+                            vertical-align: middle;
+                        "
+                        onmouseover="this.style.transform='scale(1.05)'"
+                        onmouseout="this.style.transform='scale(1)'"
+                        title="Copy ${item.email}"
+                    >
+                        <i class="fas fa-copy" style="font-size: 0.7em;"></i>
+                    </button>
+                </span>
+            `;
+        }
+
+        lastIndex = item.index + item.length;
     });
     
-    // Add remaining text after last handle
     if (lastIndex < contactInfo.length) {
         html += escapeHtml(contactInfo.substring(lastIndex));
     }
     
     element.innerHTML = html;
+    return true;
 }
 
 // Escape HTML to prevent XSS
@@ -1112,6 +1157,36 @@ window.copyInstagramHandle = function(username, buttonId) {
     } else {
         // Fallback for older browsers
         fallbackCopy(username, showSuccess);
+    }
+}
+
+// Copy email address to clipboard
+// Make it globally accessible for inline onclick handlers
+window.copyEmailAddress = function(email, buttonId) {
+    const showSuccess = () => {
+        const button = document.getElementById(buttonId);
+        if (button) {
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check" style="font-size: 0.8em;"></i>';
+            button.style.background = 'var(--accent-green)';
+            button.style.opacity = '0.9';
+            
+            setTimeout(() => {
+                button.innerHTML = originalHTML;
+                button.style.background = 'var(--accent-blue)';
+                button.style.opacity = '1';
+            }, 2000);
+        }
+        showCopyNotification(`Copied ${email} to clipboard!`);
+    };
+    
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(email).then(showSuccess).catch(err => {
+            console.error('Failed to copy:', err);
+            fallbackCopy(email, showSuccess);
+        });
+    } else {
+        fallbackCopy(email, showSuccess);
     }
 }
 
@@ -1366,7 +1441,7 @@ function loadConferenceDetail() {
 
 // Safe date format for display (avoids throws on invalid dates)
 function formatDateSafe(value) {
-    if (value == null || value === '') return 'Not specified';
+    if (value == null || value === '') return '';
     try {
         const d = new Date(value);
         if (isNaN(d.getTime())) return String(value);
@@ -1374,6 +1449,12 @@ function formatDateSafe(value) {
     } catch (e) {
         return String(value);
     }
+}
+
+function hideDetailSectionFor(element) {
+    if (!element) return;
+    const section = element.closest('section');
+    if (section) section.style.display = 'none';
 }
 
 // Returns true if the given deadline string is in the past (end of that day, local time).
@@ -1422,22 +1503,35 @@ function populateConferenceDetail(conf) {
         }
         const sizeEl = document.getElementById('conferenceSize');
         if (sizeEl) {
-            sizeEl.textContent = conf.size || '100-300 attendees';
-            sizeEl.title = 'Expected total attendees (delegates, chairs, staff)';
-            sizeEl.setAttribute('aria-label', sizeEl.title);
+            if (conf.size && String(conf.size).trim()) {
+                sizeEl.textContent = conf.size;
+                sizeEl.title = 'Expected total attendees (delegates, chairs, staff)';
+                sizeEl.setAttribute('aria-label', sizeEl.title);
+            } else {
+                sizeEl.style.display = 'none';
+            }
         }
         const orgEl = document.getElementById('organization');
         if (orgEl) {
-            orgEl.textContent = conf.organization || 'Not specified';
+            if (conf.organization && String(conf.organization).trim()) {
+                orgEl.textContent = conf.organization;
+            } else {
+                const orgCard = orgEl.closest('.info-card');
+                if (orgCard) orgCard.style.display = 'none';
+            }
         }
         
         // Add flag to location with Google Maps link
         const flag = getCountryFlag(conf.countryCode);
         const locationEl = document.getElementById('location');
         if (locationEl) {
-            const locationText = conf.location || 'Not specified';
-            const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(locationText);
-            locationEl.innerHTML = `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="location-map-link">${flag} ${escapeHtml(locationText)} <i class="fas fa-external-link-alt" style="font-size: 0.75em; opacity: 0.8;"></i></a>`;
+            if (conf.location && String(conf.location).trim()) {
+                const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(conf.location);
+                locationEl.innerHTML = `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="location-map-link">${flag} ${escapeHtml(conf.location)} <i class="fas fa-external-link-alt" style="font-size: 0.75em; opacity: 0.8;"></i></a>`;
+            } else {
+                const locationItem = locationEl.closest('.conference-detail-key-bar-item');
+                if (locationItem) locationItem.style.display = 'none';
+            }
         }
         
         // Dates (defensive)
@@ -1445,24 +1539,48 @@ function populateConferenceDetail(conf) {
         const endDate = formatDateSafe(conf.endDate);
         const datesEl = document.getElementById('dates');
         if (datesEl) {
-            datesEl.textContent = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
+            if (startDate && endDate) {
+                datesEl.textContent = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
+            } else if (startDate || endDate) {
+                datesEl.textContent = startDate || endDate;
+            } else {
+                const datesItem = datesEl.closest('.conference-detail-key-bar-item');
+                if (datesItem) datesItem.style.display = 'none';
+            }
         }
         
         // Price
         const priceEl = document.getElementById('pricePerDelegate');
         if (priceEl) {
-            priceEl.textContent = conf.pricePerDelegate || 'Contact for pricing';
+            if (conf.pricePerDelegate && String(conf.pricePerDelegate).trim()) {
+                priceEl.textContent = conf.pricePerDelegate;
+            } else {
+                const priceItem = priceEl.closest('.conference-detail-key-bar-item');
+                if (priceItem) priceItem.style.display = 'none';
+            }
         }
 
         // Important Dates
         const registrationDeadlineEl = document.getElementById('registrationDeadline');
-    if (registrationDeadlineEl) {
-        registrationDeadlineEl.textContent = conf.registrationDeadline ? formatDateSafe(conf.registrationDeadline) : 'Not specified';
-    }
+        if (registrationDeadlineEl) {
+            const registrationDeadlineText = formatDateSafe(conf.registrationDeadline);
+            if (registrationDeadlineText) {
+                registrationDeadlineEl.textContent = registrationDeadlineText;
+            } else {
+                const regCard = registrationDeadlineEl.closest('.info-card');
+                if (regCard) regCard.style.display = 'none';
+            }
+        }
     
         const positionPaperDeadlineEl = document.getElementById('positionPaperDeadline');
         if (positionPaperDeadlineEl) {
-            positionPaperDeadlineEl.textContent = conf.positionPaperDeadline ? formatDateSafe(conf.positionPaperDeadline) : 'Not specified - Check with organizers';
+            const positionPaperDeadlineText = formatDateSafe(conf.positionPaperDeadline);
+            if (positionPaperDeadlineText) {
+                positionPaperDeadlineEl.textContent = positionPaperDeadlineText;
+            } else {
+                const positionCard = positionPaperDeadlineEl.closest('.info-card');
+                if (positionCard) positionCard.style.display = 'none';
+            }
         }
 
         // Website
@@ -1491,25 +1609,45 @@ function populateConferenceDetail(conf) {
         }
         const sensoryTagEl = document.getElementById('sensoryTag');
         if (sensoryTagEl) {
-            sensoryTagEl.textContent = conf.sensorySuitable ? 'Sensory friendly: Yes' : 'Sensory friendly: No';
+            if (typeof conf.sensorySuitable === 'boolean') {
+                sensoryTagEl.textContent = conf.sensorySuitable ? 'Sensory friendly: Yes' : 'Sensory friendly: No';
+            } else {
+                sensoryTagEl.style.display = 'none';
+            }
         }
         const wheelchairTagEl = document.getElementById('wheelchairTag');
         if (wheelchairTagEl) {
-            wheelchairTagEl.textContent = conf.disabledSuitable ? 'Wheelchair friendly' : 'Wheelchair: contact organisers';
+            if (typeof conf.disabledSuitable === 'boolean') {
+                wheelchairTagEl.textContent = conf.disabledSuitable ? 'Wheelchair friendly' : 'Wheelchair: contact organisers';
+            } else {
+                wheelchairTagEl.style.display = 'none';
+            }
         }
 
         // Blurb (conference intro & aims)
         const conferenceBlurbEl = document.getElementById('conferenceBlurb');
-        if (conferenceBlurbEl && conf.description) {
-            conferenceBlurbEl.innerHTML = '<p>' + escapeHtml(conf.description) + '</p>';
+        if (conferenceBlurbEl) {
+            if (conf.description && String(conf.description).trim()) {
+                conferenceBlurbEl.innerHTML = '<p>' + escapeHtml(conf.description) + '</p>';
+            } else {
+                hideDetailSectionFor(conferenceBlurbEl);
+            }
         }
 
         // Contact information with Instagram copy buttons
-        setContactInfoWithCopyButtons('generalEmail', conf.generalEmail || 'Not provided');
-        setContactInfoWithCopyButtons('munAccount', conf.munAccount || 'Not provided');
-        setContactInfoWithCopyButtons('advisorAccount', conf.advisorAccount || 'Not provided');
-        setContactInfoWithCopyButtons('secGenAccounts', conf.secGenAccounts || 'Not provided');
-        setContactInfoWithCopyButtons('parliamentarianAccounts', conf.parliamentarianAccounts || 'Not provided');
+        const hasGeneralEmail = setContactInfoWithCopyButtons('generalEmail', conf.generalEmail);
+        const hasMunAccount = setContactInfoWithCopyButtons('munAccount', conf.munAccount);
+        const hasAdvisorAccount = setContactInfoWithCopyButtons('advisorAccount', conf.advisorAccount);
+        const hasSecGenAccounts = setContactInfoWithCopyButtons('secGenAccounts', conf.secGenAccounts);
+        const hasParliamentarianAccounts = setContactInfoWithCopyButtons('parliamentarianAccounts', conf.parliamentarianAccounts);
+
+        const contactSection = document.getElementById('contact-section');
+        if (contactSection) {
+            const hasWebsite = conf.website && conf.website.trim();
+            if (!hasWebsite && !hasGeneralEmail && !hasMunAccount && !hasAdvisorAccount && !hasSecGenAccounts && !hasParliamentarianAccounts) {
+                contactSection.style.display = 'none';
+            }
+        }
 
         // Committees with descriptions
         if (conf.committees && Array.isArray(conf.committees) && conf.committees.length > 0) {
@@ -1774,9 +1912,7 @@ function populateConferenceDetail(conf) {
                             </div>
                             ${formatChairInfoWithCopyButtons(chairInfo)}
                         </div>
-                    ` : `
-                        <p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color); color: var(--accent-green); font-size: 0.9em;"><strong><i class="fas fa-user-tie"></i> Chairs: TBD</strong></p>
-                    `}
+                    ` : ''}
                 </div>
             `;
         }).join('');
@@ -1787,7 +1923,7 @@ function populateConferenceDetail(conf) {
     } else {
         const committeesEl = document.getElementById('committees');
         if (committeesEl) {
-            committeesEl.innerHTML = '<p>Committee information coming soon.</p>';
+            hideDetailSectionFor(committeesEl);
         }
     }
 
@@ -1797,7 +1933,7 @@ function populateConferenceDetail(conf) {
             if (conf.uniqueTopics && conf.uniqueTopics.length > 0) {
                 uniqueTopicsEl.innerHTML = `<div class="topic-cards-grid">${conf.uniqueTopics.map(t => `<div class="topic-card">${t}</div>`).join('')}</div>`;
             } else {
-                uniqueTopicsEl.innerHTML = '<p>Topic information coming soon.</p>';
+                hideDetailSectionFor(uniqueTopicsEl);
             }
         }
 
@@ -1807,7 +1943,7 @@ function populateConferenceDetail(conf) {
             if (conf.chairsPages) {
                 chairsPagesEl.innerHTML = linkifyInstagramInHtml(conf.chairsPages);
             } else {
-                chairsPagesEl.innerHTML = '<p>Chair information will be announced soon.</p>';
+                hideDetailSectionFor(chairsPagesEl);
             }
         }
 
@@ -1817,7 +1953,7 @@ function populateConferenceDetail(conf) {
             if (conf.allocations && conf.allocations.length > 0) {
                 allocationsEl.innerHTML = `<ul class="allocation-list">${conf.allocations.map(a => `<li>${a}</li>`).join('')}</ul>`;
             } else {
-                allocationsEl.innerHTML = '<p>Allocation information will be provided closer to the conference date.</p>';
+                hideDetailSectionFor(allocationsEl);
             }
         }
 
@@ -1843,7 +1979,7 @@ function populateConferenceDetail(conf) {
     } else {
         const availableAwardsEl = document.getElementById('availableAwards');
         if (availableAwardsEl) {
-            availableAwardsEl.innerHTML = '<p>Award categories to be announced.</p>';
+            hideDetailSectionFor(availableAwardsEl);
         }
     }
 
@@ -1852,7 +1988,7 @@ function populateConferenceDetail(conf) {
             if (conf.previousWinners && conf.previousWinners.length > 0) {
                 previousWinnersEl.innerHTML = `<ul class="award-list">${conf.previousWinners.map(w => `<li>${w}</li>`).join('')}</ul>`;
             } else {
-                previousWinnersEl.innerHTML = '<p>No previous winners (first-time conference or information not available).</p>';
+                hideDetailSectionFor(previousWinnersEl);
             }
         }
 
@@ -1862,14 +1998,23 @@ function populateConferenceDetail(conf) {
             if (conf.schedule) {
                 scheduleEl.innerHTML = linkifyInstagramInHtml(conf.schedule);
             } else {
-                scheduleEl.innerHTML = '<p>Detailed schedule will be released closer to the conference date.</p>';
+                hideDetailSectionFor(scheduleEl);
             }
         }
 
         // Independent Delegates
         const independentDelsWelcomeEl = document.getElementById('independentDelsWelcome');
         if (independentDelsWelcomeEl) {
-            independentDelsWelcomeEl.textContent = conf.independentDelsWelcome ? 'Yes, independent delegates are welcome! Advisors are welcome but not necessary.' : 'Currently only accepting school delegations.';
+            if (typeof conf.independentDelsWelcome === 'boolean') {
+                independentDelsWelcomeEl.textContent = conf.independentDelsWelcome ? 'Yes, independent delegates are welcome! Advisors are welcome but not necessary.' : 'Currently only accepting school delegations.';
+            } else {
+                const independentContent = independentDelsWelcomeEl.closest('.detail-section-content');
+                const independentTitle = independentContent ? independentContent.previousElementSibling : null;
+                if (independentContent) independentContent.style.display = 'none';
+                if (independentTitle && independentTitle.classList.contains('detail-section-col-title')) {
+                    independentTitle.style.display = 'none';
+                }
+            }
         }
         
         const registrationClosed = isDeadlinePast(conf.registrationDeadline);
@@ -1946,18 +2091,42 @@ function populateConferenceDetail(conf) {
             } else if (conf.advisorSignupLink) {
                 advisorSignupEl.innerHTML = `<a href="${conf.advisorSignupLink}" class="btn btn-primary" style="width: 100%;"><i class="fas fa-chalkboard-teacher"></i> Sign Up Your School</a>`;
             } else {
-                advisorSignupEl.innerHTML = '<p>Contact the conference organizers for registration information.</p>';
+                advisorSignupEl.innerHTML = '';
+                const advisorTitle = advisorSignupEl.previousElementSibling;
+                if (advisorTitle && advisorTitle.classList.contains('detail-section-col-title')) {
+                    advisorTitle.style.display = 'none';
+                }
+                advisorSignupEl.style.display = 'none';
             }
         }
 
         // Accessibility
         const disabledSuitableEl = document.getElementById('disabledSuitable');
         if (disabledSuitableEl) {
-            disabledSuitableEl.textContent = conf.disabledSuitable ? '✓ Yes, facilities are accessible' : '✗ Limited accessibility - contact organizers for details';
+            if (typeof conf.disabledSuitable === 'boolean') {
+                disabledSuitableEl.textContent = conf.disabledSuitable ? '✓ Yes, facilities are accessible' : '✗ Limited accessibility - contact organizers for details';
+            } else {
+                disabledSuitableEl.style.display = 'none';
+            }
         }
         const sensorySuitableEl = document.getElementById('sensorySuitable');
         if (sensorySuitableEl) {
-            sensorySuitableEl.textContent = conf.sensorySuitable ? '✓ Yes, accommodations available' : '✗ Limited accommodations - contact organizers for details';
+            if (typeof conf.sensorySuitable === 'boolean') {
+                sensorySuitableEl.textContent = conf.sensorySuitable ? '✓ Yes, accommodations available' : '✗ Limited accommodations - contact organizers for details';
+            } else {
+                sensorySuitableEl.style.display = 'none';
+            }
+        }
+        if (disabledSuitableEl && sensorySuitableEl) {
+            const hasAccessibilityInfo = typeof conf.disabledSuitable === 'boolean' || typeof conf.sensorySuitable === 'boolean';
+            if (!hasAccessibilityInfo) {
+                const accessibilityContent = disabledSuitableEl.closest('.detail-section-content');
+                const accessibilityTitle = accessibilityContent ? accessibilityContent.previousElementSibling : null;
+                if (accessibilityContent) accessibilityContent.style.display = 'none';
+                if (accessibilityTitle && accessibilityTitle.classList.contains('detail-section-col-title')) {
+                    accessibilityTitle.style.display = 'none';
+                }
+            }
         }
 
         // Venue Guide
@@ -1966,7 +2135,7 @@ function populateConferenceDetail(conf) {
             if (conf.venueGuide) {
                 venueGuideEl.innerHTML = linkifyInstagramInHtml(conf.venueGuide);
             } else {
-                venueGuideEl.innerHTML = '<p>Venue information will be provided to registered participants.</p>';
+                hideDetailSectionFor(venueGuideEl);
             }
         }
 
@@ -1976,7 +2145,7 @@ function populateConferenceDetail(conf) {
             if (conf.extraNotes) {
                 extraNotesEl.innerHTML = linkifyInstagramInHtml(conf.extraNotes);
             } else {
-                extraNotesEl.innerHTML = '<p>No additional notes at this time.</p>';
+                hideDetailSectionFor(extraNotesEl);
             }
         }
     } catch (error) {
