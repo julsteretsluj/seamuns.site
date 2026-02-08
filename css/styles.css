@@ -2737,18 +2737,18 @@ body::before {
 }
 
 .conference-detail-hero {
-    background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.08), rgba(0, 172, 193, 0.06)) #ffffff;
+    border: 1px solid rgba(30, 136, 229, 0.18);
     border-radius: 16px;
-    padding: 32px 36px;
-    margin-bottom: 32px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 6px 16px rgba(30, 136, 229, 0.08);
     animation: fadeInUp 0.5s ease both;
 }
 
 [data-theme="dark"] .conference-detail-hero {
-    background: rgba(30, 30, 30, 0.95);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, rgba(66, 165, 245, 0.12), rgba(38, 198, 218, 0.1)) rgba(16, 22, 28, 0.96);
+    border-color: rgba(66, 165, 245, 0.3);
 }
 
 .conference-detail-hero-top {
@@ -2757,7 +2757,7 @@ body::before {
     align-items: flex-start;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
 .conference-detail-title-row {
@@ -2799,7 +2799,7 @@ body::before {
     align-items: center;
     gap: 6px;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--accent-color);
     text-decoration: none;
     transition: color 0.2s ease, text-decoration 0.2s ease;
@@ -2823,23 +2823,23 @@ body::before {
 .conference-detail-key-bar {
     display: flex;
     flex-wrap: wrap;
-    gap: 24px 32px;
-    padding: 16px 0;
-    margin-bottom: 12px;
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
+    gap: 16px 24px;
+    padding: 12px 0;
+    margin-bottom: 10px;
+    border-top: 1px solid rgba(30, 136, 229, 0.18);
+    border-bottom: 1px solid rgba(30, 136, 229, 0.18);
 }
 
 .conference-detail-key-bar-item {
     display: flex;
     align-items: baseline;
     gap: 8px;
-    font-size: 15px;
+    font-size: 14px;
     color: var(--text-primary);
 }
 
 .conference-detail-key-bar-item .conference-detail-key-label {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -2854,34 +2854,35 @@ body::before {
 .conference-detail-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 20px;
+    gap: 6px;
+    margin-bottom: 14px;
 }
 
 .conference-detail-tag {
     display: inline-block;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-    background: rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    color: var(--text-primary);
+    padding: 5px 10px;
+    border-radius: 18px;
+    font-size: 11px;
+    font-weight: 600;
+    background: rgba(30, 136, 229, 0.1);
+    border: 1px solid rgba(30, 136, 229, 0.25);
+    color: #0d3b66;
 }
 
 [data-theme="dark"] .conference-detail-tag {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(66, 165, 245, 0.2);
+    border-color: rgba(66, 165, 245, 0.35);
+    color: #cfe9ff;
 }
 
 .conference-detail-info-cards-secondary {
     margin-top: 0;
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    gap: 10px;
 }
 
 .conference-detail-info-cards-secondary .info-card {
-    padding: 12px 16px;
+    padding: 10px 14px;
     align-items: center;
     min-height: 0;
 }
@@ -2891,11 +2892,11 @@ body::before {
 }
 
 .conference-detail-info-cards-secondary .info-card-label {
-    font-size: 11px;
+    font-size: 10px;
 }
 
 .conference-detail-info-cards-secondary .info-card-value {
-    font-size: 13px;
+    font-size: 12.5px;
     line-height: 1.35;
 }
 
@@ -2906,7 +2907,7 @@ body::before {
 }
 
 .conference-detail-title {
-    font-size: 1.75rem;
+    font-size: 1.6rem;
     font-weight: 600;
     color: var(--text-primary);
     margin: 0;
@@ -2921,43 +2922,43 @@ body::before {
 }
 
 .conference-detail-badge {
-    padding: 6px 12px;
+    padding: 5px 10px;
     border-radius: 20px;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
 }
 
 .conference-detail-badge-status {
-    background: rgba(104, 211, 145, 0.2);
-    color: var(--accent-green, #2d8a5e);
-    border: 1px solid rgba(104, 211, 145, 0.35);
+    background: rgba(0, 172, 193, 0.18);
+    color: #0f766e;
+    border: 1px solid rgba(0, 172, 193, 0.35);
 }
 
 [data-theme="dark"] .conference-detail-badge-status {
-    background: rgba(104, 211, 145, 0.25);
-    color: #68d391;
+    background: rgba(38, 198, 218, 0.25);
+    color: #5eead4;
 }
 
 .conference-detail-badge-status.previous {
-    background: rgba(246, 173, 85, 0.2);
-    color: var(--accent-orange, #c05621);
-    border-color: rgba(246, 173, 85, 0.35);
+    background: rgba(239, 83, 80, 0.18);
+    color: #b91c1c;
+    border-color: rgba(239, 83, 80, 0.35);
 }
 
 [data-theme="dark"] .conference-detail-badge-status.previous {
-    background: rgba(246, 173, 85, 0.25);
-    color: #f6ad55;
+    background: rgba(239, 83, 80, 0.25);
+    color: #fecaca;
 }
 
 .conference-detail-badge-size {
-    background: rgba(74, 144, 226, 0.12);
-    color: var(--accent-blue, #2563eb);
-    border: 1px solid rgba(74, 144, 226, 0.25);
+    background: rgba(30, 136, 229, 0.14);
+    color: #1d4ed8;
+    border: 1px solid rgba(30, 136, 229, 0.3);
 }
 
 [data-theme="dark"] .conference-detail-badge-size {
-    background: rgba(74, 144, 226, 0.2);
-    color: #60a5fa;
+    background: rgba(66, 165, 245, 0.25);
+    color: #93c5fd;
 }
 
 /* Card-based info layout */
@@ -2966,6 +2967,15 @@ body::before {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 16px;
     margin-bottom: 24px;
+}
+
+.conference-detail-info-cards .info-card {
+    border-left: 3px solid var(--accent-color);
+    background: #ffffff;
+}
+
+[data-theme="dark"] .conference-detail-info-cards .info-card {
+    background: rgba(16, 22, 28, 0.96);
 }
 
 /* Simple entrance animations (respect reduced motion) */
@@ -3361,10 +3371,10 @@ body::before {
 
 .detail-section {
     background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(30, 136, 229, 0.16);
     border-radius: 12px;
-    padding: 24px 28px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    padding: 20px 22px;
+    box-shadow: 0 6px 14px rgba(30, 136, 229, 0.08);
     transition: box-shadow 0.25s ease, transform 0.25s ease;
     animation: fadeInUp 0.5s ease both;
 }
@@ -3391,8 +3401,8 @@ body::before {
 }
 
 [data-theme="dark"] .detail-section {
-    background: rgba(30, 30, 30, 0.95);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(16, 22, 28, 0.96);
+    border-color: rgba(66, 165, 245, 0.28);
 }
 
 .detail-section:hover {
@@ -3407,7 +3417,7 @@ body::before {
     font-size: 1rem;
     font-weight: 600;
     color: var(--accent-color);
-    margin: 0 0 16px 0;
+    margin: 0 0 12px 0;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -3426,15 +3436,15 @@ body::before {
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--accent-color);
-    margin: 0 0 16px 0;
-    padding: 12px 20px;
-    background: rgba(0, 0, 0, 0.03);
+    margin: 0 0 12px 0;
+    padding: 10px 16px;
+    background: rgba(30, 136, 229, 0.08);
     border-radius: 8px;
     border-left: 4px solid var(--accent-color);
 }
 
 [data-theme="dark"] .detail-section-banner {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(66, 165, 245, 0.12);
 }
 
 .detail-section-banner-cloud {
@@ -4443,11 +4453,11 @@ body::before {
 }
 
 .conference-card {
-    background: var(--bg-glass);
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.06), rgba(0, 172, 193, 0.04)) var(--bg-glass);
     backdrop-filter: blur(30px) saturate(180%);
-    border: 1px solid var(--border-color);
+    border: 1px solid rgba(30, 136, 229, 0.18);
     border-radius: 24px;
-    padding: 24px;
+    padding: 20px;
     box-shadow: var(--shadow-glass);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
@@ -4465,7 +4475,7 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(255, 182, 193, 0.1), rgba(135, 206, 235, 0.05));
+    background: linear-gradient(135deg, rgba(30, 136, 229, 0.14), rgba(0, 172, 193, 0.08));
     opacity: 0;
     transition: opacity 0.3s ease;
     z-index: 0;
@@ -4473,7 +4483,7 @@ body::before {
 }
 
 [data-theme="dark"] .conference-card::before {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    background: linear-gradient(135deg, rgba(66, 165, 245, 0.2), rgba(38, 198, 218, 0.12));
 }
 
 .conference-card:hover::before {
@@ -4487,20 +4497,20 @@ body::before {
 }
 
 .conference-card.upcoming {
-    border-left-color: var(--accent-green);
+    border-left-color: #0ea5a6;
 }
 
 .conference-card.previous {
-    border-left-color: var(--accent-orange);
+    border-left-color: #ef5350;
 }
 
 /* Dark mode border colors */
 [data-theme="dark"] .conference-card.upcoming {
-    border-left-color: #68d391;
+    border-left-color: #2dd4bf;
 }
 
 [data-theme="dark"] .conference-card.previous {
-    border-left-color: #f6ad55;
+    border-left-color: #f87171;
 }
 
 /* Status Badges Layout */
@@ -4514,58 +4524,58 @@ body::before {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
     position: relative;
     z-index: 3;
 }
 
 .conference-title {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     line-height: 1.3;
     letter-spacing: -0.003em;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .conference-status {
-    padding: 6px 12px;
+    padding: 5px 10px;
     border-radius: 20px;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     backdrop-filter: blur(10px);
 }
 
 .conference-status.upcoming {
-    background: rgba(152, 251, 152, 0.2);
-    color: #2d5a2d;
-    border: 1px solid rgba(152, 251, 152, 0.3);
+    background: rgba(0, 172, 193, 0.2);
+    color: #0f766e;
+    border: 1px solid rgba(0, 172, 193, 0.35);
 }
 
 .conference-status.previous {
-    background: rgba(255, 182, 193, 0.2);
-    color: #8b4a5a;
-    border: 1px solid rgba(255, 182, 193, 0.3);
+    background: rgba(239, 83, 80, 0.2);
+    color: #b91c1c;
+    border: 1px solid rgba(239, 83, 80, 0.35);
 }
 
 /* Dark mode status colors */
 [data-theme="dark"] .conference-status.upcoming {
-    background: rgba(104, 211, 145, 0.3);
-    color: #68d391;
-    border: 1px solid rgba(104, 211, 145, 0.4);
+    background: rgba(38, 198, 218, 0.3);
+    color: #5eead4;
+    border: 1px solid rgba(38, 198, 218, 0.45);
 }
 
 [data-theme="dark"] .conference-status.previous {
-    background: rgba(246, 173, 85, 0.3);
-    color: #f6ad55;
-    border: 1px solid rgba(246, 173, 85, 0.4);
+    background: rgba(239, 83, 80, 0.3);
+    color: #fecaca;
+    border: 1px solid rgba(239, 83, 80, 0.45);
 }
 
 .conference-info {
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     position: relative;
     z-index: 1;
 }
@@ -4574,9 +4584,9 @@ body::before {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     color: var(--text-secondary);
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 400;
 }
 
@@ -4598,13 +4608,13 @@ body::before {
 }
 
 .conference-description {
-    color: var(--text-tertiary);
-    font-size: 15px;
+    color: var(--text-secondary);
+    font-size: 14px;
     line-height: 1.47;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     display: -webkit-box;
-    d: 3;
-    line-clamp: 3;
+    d: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     position: relative;
@@ -4619,8 +4629,8 @@ body::before {
 }
 
 .conference-actions .btn {
-    padding: 10px 16px;
-    font-size: 15px;
+    padding: 8px 14px;
+    font-size: 14px;
     flex: 1;
     justify-content: center;
 }

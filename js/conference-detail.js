@@ -1486,7 +1486,7 @@ function populateConferenceDetail(conf) {
         // Hero: accessibility and delegate count tags
         const delegateCountTagEl = document.getElementById('delegateCountTag');
         if (delegateCountTagEl) {
-            delegateCountTagEl.textContent = conf.size ? 'del count: ' + (conf.size.split('(')[0].trim() || conf.size) : '';
+            delegateCountTagEl.textContent = conf.size ? 'Delegate Estimate: ' + (conf.size.split('(')[0].trim() || conf.size) : '';
             if (!delegateCountTagEl.textContent) delegateCountTagEl.style.display = 'none';
         }
         const sensoryTagEl = document.getElementById('sensoryTag');

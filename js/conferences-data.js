@@ -438,7 +438,7 @@ window.MUN_CONFERENCES_DATA = [
     countryCode: "TH",
     startDate: "2026-04-25",
     endDate: "2026-04-25",
-    description: "HEXAMUN '26 at Lycée Français International de Bangkok (LFIB). Delegate fee 850 THB; Chair fee Free. Sensory-friendly and wheelchair accessible. Independent delegates welcome.",
+    description: "HEXAMUN '26 at Lycée Français International de Bangkok (LFIB). Delegate fee 850 THB; Chair fee 850 THB. Sensory-friendly and wheelchair accessible. Independent delegates welcome.",
     website: "",
     registrationDeadline: "",
     positionPaperDeadline: "",
@@ -449,7 +449,7 @@ window.MUN_CONFERENCES_DATA = [
     advisorAccount: "",
     secGenAccounts: "Anaïs Amphoux-Ng (anai.amphoux-ng@lfib.ac.th), Eden Romanet (eden.romanet@lfib.ac.th)",
     parliamentarianAccounts: "",
-    pricePerDelegate: "850 THB. Chair fee: Free",
+    pricePerDelegate: "850 THB. Chair fee: 850 THB",
     independentDelsWelcome: true,
     independentSignupLink: "https://forms.gle/op4NSAhG4DdJ9nev8",
     advisorSignupLink: "https://forms.gle/LMtMA3DScQyidJXN7",
@@ -476,7 +476,7 @@ window.MUN_CONFERENCES_DATA = [
     previousWinners: [],
     schedule: "<p><strong>April 25, 2026 (HEXAMUN 26'):</strong></p><ul style=\"margin: 0.5em 0; padding-left: 1.25em;\"><li>07:30–08:00 — Arrival of delegations</li><li>08:00–09:00 — Opening Ceremony</li><li>09:00–10:25 — First Committee Session</li><li>10:25–10:40 — Snack Break</li><li>10:40–12:30 — Second Committee Session</li><li>12:30–13:30 — Lunch Break</li><li>13:30–15:45 — Third Committee Session</li><li>15:45–16:00 — Snack Break</li><li>16:00–16:30 — Last Committee Session</li><li>16:35–17:10 — Closing Ceremony</li><li>17:10 — End of Conference</li></ul>",
     venueGuide: "<p>Conference at Lycée Français International de Bangkok (LFIB). Wheelchair accessible and sensory-friendly.</p>",
-    extraNotes: "<p>HEXAMUN '26. Delegate fee: 850 THB. Chair fee: Free. <strong>Independent Delegates:</strong> Yes. <strong>Accessibility:</strong> Wheelchair accessible and sensory-friendly. Follow us on Instagram: <a href='https://www.instagram.com/hexa.mun/' target='_blank' rel='noopener noreferrer'>@hexa.mun</a>. Secretariat: Anaïs Amphoux-Ng (anai.amphoux-ng@lfib.ac.th), Eden Romanet (eden.romanet@lfib.ac.th).</p>"
+    extraNotes: "<p>HEXAMUN '26. Delegate fee: 850 THB. Chair fee: 850 THB. <strong>Independent Delegates:</strong> Yes. <strong>Accessibility:</strong> Wheelchair accessible and sensory-friendly. Follow us on Instagram: <a href='https://www.instagram.com/hexa.mun/' target='_blank' rel='noopener noreferrer'>@hexa.mun</a>. Secretariat: Anaïs Amphoux-Ng (anai.amphoux-ng@lfib.ac.th), Eden Romanet (eden.romanet@lfib.ac.th).</p>"
 }
 ];
 
