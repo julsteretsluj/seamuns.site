@@ -1457,6 +1457,176 @@ function hideDetailSectionFor(element) {
     if (section) section.style.display = 'none';
 }
 
+// Build HTML for one committee (used on conference detail and on standalone committee page). Exposed globally for committee.html.
+function buildCommitteeItemHTML(conf, c, index) {
+    let committeeName, committeeTopic, chairInfo;
+    if (typeof c !== 'string' && (typeof c !== 'object' || c === null)) {
+        committeeName = String(c != null ? c : '');
+        committeeTopic = [];
+        chairInfo = '';
+    } else if (typeof c === 'object' && c !== null) {
+        let rawCommitteeName = c.committee_name || c.name || '';
+        committeeName = rawCommitteeName.split(' (')[0].trim();
+        committeeTopic = c.topic || '';
+        chairInfo = c.chairs_info || c.chair_info || c.chairInfo || '';
+        const topics = committeeTopic ? committeeTopic.split(' | ').map(function (t) { return t.trim().replace(/\|$/, ''); }).filter(function (t) { return t; }) : [];
+        committeeTopic = topics;
+    } else {
+        committeeName = c;
+        committeeTopic = '';
+        chairInfo = '';
+        if (c.includes('Chairs:')) {
+            const parts = c.split('Chairs:');
+            let mainContent = parts[0].trim().replace(/\s*\|\s*$/, '');
+            chairInfo = 'Chairs: ' + parts.slice(1).join('Chairs:').trim();
+            if (mainContent.includes(' - ')) {
+                const nameTopicParts = mainContent.split(' - ');
+                committeeName = nameTopicParts[0].trim().split(' (')[0].trim();
+                const topicString = nameTopicParts.slice(1).join(' - ').trim();
+                committeeTopic = topicString ? topicString.split(' | ').map(function (t) { return t.trim().replace(/\|$/, ''); }).filter(function (t) { return t; }) : [];
+            } else {
+                committeeName = mainContent;
+            }
+        } else if (c.includes(' | ')) {
+            const mainParts = c.split(' | ');
+            const mainContent = mainParts[0].trim();
+            const lastPart = mainParts[mainParts.length - 1].trim();
+            const looksLikeTopic = /^(The Question of|Topic\s*\d*\s*:)/i.test(lastPart.trim());
+            const lastPartLower = lastPart.toLowerCase();
+            const looksLikeChairs = !looksLikeTopic && (lastPart.includes('@') || (lastPart.includes(',') && !lastPartLower.includes('topic')) || lastPartLower.includes('chair') || lastPartLower.includes('head chair') || lastPartLower.includes('deputy chair') || lastPartLower.includes('president') || lastPartLower.includes('vice president') || lastPartLower.includes('editor') || lastPartLower.includes('editor in chief') || lastPartLower.includes('deputy editor') || lastPart === 'TBD' || lastPart === 'A, B' || /^(head|deputy|president|vice president|editor)/i.test(lastPart.trim()));
+            if (looksLikeChairs && mainParts.length > 1) {
+                chairInfo = lastPart;
+                const fullContent = mainParts.slice(0, -1).join(' | ');
+                if (fullContent.includes(' - ')) {
+                    const parts = fullContent.split(' - ');
+                    committeeName = parts[0].trim().split(' (')[0].trim();
+                    const topicString = parts.slice(1).join(' - ').trim();
+                    committeeTopic = topicString ? topicString.split(' | ').map(function (t) { return t.trim().replace(/\|$/, ''); }).filter(function (t) { return t; }) : [];
+                } else {
+                    committeeName = fullContent;
+                }
+            } else {
+                if (mainContent.includes(' - ')) {
+                    const parts = mainContent.split(' - ');
+                    committeeName = parts[0].trim().split(' (')[0].trim();
+                    const topicString = parts.slice(1).join(' - ').trim();
+                    const topics = topicString ? topicString.split(' | ').map(function (t) { return t.trim().replace(/\|$/, ''); }).filter(function (t) { return t; }) : [];
+                    mainParts.slice(1).forEach(function (p) {
+                        const trimmed = p.trim();
+                        if (trimmed && !trimmed.includes('@') && !trimmed.includes('TBD') && !trimmed.includes('A, B')) topics.push(trimmed);
+                    });
+                    committeeTopic = topics;
+                } else {
+                    committeeName = mainContent;
+                    committeeTopic = mainParts.slice(1).map(function (t) { return t.trim(); }).filter(function (t) { return t && !t.includes('@') && !t.includes('TBD') && !t.includes('A, B'); });
+                }
+            }
+        } else if (c.includes(' - ')) {
+            const parts = c.split(' - ');
+            committeeName = parts[0].trim().split(' (')[0].trim();
+            const rest = parts.slice(1).join(' - ').trim();
+            if (rest.includes('@') || rest.toLowerCase().includes('chair') || rest.toLowerCase().includes('head') || rest.toLowerCase().includes('deputy') || rest.toLowerCase().includes('president') || rest.toLowerCase().includes('editor')) {
+                const chairMatch = rest.match(/(head\s+chair|deputy\s+chair|president|vice\s+president|editor\s+in\s+chief|deputy\s+editor|editor)[:].*$/i);
+                if (chairMatch) {
+                    const chairIndex = rest.indexOf(chairMatch[0]);
+                    committeeTopic = rest.substring(0, chairIndex).trim();
+                    chairInfo = rest.substring(chairIndex).trim();
+                } else {
+                    committeeTopic = rest;
+                }
+            } else {
+                committeeTopic = rest;
+            }
+        }
+        if (!chairInfo && typeof c === 'string') {
+            const chairPatterns = [/head\s+chair[:\s].*?deputy\s+chair[:\s].*?/i, /president[:\s].*?vice\s+president[:\s].*?/i, /editor\s+in\s+chief[:\s].*?editor[:\s].*?/i, /chair[:\s].*?@/i];
+            for (var pi = 0; pi < chairPatterns.length; pi++) {
+                const match = c.match(chairPatterns[pi]);
+                if (match) {
+                    const matchIndex = c.indexOf(match[0]);
+                    if (matchIndex > 0 && c[matchIndex - 1] === '|') {
+                        chairInfo = c.substring(matchIndex).trim();
+                        if (!committeeTopic && matchIndex > 0) {
+                            const beforeMatch = c.substring(0, matchIndex - 1).trim();
+                            if (beforeMatch.includes(' - ')) {
+                                const parts = beforeMatch.split(' - ');
+                                committeeName = parts[0].trim();
+                                committeeTopic = parts.slice(1).join(' - ').trim();
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    let rawCommitteeName = '';
+    if (typeof c === 'object' && c !== null) {
+        rawCommitteeName = c.committee_name || c.name || '';
+    } else if (typeof c === 'string') {
+        rawCommitteeName = c;
+    }
+    const desc = getCommitteeDescription(committeeName, rawCommitteeName);
+    const sizeInfo = conf.committeeSizes && Array.isArray(conf.committeeSizes) && conf.committeeSizes.find(function (s) { return s.abbrev === committeeName; });
+    const displayName = (typeof c === 'string' && c.includes(' - ')) ? c.split(' - ')[0].trim() : committeeName;
+    const tagInfo = conf.committeeTags && conf.committeeTags[displayName];
+    const nameUpper = (committeeName || '').toUpperCase();
+    const displayUpper = (displayName || '').toUpperCase();
+    const isPressCorps = nameUpper.includes('PRESS') || displayUpper.includes('PRESS') || nameUpper === 'PC';
+    const isUNSC = (nameUpper.includes('UNSC') || nameUpper.includes('SECURITY COUNCIL') || nameUpper === 'SC') && !nameUpper.includes('HISTORICAL');
+    const isHSC = nameUpper.includes('HSC') || nameUpper.includes('HISTORICAL SECURITY');
+    if ((isPressCorps || isUNSC || isHSC) && committeeTopic) {
+        committeeTopic = Array.isArray(committeeTopic) ? committeeTopic.slice(0, 1) : [committeeTopic];
+    }
+    const difficultyEmojis = { beginner: '🌱', intermediate: '⭐', advanced: '🔥' };
+    var topicsHtml = '';
+    if (Array.isArray(committeeTopic) && committeeTopic.length > 0) {
+        topicsHtml = committeeTopic.map(function (topic, tIdx) {
+            var cleanTopic = topic.replace(/^Topic \d+:\s*/, '');
+            var topicDifficulty = getTopicDifficulty(cleanTopic, desc.type);
+            return '<li class="topic-difficulty-row topic-difficulty-row--' + topicDifficulty + '" style="margin-bottom: 8px; padding: 8px; background: rgba(0,0,0,0.02); border-radius: 8px; border-left: 3px solid ' + (topicDifficulty === 'beginner' ? '#81c784' : topicDifficulty === 'intermediate' ? '#ffb74d' : '#ef5350') + ';"><div style="display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap;"><strong style="flex: 1;">Topic ' + (tIdx + 1) + ':</strong><span class="difficulty-tag difficulty-tag--' + topicDifficulty + '">' + difficultyEmojis[topicDifficulty] + ' ' + topicDifficulty + '</span></div><div style="margin-top: 4px; color: var(--text-secondary);">' + cleanTopic + '</div></li>';
+        }).join('');
+        topicsHtml = '<div style="margin: 8px 0;"><strong style="color: var(--accent-blue); font-size: 0.95em;">Topics:</strong><ul style="margin: 4px 0 0 0; padding-left: 20px; color: var(--accent-blue); font-size: 0.95em; list-style: none;">' + topicsHtml + '</ul></div>';
+    } else if (committeeTopic) {
+        var topicDifficulty = getTopicDifficulty(committeeTopic, desc.type);
+        topicsHtml = '<div class="topic-difficulty-row topic-difficulty-row--' + topicDifficulty + '" style="margin: 8px 0; padding: 8px; background: rgba(0,0,0,0.02); border-radius: 8px; border-left: 3px solid ' + (topicDifficulty === 'beginner' ? '#81c784' : topicDifficulty === 'intermediate' ? '#ffb74d' : '#ef5350') + ';"><div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px;"><strong style="color: var(--accent-blue); font-size: 0.95em;">Topic:</strong><span class="difficulty-tag difficulty-tag--' + topicDifficulty + '">' + difficultyEmojis[topicDifficulty] + ' ' + topicDifficulty + '</span></div><div style="color: var(--text-secondary);">' + committeeTopic + '</div></div>';
+    }
+    var gradeRangeHtml = '';
+    if (sizeInfo && sizeInfo.gradeRange) {
+        var parts = (sizeInfo.gradeRange || '').match(/\d+/g);
+        var rangeMod = (!parts || parts.length < 2) ? 'wide' : (parseInt(parts[0], 10) >= 9 ? 'upper' : parseInt(parts[1], 10) <= 10 ? 'lower' : 'wide');
+        gradeRangeHtml = '<p style="margin: 4px 0 0 0; color: var(--text-secondary); font-size: 0.9em;"><strong>Grades:</strong> <span class="grade-range-tag grade-range-tag--' + rangeMod + '">' + sizeInfo.gradeRange + '</span>' + (sizeInfo.gradeNote ? ' <span style="font-style: italic;">(' + sizeInfo.gradeNote + ')</span>' : '') + '</p>';
+    }
+    var chairHtml = '';
+    if (chairInfo && chairInfo.trim()) {
+        chairHtml = '<div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color);"><div style="color: var(--accent-green); font-size: 0.9em; margin-bottom: 8px;"><strong><i class="fas fa-user-tie"></i> ' + (chairInfo.startsWith('Chairs:') || chairInfo.startsWith('Chair:') ? chairInfo : 'Chairs: ' + chairInfo) + '</strong></div>' + formatChairInfoWithCopyButtons(chairInfo) + '</div>';
+    }
+    return '<div class="committee-item" id="committee-item-' + index + '" style="background: var(--bg-glass); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 16px;">' +
+        '<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;"><span style="font-size: 1.5em;">' + desc.icon + '</span><div style="flex: 1;">' +
+        '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;"><strong style="font-size: 1.1em; color: var(--text-primary);">' + displayName + '</strong>' +
+        (desc.type ? '<span style="font-size: 0.7em; padding: 2px 6px; border-radius: 10px; font-weight: bold; text-transform: uppercase; ' + (desc.type === 'traditional' ? 'background: #e3f2fd; color: #1976d2; border: 1px solid #bbdefb;' : 'background: #f3e5f5; color: #7b1fa2; border: 1px solid #ce93d8;') + '">' + (desc.type === 'traditional' ? '🏛️ Traditional' : '⭐ Specialized') + '</span>' : '') +
+        (tagInfo ? '<span style="font-size: 0.7em; padding: 2px 6px; border-radius: 10px; font-weight: bold; background: #e8f5e9; color: #2e7d32; border: 1px solid #81c784;">' + tagInfo.tag + '</span><i class="fas fa-circle-question" style="color: var(--text-secondary); font-size: 0.85em; cursor: help;" title="' + (tagInfo.tooltip || '').replace(/"/g, '&quot;') + '" aria-label="' + (tagInfo.tooltip || '').replace(/"/g, '&quot;') + '"></i>' : '') +
+        '</div><div style="font-size: 0.9em; color: var(--text-secondary);">(' + desc.name + ')</div></div></div>' +
+        topicsHtml +
+        '<p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.95em;">' + desc.description + '</p><p style="margin: 4px 0 0 0; color: var(--text-secondary); font-size: 0.9em;"><strong>Focus:</strong> ' + desc.focus + '</p>' +
+        (desc.note ? '<p style="margin: 4px 0 0 0; color: var(--accent-blue); font-size: 0.9em; font-style: italic;"><strong>Note:</strong> ' + desc.note + '</p>' : '') +
+        (sizeInfo ? '<p style="margin: 8px 0 0 0; color: var(--text-secondary); font-size: 0.9em;"><strong>Size:</strong> ' + sizeInfo.chairs + ' ' + (sizeInfo.chairLabel || 'Chairs') + ', ' + sizeInfo.delegates + ' Delegates, Total: ' + sizeInfo.total + '</p>' : '') +
+        gradeRangeHtml + chairHtml + '</div>';
+}
+function getCommitteeDisplayName(c) {
+    if (typeof c === 'object' && c !== null) {
+        var raw = c.committee_name || c.name || '';
+        return raw.split(' (')[0].trim();
+    }
+    if (typeof c === 'string') return c.includes(' - ') ? c.split(' - ')[0].trim() : c.trim();
+    return '';
+}
+if (typeof window !== 'undefined') {
+    window.buildCommitteeItemHTML = buildCommitteeItemHTML;
+    window.getCommitteeDisplayName = getCommitteeDisplayName;
+    window.getConferenceForDetailPage = getConferenceForDetailPage;
+}
+
 // Returns true if the given deadline string is in the past (end of that day, local time).
 function isDeadlinePast(deadlineString) {
     if (deadlineString == null || String(deadlineString).trim() === '') return false;
@@ -1651,274 +1821,15 @@ function populateConferenceDetail(conf) {
 
         // Committees with descriptions
         if (conf.committees && Array.isArray(conf.committees) && conf.committees.length > 0) {
-        const committeeItems = conf.committees.map(c => {
-            // Handle both object format (from database) and string format (legacy)
-            let committeeName, committeeTopic, chairInfo;
-            if (typeof c !== 'string' && (typeof c !== 'object' || c === null)) {
-                return { committeeName: String(c != null ? c : ''), committeeTopic: [], chairInfo: '' };
-            }
-            if (typeof c === 'object' && c !== null) {
-                // Database format: object with separate fields
-                let rawCommitteeName = c.committee_name || c.name || '';
-                
-                // Extract abbreviation from committee name (remove anything in parentheses)
-                committeeName = rawCommitteeName.split(' (')[0].trim();
-                committeeTopic = c.topic || '';
-                // Get chair info from any possible field name
-                chairInfo = c.chairs_info || c.chair_info || c.chairInfo || '';
-                
-                // Parse multiple topics separated by " | "
-                const topics = committeeTopic ? committeeTopic.split(' | ').map(t => t.trim().replace(/\|$/, '')).filter(t => t) : [];
-                committeeTopic = topics;
-            } else {
-                // Legacy string format: parse the string
-                committeeName = c;
-                committeeTopic = '';
-                chairInfo = '';
-                
-                // Check if it contains "Chairs:" to identify chair info
-                if (c.includes('Chairs:')) {
-                    // Split by "Chairs:" to separate content from chair info
-                    const parts = c.split('Chairs:');
-                    // Remove trailing " | " before parsing main content
-                    let mainContent = parts[0].trim().replace(/\s*\|\s*$/, '');
-                    chairInfo = 'Chairs: ' + parts.slice(1).join('Chairs:').trim();
-                    
-                    // Now parse the main content for committee name and topics
-                    if (mainContent.includes(' - ')) {
-                        const nameTopicParts = mainContent.split(' - ');
-                        let rawCommitteeName = nameTopicParts[0].trim();
-                        // Extract abbreviation from committee name (remove anything in parentheses)
-                        committeeName = rawCommitteeName.split(' (')[0].trim();
-                        const topicString = nameTopicParts.slice(1).join(' - ').trim();
-                        
-                        // Parse multiple topics separated by " | "
-                        const topics = topicString ? topicString.split(' | ').map(t => t.trim().replace(/\|$/, '')).filter(t => t) : [];
-                        committeeTopic = topics;
-                    } else {
-                        committeeName = mainContent;
-                    }
-                } else if (c.includes(' | ')) {
-                    // May have topic separators or chair info without "Chairs:" prefix
-                    const mainParts = c.split(' | ');
-                    const mainContent = mainParts[0].trim();
-                    const lastPart = mainParts[mainParts.length - 1].trim();
-                    
-                    // Check if last part looks like a topic (e.g. "The Question of...", "Topic 2:...") — if so, don't treat as chair info
-                    const looksLikeTopic = /^(The Question of|Topic\s*\d*\s*:)/i.test(lastPart.trim());
-                    // Check if last part looks like chair info (contains @, names with commas, or common chair keywords)
-                    const lastPartLower = lastPart.toLowerCase();
-                    const looksLikeChairs = !looksLikeTopic && (
-                                          lastPart.includes('@') || 
-                                          (lastPart.includes(',') && !lastPartLower.includes('topic')) ||
-                                          lastPartLower.includes('chair') ||
-                                          lastPartLower.includes('head chair') ||
-                                          lastPartLower.includes('deputy chair') ||
-                                          lastPartLower.includes('president') ||
-                                          lastPartLower.includes('vice president') ||
-                                          lastPartLower.includes('editor') ||
-                                          lastPartLower.includes('editor in chief') ||
-                                          lastPartLower.includes('deputy editor') ||
-                                          lastPart === 'TBD' ||
-                                          lastPart === 'A, B' ||
-                                          /^(head|deputy|president|vice president|editor)/i.test(lastPart.trim()));
-                    
-                    if (looksLikeChairs && mainParts.length > 1) {
-                        // Last part is chair info
-                        chairInfo = lastPart;
-                        const contentParts = mainParts.slice(0, -1);
-                        const fullContent = contentParts.join(' | ');
-                        
-                        // Parse the content for committee name and topics
-                        if (fullContent.includes(' - ')) {
-                            const parts = fullContent.split(' - ');
-                            let rawCommitteeName = parts[0].trim();
-                            committeeName = rawCommitteeName.split(' (')[0].trim();
-                            const topicString = parts.slice(1).join(' - ').trim();
-                            const topics = topicString ? topicString.split(' | ').map(t => t.trim().replace(/\|$/, '')).filter(t => t) : [];
-                            committeeTopic = topics;
-                        } else {
-                            committeeName = fullContent;
-                        }
-                    } else {
-                        // No chair info, treat as topic separators
-                        if (mainContent.includes(' - ')) {
-                            const parts = mainContent.split(' - ');
-                            let rawCommitteeName = parts[0].trim();
-                            committeeName = rawCommitteeName.split(' (')[0].trim();
-                            const topicString = parts.slice(1).join(' - ').trim();
-                            const topics = topicString ? topicString.split(' | ').map(t => t.trim().replace(/\|$/, '')).filter(t => t) : [];
-                            // Add remaining parts as additional topics
-                            mainParts.slice(1).forEach(p => {
-                                const trimmed = p.trim();
-                                if (trimmed && !trimmed.includes('@') && !trimmed.includes('TBD') && !trimmed.includes('A, B')) {
-                                    topics.push(trimmed);
-                                }
-                            });
-                            committeeTopic = topics;
-                        } else {
-                            committeeName = mainContent;
-                            // Parse remaining parts as topics (excluding those that look like chairs)
-                            const topics = mainParts.slice(1).map(t => t.trim()).filter(t => {
-                                return t && !t.includes('@') && !t.includes('TBD') && !t.includes('A, B');
-                            });
-                            committeeTopic = topics;
-                        }
-                    }
-                } else if (c.includes(' - ')) {
-                    // Simple format: Committee Name - Single Topic
-                    const parts = c.split(' - ');
-                    let rawCommitteeName = parts[0].trim();
-                    // Extract abbreviation from committee name (remove anything in parentheses)
-                    committeeName = rawCommitteeName.split(' (')[0].trim();
-                    const rest = parts.slice(1).join(' - ').trim();
-                    
-                    // Check if the rest contains chair info (even without " | " separator)
-                    if (rest.includes('@') || 
-                        rest.toLowerCase().includes('chair') || 
-                        rest.toLowerCase().includes('head') ||
-                        rest.toLowerCase().includes('deputy') ||
-                        rest.toLowerCase().includes('president') ||
-                        rest.toLowerCase().includes('editor')) {
-                        // Try to extract chair info from the rest
-                        // Look for patterns like "Head Chair:", "Deputy Chair:", etc.
-                        const chairMatch = rest.match(/(head\s+chair|deputy\s+chair|president|vice\s+president|editor\s+in\s+chief|deputy\s+editor|editor)[:].*$/i);
-                        if (chairMatch) {
-                            const chairIndex = rest.indexOf(chairMatch[0]);
-                            committeeTopic = rest.substring(0, chairIndex).trim();
-                            chairInfo = rest.substring(chairIndex).trim();
-                        } else {
-                            committeeTopic = rest;
-                        }
-                    } else {
-                        committeeTopic = rest;
-                    }
-                }
-                
-                // Final fallback: if we still don't have chair info but the string contains chair-related terms
-                if (!chairInfo && typeof c === 'string') {
-                    const chairPatterns = [
-                        /head\s+chair[:\s].*?deputy\s+chair[:\s].*?/i,
-                        /president[:\s].*?vice\s+president[:\s].*?/i,
-                        /editor\s+in\s+chief[:\s].*?editor[:\s].*?/i,
-                        /chair[:\s].*?@/i
-                    ];
-                    
-                    for (const pattern of chairPatterns) {
-                        const match = c.match(pattern);
-                        if (match) {
-                            // Extract the chair info part
-                            const matchIndex = c.indexOf(match[0]);
-                            if (matchIndex > 0 && c[matchIndex - 1] === '|') {
-                                chairInfo = c.substring(matchIndex).trim();
-                                // Update committeeTopic if we extracted it from the same string
-                                if (!committeeTopic && matchIndex > 0) {
-                                    const beforeMatch = c.substring(0, matchIndex - 1).trim();
-                                    if (beforeMatch.includes(' - ')) {
-                                        const parts = beforeMatch.split(' - ');
-                                        committeeName = parts[0].trim();
-                                        committeeTopic = parts.slice(1).join(' - ').trim();
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            
-            // Extract raw committee name for difficulty detection
-            let rawCommitteeName = '';
-            if (typeof c === 'object' && c !== null) {
-                rawCommitteeName = c.committee_name || c.name || '';
-            } else if (typeof c === 'string') {
-                rawCommitteeName = c;
-            }
-            
-            const desc = getCommitteeDescription(committeeName, rawCommitteeName);
-            const sizeInfo = conf.committeeSizes && Array.isArray(conf.committeeSizes) && conf.committeeSizes.find(s => s.abbrev === committeeName);
-            // Display name: keep parenthetical e.g. "EU (FR)" when present in the raw string
-            const displayName = (typeof c === 'string' && c.includes(' - ')) ? c.split(' - ')[0].trim() : committeeName;
-            const tagInfo = conf.committeeTags && conf.committeeTags[displayName];
-            
-            // Difficulty label styling for topics
-            const difficultyStyles = {
-                beginner: 'background: #e8f5e9; color: #2e7d32; border: 1px solid #81c784;',
-                intermediate: 'background: #fff3e0; color: #e65100; border: 1px solid #ffb74d;',
-                advanced: 'background: #ffebee; color: #c62828; border: 1px solid #ef5350;'
-            };
-            
-            const difficultyEmojis = {
-                beginner: '🌱',
-                intermediate: '⭐',
-                advanced: '🔥'
-            };
-            
-            return `
-                <div class="committee-item" style="background: var(--bg-glass); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 16px;">
-                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                        <span style="font-size: 1.5em;">${desc.icon}</span>
-                        <div style="flex: 1;">
-                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
-                                <strong style="font-size: 1.1em; color: var(--text-primary);">${displayName}</strong>
-                                ${desc.type ? `<span style="font-size: 0.7em; padding: 2px 6px; border-radius: 10px; font-weight: bold; text-transform: uppercase; ${desc.type === 'traditional' ? 'background: #e3f2fd; color: #1976d2; border: 1px solid #bbdefb;' : 'background: #f3e5f5; color: #7b1fa2; border: 1px solid #ce93d8;'}">${desc.type === 'traditional' ? '🏛️ Traditional' : '⭐ Specialized'}</span>` : ''}
-                                ${tagInfo ? `<span style="font-size: 0.7em; padding: 2px 6px; border-radius: 10px; font-weight: bold; background: #e8f5e9; color: #2e7d32; border: 1px solid #81c784;">${tagInfo.tag}</span><i class="fas fa-circle-question" style="color: var(--text-secondary); font-size: 0.85em; cursor: help;" title="${(tagInfo.tooltip || '').replace(/"/g, '&quot;')}" aria-label="${(tagInfo.tooltip || '').replace(/"/g, '&quot;')}"></i>` : ''}
-                            </div>
-                            <div style="font-size: 0.9em; color: var(--text-secondary);">(${desc.name})</div>
-                        </div>
-                    </div>
-                    ${Array.isArray(committeeTopic) && committeeTopic.length > 0 ? `
-                        <div style="margin: 8px 0;">
-                            <strong style="color: var(--accent-blue); font-size: 0.95em;">Topics:</strong>
-                            <ul style="margin: 4px 0 0 0; padding-left: 20px; color: var(--accent-blue); font-size: 0.95em; list-style: none;">
-                                ${committeeTopic.map((topic, index) => {
-                                    // Remove existing "Topic X:" prefix if present
-                                    const cleanTopic = topic.replace(/^Topic \d+:\s*/, '');
-                                    // Get difficulty for this specific topic
-                                    const topicDifficulty = getTopicDifficulty(cleanTopic, desc.type);
-                                    return `
-                                        <li style="margin-bottom: 8px; padding: 8px; background: rgba(0,0,0,0.02); border-radius: 8px; border-left: 3px solid ${topicDifficulty === 'beginner' ? '#81c784' : topicDifficulty === 'intermediate' ? '#ffb74d' : '#ef5350'};">
-                                            <div style="display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap;">
-                                                <strong style="flex: 1;">Topic ${index + 1}:</strong>
-                                                <span style="font-size: 0.65em; padding: 2px 6px; border-radius: 10px; font-weight: bold; text-transform: capitalize; ${difficultyStyles[topicDifficulty]}">${difficultyEmojis[topicDifficulty]} ${topicDifficulty}</span>
-                                            </div>
-                                            <div style="margin-top: 4px; color: var(--text-secondary);">${cleanTopic}</div>
-                                        </li>
-                                    `;
-                                }).join('')}
-                            </ul>
-                        </div>
-                    ` : committeeTopic ? (() => {
-                        const topicDifficulty = getTopicDifficulty(committeeTopic, desc.type);
-                        return `
-                            <div style="margin: 8px 0; padding: 8px; background: rgba(0,0,0,0.02); border-radius: 8px; border-left: 3px solid ${topicDifficulty === 'beginner' ? '#81c784' : topicDifficulty === 'intermediate' ? '#ffb74d' : '#ef5350'};">
-                                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px;">
-                                    <strong style="color: var(--accent-blue); font-size: 0.95em;">Topic:</strong>
-                                    <span style="font-size: 0.65em; padding: 2px 6px; border-radius: 10px; font-weight: bold; text-transform: capitalize; ${difficultyStyles[topicDifficulty]}">${difficultyEmojis[topicDifficulty]} ${topicDifficulty}</span>
-                                </div>
-                                <div style="color: var(--text-secondary);">${committeeTopic}</div>
-                            </div>
-                        `;
-                    })() : ''}
-                    <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.95em;">${desc.description}</p>
-                    <p style="margin: 4px 0 0 0; color: var(--text-secondary); font-size: 0.9em;"><strong>Focus:</strong> ${desc.focus}</p>
-                    ${desc.note ? `<p style="margin: 4px 0 0 0; color: var(--accent-blue); font-size: 0.9em; font-style: italic;"><strong>Note:</strong> ${desc.note}</p>` : ''}
-                    ${sizeInfo ? `<p style="margin: 8px 0 0 0; color: var(--text-secondary); font-size: 0.9em;"><strong>Size:</strong> ${sizeInfo.chairs} ${sizeInfo.chairLabel || 'Chairs'}, ${sizeInfo.delegates} Delegates, Total: ${sizeInfo.total}</p>` : ''}
-                    ${sizeInfo && sizeInfo.gradeRange ? `<p style="margin: 4px 0 0 0; color: var(--text-secondary); font-size: 0.9em;"><strong>Grades:</strong> ${sizeInfo.gradeRange}${sizeInfo.gradeNote ? ` <span style="font-style: italic;">(${sizeInfo.gradeNote})</span>` : ''}</p>` : ''}
-                    ${chairInfo && chairInfo.trim() ? `
-                        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color);">
-                            <div style="color: var(--accent-green); font-size: 0.9em; margin-bottom: 8px;">
-                                <strong><i class="fas fa-user-tie"></i> ${chairInfo.startsWith('Chairs:') || chairInfo.startsWith('Chair:') ? chairInfo : 'Chairs: ' + chairInfo}</strong>
-                            </div>
-                            ${formatChairInfoWithCopyButtons(chairInfo)}
-                        </div>
-                    ` : ''}
-                </div>
-            `;
+        const conferenceIdParam = encodeURIComponent(conf.id);
+        const committeeCardsHtml = conf.committees.map((c, i) => {
+            const name = getCommitteeDisplayName(c);
+            return `<a href="committee.html?id=${conferenceIdParam}&committee=${i}" class="committee-card">${escapeHtml(name)}</a>`;
         }).join('');
+        const committeeItems = conf.committees.map((c, index) => buildCommitteeItemHTML(conf, c, index)).join('');
         const committeesEl = document.getElementById('committees');
         if (committeesEl) {
-            committeesEl.innerHTML = committeeItems;
+            committeesEl.innerHTML = '<div class="committee-cards-grid">' + committeeCardsHtml + '</div><div class="committee-items-list">' + committeeItems + '</div>';
         }
     } else {
         const committeesEl = document.getElementById('committees');

@@ -68,79 +68,79 @@ html {
    THEME SYSTEM - Multiple Color Schemes
    ======================================== */
 
-/* Default Theme - Blue/Green (Light) */
+/* Default Theme - White & Navy (Light) */
 :root {
     --font-body: 'SiteSans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --font-display: 'SiteDisplay', 'SiteSans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --font-display-condensed: 'SiteDisplayCondensed', 'SiteDisplay', 'SiteSans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    --bg-primary: linear-gradient(135deg, #f0f5f2 0%, #f5faf7 50%, #eef5f0 100%);
-    --bg-secondary: rgba(245, 250, 247, 0.9);
-    --bg-glass: rgba(255, 255, 255, 0.7);
-    --text-primary: #1a1a1a;
-    --text-secondary: rgba(26, 26, 26, 0.85);
-    --text-tertiary: rgba(26, 26, 26, 0.7);
-    --border-color: rgba(43, 125, 142, 0.2);
-    --shadow-glass: 0 8px 32px rgba(43, 125, 142, 0.08);
-    --shadow-hover: 0 16px 48px rgba(43, 125, 142, 0.12);
-    --accent-blue: #1E88E5;
-    --accent-purple: #29B6F6;
-    --accent-green: #00ACC1;
-    --accent-orange: #00BCD4;
-    --accent-red: #E53935;
+    --bg-primary: #ffffff;
+    --bg-secondary: rgba(255, 255, 255, 0.95);
+    --bg-glass: rgba(255, 255, 255, 0.9);
+    --text-primary: #0d2847;
+    --text-secondary: rgba(13, 40, 71, 0.88);
+    --text-tertiary: rgba(13, 40, 71, 0.7);
+    --border-color: rgba(0, 31, 63, 0.12);
+    --shadow-glass: 0 8px 32px rgba(0, 31, 63, 0.06);
+    --shadow-hover: 0 16px 48px rgba(0, 31, 63, 0.1);
+    --accent-blue: #001f3f;
+    --accent-purple: #0d2847;
+    --accent-green: #003366;
+    --accent-orange: #1e4976;
+    --accent-red: #c62828;
     --accent-color: var(--accent-blue);
     --accent-hover: var(--accent-purple);
 }
 
-/* Dark Mode - Blue/Green Theme */
+/* Dark Mode - White & Navy (dark navy background) */
 [data-theme="dark"] {
-    --bg-primary: linear-gradient(135deg, #0f1f2a 0%, #1a2f38 50%, #253f47 100%);
-    --bg-secondary: rgba(15, 31, 42, 0.6);
-    --bg-glass: rgba(43, 125, 142, 0.08);
+    --bg-primary: #0d2847;
+    --bg-secondary: rgba(13, 40, 71, 0.95);
+    --bg-glass: rgba(255, 255, 255, 0.06);
     --text-primary: #ffffff;
-    --text-secondary: rgba(255, 255, 255, 0.9);
+    --text-secondary: rgba(255, 255, 255, 0.92);
     --text-tertiary: rgba(255, 255, 255, 0.75);
-    --border-color: rgba(74, 159, 176, 0.2);
-    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.5);
-    --shadow-hover: 0 16px 48px rgba(43, 125, 142, 0.3);
-    --accent-blue: #42A5F5;
+    --border-color: rgba(255, 255, 255, 0.12);
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.35);
+    --accent-blue: #5b9bd5;
     --accent-color: var(--accent-blue);
-    --accent-hover: var(--accent-purple);
-    --accent-purple: #4FC3F7;
-    --accent-green: #26C6DA;
-    --accent-orange: #4DD0E1;
-    --accent-red: #EF5350;
+    --accent-hover: #7eb3e8;
+    --accent-purple: #7eb3e8;
+    --accent-green: #6ba3d4;
+    --accent-orange: #8fc4e8;
+    --accent-red: #ef5350;
 }
 
-/* Blue Theme (Light) - Explicit definition to match default theme */
+/* Blue Theme (Light) - White & Navy */
 [data-color="blue"] {
-    --bg-primary: linear-gradient(135deg, #f0f5f2 0%, #f5faf7 50%, #eef5f0 100%);
-    --bg-secondary: rgba(245, 250, 247, 0.9);
-    --bg-glass: rgba(255, 255, 255, 0.7);
-    --border-color: rgba(43, 125, 142, 0.2);
-    --shadow-glass: 0 8px 32px rgba(43, 125, 142, 0.08);
-    --shadow-hover: 0 16px 48px rgba(43, 125, 142, 0.12);
-    --accent-blue: #1E88E5;
-    --accent-purple: #29B6F6;
-    --accent-green: #00ACC1;
-    --accent-orange: #00BCD4;
-    --accent-red: #E53935;
+    --bg-primary: #ffffff;
+    --bg-secondary: rgba(255, 255, 255, 0.95);
+    --bg-glass: rgba(255, 255, 255, 0.9);
+    --border-color: rgba(0, 31, 63, 0.12);
+    --shadow-glass: 0 8px 32px rgba(0, 31, 63, 0.06);
+    --shadow-hover: 0 16px 48px rgba(0, 31, 63, 0.1);
+    --accent-blue: #001f3f;
+    --accent-purple: #0d2847;
+    --accent-green: #003366;
+    --accent-orange: #1e4976;
+    --accent-red: #c62828;
     --accent-color: var(--accent-blue);
     --accent-hover: var(--accent-purple);
 }
 
-/* Blue Theme (Dark) */
+/* Blue Theme (Dark) - Navy background, white text */
 [data-color="blue"][data-theme="dark"] {
-    --bg-primary: linear-gradient(135deg, #0f1f2a 0%, #1a2f38 50%, #253f47 100%);
-    --bg-secondary: rgba(15, 31, 42, 0.6);
-    --bg-glass: rgba(43, 125, 142, 0.08);
-    --border-color: rgba(74, 159, 176, 0.2);
-    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.5);
-    --shadow-hover: 0 16px 48px rgba(43, 125, 142, 0.3);
-    --accent-blue: #42A5F5;
-    --accent-purple: #4FC3F7;
-    --accent-green: #26C6DA;
-    --accent-orange: #4DD0E1;
-    --accent-red: #EF5350;
+    --bg-primary: #0d2847;
+    --bg-secondary: rgba(13, 40, 71, 0.95);
+    --bg-glass: rgba(255, 255, 255, 0.06);
+    --border-color: rgba(255, 255, 255, 0.12);
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.35);
+    --accent-blue: #5b9bd5;
+    --accent-purple: #7eb3e8;
+    --accent-green: #6ba3d4;
+    --accent-orange: #8fc4e8;
+    --accent-red: #ef5350;
     --accent-color: var(--accent-blue);
     --accent-hover: var(--accent-purple);
 }
@@ -3623,8 +3623,54 @@ body::before {
     border-top: 1px solid var(--border-color);
 }
 
-/* Committees / delegations: two columns */
-.conference-detail-grid #committees {
+/* Committee cards: black cards with name only, link to committee section */
+.committee-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.committee-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 72px;
+    padding: 14px 16px;
+    background: #0d2847;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.committee-card:hover {
+    background: #001f3f;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 31, 63, 0.35);
+}
+
+.committee-card:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+[data-theme="dark"] .committee-card {
+    background: #001a33;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .committee-card:hover {
+    background: #002244;
+}
+
+/* Committee items list: two columns below the cards */
+.conference-detail-grid #committees .committee-items-list {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
@@ -3635,7 +3681,10 @@ body::before {
 }
 
 @media (max-width: 768px) {
-    .conference-detail-grid #committees {
+    .committee-cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+    .conference-detail-grid #committees .committee-items-list {
         grid-template-columns: 1fr;
     }
 }
@@ -3686,6 +3735,92 @@ body::before {
 
 [data-theme="dark"] .topic-card:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Difficulty tags: beginner, intermediate, advanced */
+.difficulty-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+.difficulty-tag--beginner {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-color: #81c784;
+}
+.difficulty-tag--intermediate {
+    background: #fff3e0;
+    color: #e65100;
+    border-color: #ffb74d;
+}
+.difficulty-tag--advanced {
+    background: #ffebee;
+    color: #c62828;
+    border-color: #ef5350;
+}
+[data-theme="dark"] .difficulty-tag--beginner {
+    background: rgba(129, 199, 132, 0.25);
+    color: #a5d6a7;
+    border-color: #81c784;
+}
+[data-theme="dark"] .difficulty-tag--intermediate {
+    background: rgba(255, 183, 77, 0.2);
+    color: #ffcc80;
+    border-color: #ffb74d;
+}
+[data-theme="dark"] .difficulty-tag--advanced {
+    background: rgba(239, 83, 80, 0.2);
+    color: #ef9a9a;
+    border-color: #ef5350;
+}
+
+/* Grade/age range tags */
+.grade-range-tag {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+.grade-range-tag--lower {
+    background: #e3f2fd;
+    color: #1565c0;
+    border-color: #64b5f6;
+}
+.grade-range-tag--wide {
+    background: #e0f2f1;
+    color: #00695c;
+    border-color: #4db6ac;
+}
+.grade-range-tag--upper {
+    background: #ede7f6;
+    color: #4527a0;
+    border-color: #9575cd;
+}
+[data-theme="dark"] .grade-range-tag--lower {
+    background: rgba(100, 181, 246, 0.2);
+    color: #90caf9;
+    border-color: #64b5f6;
+}
+[data-theme="dark"] .grade-range-tag--wide {
+    background: rgba(77, 182, 172, 0.2);
+    color: #80cbc4;
+    border-color: #4db6ac;
+}
+[data-theme="dark"] .grade-range-tag--upper {
+    background: rgba(149, 117, 205, 0.25);
+    color: #b39ddb;
+    border-color: #9575cd;
 }
 
 /* Awards two-column card grid */
