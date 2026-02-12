@@ -91,25 +91,6 @@ const committees = [
     ],
   },
   {
-    id: "hsc",
-    name: "HSC",
-    topicGroups: [
-      "SARS Outbreak (2002-2004)",
-      "The Black Death (1346-1353)",
-      "The September 11 Attacks (2001)",
-      "The East African Embassy Bombings (1998)",
-    ],
-    members: [
-      "China", "France", "United Kingdom", "United States", "Russia",
-      "Algeria", "Argentina", "Brazil", "Ghana", "India", "Japan", "Norway"
-    ],
-    subIssues: [
-      "Analyzing historical context and decision-making processes.",
-      "Evaluating international response mechanisms and coordination.",
-      "Assessing long-term implications and lessons learned.",
-    ],
-  },
-  {
     id: "icj",
     name: "ICJ",
     topicGroups: [
@@ -825,35 +806,6 @@ const elements = {
 
 // Crisis definitions for crisis/historical/fictional committees
 const crises = {
-  hsc: [
-    {
-      title: "Breaking: New Intelligence Report",
-      description: "Intelligence agencies report a new development that changes the context of the situation. How will the Security Council respond?",
-      options: [
-        { text: "Request immediate briefing from intelligence agencies", points: 10, outcome: "The briefing reveals critical information that shapes the discussion." },
-        { text: "Call for emergency session", points: 8, outcome: "An emergency session is convened to address the new information." },
-        { text: "Continue with current agenda", points: 5, outcome: "The committee proceeds but may miss critical timing." },
-      ],
-    },
-    {
-      title: "Diplomatic Incident",
-      description: "A major diplomatic incident occurs between two member states, threatening to derail negotiations.",
-      options: [
-        { text: "Call for immediate de-escalation", points: 12, outcome: "Both parties agree to de-escalate tensions." },
-        { text: "Propose mediation", points: 10, outcome: "A neutral mediator is appointed to facilitate dialogue." },
-        { text: "Table discussion until tensions cool", points: 6, outcome: "Discussion is postponed, but tensions remain." },
-      ],
-    },
-    {
-      title: "Humanitarian Emergency",
-      description: "Reports emerge of a humanitarian crisis requiring immediate international response.",
-      options: [
-        { text: "Authorize emergency aid deployment", points: 15, outcome: "Humanitarian aid is immediately dispatched." },
-        { text: "Establish fact-finding mission", points: 8, outcome: "A mission is sent to assess the situation." },
-        { text: "Refer to specialized agencies", points: 5, outcome: "The matter is referred to relevant UN agencies." },
-      ],
-    },
-  ],
   icj: [
     {
       title: "New Evidence Submitted",
@@ -2084,7 +2036,7 @@ const resetSimulation = () => {
 
 const isCrisisCommittee = () => {
   if (!state.committee) return false;
-  return ["hsc", "icj", "uncsa", "fwc"].includes(state.committee.id);
+  return ["icj", "uncsa", "fwc"].includes(state.committee.id);
 };
 
 const triggerCrisis = () => {
