@@ -1570,14 +1570,6 @@ function buildCommitteeItemHTML(conf, c, index) {
     const sizeInfo = conf.committeeSizes && Array.isArray(conf.committeeSizes) && conf.committeeSizes.find(function (s) { return s.abbrev === committeeName; });
     const displayName = (typeof c === 'string' && c.includes(' - ')) ? c.split(' - ')[0].trim() : committeeName;
     const tagInfo = conf.committeeTags && conf.committeeTags[displayName];
-    const nameUpper = (committeeName || '').toUpperCase();
-    const displayUpper = (displayName || '').toUpperCase();
-    const isPressCorps = nameUpper.includes('PRESS') || displayUpper.includes('PRESS') || nameUpper === 'PC';
-    const isUNSC = (nameUpper.includes('UNSC') || nameUpper.includes('SECURITY COUNCIL') || nameUpper === 'SC') && !nameUpper.includes('HISTORICAL');
-    const isHSC = nameUpper.includes('HSC') || nameUpper.includes('HISTORICAL SECURITY');
-    if ((isPressCorps || isUNSC || isHSC) && committeeTopic) {
-        committeeTopic = Array.isArray(committeeTopic) ? committeeTopic.slice(0, 1) : [committeeTopic];
-    }
     const difficultyEmojis = { beginner: '🌱', intermediate: '⭐', advanced: '🔥' };
     var topicsHtml = '';
     if (Array.isArray(committeeTopic) && committeeTopic.length > 0) {
