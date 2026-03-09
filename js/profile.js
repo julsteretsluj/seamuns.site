@@ -246,9 +246,6 @@ async function loadUserProfile(user) {
         if (profileSchoolHint) profileSchoolHint.style.display = user.school ? 'none' : 'block';
     }
     
-    // Load conference data
-    const conferences = JSON.parse(localStorage.getItem('munConferences')) || [];
-    
     // Get today's date for comparison
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Reset to start of day for accurate comparison
