@@ -13,14 +13,13 @@ class MUNTracker {
         // Don't call init() here - wait for explicit init() call after DOM is ready
     }
 
-    init() {
+    async init() {
         try {
             console.log('MUNTracker.init() started');
             this.loadUsers();
             this.loadTheme();
             this.bindEvents();
             this.applyPolicyLinks();
-            this.checkAuthState();
             this.subscribeFirebaseAuthState();
             var hasConferenceList = document.getElementById('conferencesList');
             if (hasConferenceList) {
@@ -28,12 +27,15 @@ class MUNTracker {
                 this.loadConferences();
                 console.log('Conferences loaded, count:', this.conferences.length);
                 this.bindDetailsModalEvents();
+                await this.checkAuthState();
                 this.updateStatistics();
                 this.updateLocationFilter();
                 console.log('Rendering conferences...');
                 this.renderConferences();
                 if (window.location.search.indexOf('open=login') !== -1) this.openModal('loginModal');
                 if (window.location.search.indexOf('open=signup') !== -1) this.openModal('signupModal');
+            } else {
+                this.checkAuthState();
             }
             console.log('MUNTracker.init() completed');
         } catch (error) {
