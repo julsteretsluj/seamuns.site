@@ -2082,17 +2082,18 @@ function setupAttendanceButton(conference) {
         return;
     }
 
-    // Update button based on attendance status
+    // Update button based on attendance status and conference date
     const status = conference.attendanceStatus || 'not-attending';
-    updateAttendanceButton(status);
+    updateAttendanceButton(status, conference);
 
     attendanceBtn.addEventListener('click', () => {
         toggleAttendance(conference.id);
     });
 }
 
-function updateAttendanceButton(status) {
+function updateAttendanceButton(status, conference) {
     const btn = document.getElementById('attendanceBtn');
+    const isPast = conference && isConferencePast(conference);
     
     switch (status) {
         case 'attending':
@@ -2102,8 +2103,19 @@ function updateAttendanceButton(status) {
             btn.innerHTML = '<i class="fas fa-times-circle"></i> Remove Attendance';
             break;
         default:
-            btn.innerHTML = '<i class="fas fa-user-check"></i> Mark as Attending';
+            btn.innerHTML = isPast
+                ? '<i class="fas fa-trophy"></i> Mark as Attended'
+                : '<i class="fas fa-user-check"></i> Mark as Attending';
     }
+}
+
+function isConferencePast(conference) {
+    if (!conference || !conference.endDate) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const endDate = new Date(conference.endDate);
+    endDate.setHours(0, 0, 0, 0);
+    return endDate < today;
 }
 
 async function toggleAttendance(conferenceId) {
@@ -2117,19 +2129,18 @@ async function toggleAttendance(conferenceId) {
 
     const currentStatus = conference.attendanceStatus || 'not-attending';
     let newStatus;
+    const isPast = isConferencePast(conference);
 
     switch (currentStatus) {
         case 'not-attending':
-            newStatus = 'attending';
+            newStatus = isPast ? 'attended' : 'attending';
             break;
         case 'attending':
-            newStatus = 'attended';
-            break;
         case 'attended':
             newStatus = 'not-attending';
             break;
         default:
-            newStatus = 'attending';
+            newStatus = isPast ? 'attended' : 'attending';
     }
 
     conference.attendanceStatus = newStatus;
@@ -2138,7 +2149,7 @@ async function toggleAttendance(conferenceId) {
     // Save to user-specific storage (Firebase or userAttendance_ localStorage) so it persists across devices/sessions
     await saveAttendanceFromDetailPage(conferenceId, newStatus);
     
-    updateAttendanceButton(newStatus);
+    updateAttendanceButton(newStatus, conference);
     
     // Show message
     showTempMessage(`Marked as ${getAttendanceLabel(newStatus)}`);
@@ -2184,16 +2195,28 @@ function setupAwardButton(conference) {
     }
 }
 
-// Open Award Modal with pre-filled conference data
+// Open Award Modal with pre-filled conference data (only used if award modal exists on page)
 function openAwardModal(conference) {
     const awardModal = document.getElementById('awardModal');
     const awardForm = document.getElementById('awardForm');
     if (!awardModal || !awardForm) return;
     awardForm.reset();
     const awardConference = document.getElementById('awardConference');
+    const awardConferenceOther = document.getElementById('awardConferenceOther');
+    const awardConferenceOtherWrap = document.getElementById('awardConferenceOtherWrap');
     const awardDate = document.getElementById('awardDate');
     const otherAwardTypeGroup = document.getElementById('otherAwardTypeGroup');
-    if (awardConference) awardConference.value = conference.name;
+    if (awardConference) {
+        if (typeof populateAwardConferenceSelect === 'function') populateAwardConferenceSelect();
+        if (awardConference.options && Array.from(awardConference.options).some(function(o) { return o.value === conference.name; })) {
+            awardConference.value = conference.name;
+            if (awardConferenceOtherWrap) awardConferenceOtherWrap.style.display = 'none';
+        } else {
+            awardConference.value = '__other__';
+            if (awardConferenceOther) awardConferenceOther.value = conference.name || '';
+            if (awardConferenceOtherWrap) awardConferenceOtherWrap.style.display = 'block';
+        }
+    }
     if (awardDate) awardDate.value = conference.startDate;
     if (otherAwardTypeGroup) otherAwardTypeGroup.style.display = 'none';
     awardModal.classList.add('show');
@@ -2219,10 +2242,11 @@ function closeAwardModal() {
 }
 
 // Handle Award Form Submission
-function handleAwardSubmit(e) {
+async function handleAwardSubmit(e) {
     e.preventDefault();
     
     const awardConferenceEl = document.getElementById('awardConference');
+    const awardConferenceOtherEl = document.getElementById('awardConferenceOther');
     const awardTypeEl = document.getElementById('awardType');
     const awardTypeOtherEl = document.getElementById('awardTypeOther');
     const awardCommitteeEl = document.getElementById('awardCommittee');
@@ -2234,7 +2258,9 @@ function handleAwardSubmit(e) {
         return;
     }
     
-    const conference = awardConferenceEl.value.trim();
+    const conference = (awardConferenceEl.value === '__other__' && awardConferenceOtherEl)
+        ? awardConferenceOtherEl.value.trim()
+        : awardConferenceEl.value.trim();
     const awardTypeSelect = awardTypeEl.value;
     const awardType = awardTypeSelect === 'Other' && awardTypeOtherEl ? awardTypeOtherEl.value.trim() : awardTypeSelect;
     const committee = awardCommitteeEl ? awardCommitteeEl.value.trim() : '';
@@ -2273,7 +2299,10 @@ function handleAwardSubmit(e) {
     // Save to Firebase if available
     const firebaseUserId = currentUser.uid || currentUser.firebaseId;
     if (typeof FirebaseDB !== 'undefined' && firebaseUserId) {
-        FirebaseDB.updateAward(firebaseUserId, currentUser.awards);
+        try {
+            const res = await FirebaseDB.updateAward(firebaseUserId, currentUser.awards);
+            if (!res.success) console.warn('Firebase award save failed:', res.error);
+        } catch (e) { console.warn('Firebase award save error:', e); }
     }
     
     // Save to localStorage

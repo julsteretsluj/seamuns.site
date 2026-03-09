@@ -373,14 +373,15 @@ const FirebaseDB = {
         }
     },
 
-    // Update award in user profile
+    // Update awards in user profile (stored in users/{userId}.awards)
     async updateAward(userId, awards) {
         if (!db) return { success: false, error: 'Firestore not available' };
         try {
-            await db.collection('users').doc(userId).update({
-                awards: awards
-            });
-            console.log('✅ Awards updated');
+            await db.collection('users').doc(userId).set(
+                { awards: Array.isArray(awards) ? awards : [] },
+                { merge: true }
+            );
+            console.log('✅ Awards saved to Firestore');
             return { success: true };
         } catch (error) {
             console.error('❌ Update award error:', error);

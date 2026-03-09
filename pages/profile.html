@@ -236,7 +236,14 @@
             <form id="awardForm">
                 <div class="form-group">
                     <label for="awardConference">Conference *</label>
-                    <input type="text" id="awardConference" required placeholder="e.g. SEAMUN 2025">
+                    <select id="awardConference" required>
+                        <option value="">— Select conference —</option>
+                        <!-- Populated by profile.js from MUN_CONFERENCES_DATA / munConferences -->
+                    </select>
+                    <div class="form-group" id="awardConferenceOtherWrap" style="display: none; margin-top: 0.75rem;">
+                        <label for="awardConferenceOther">Other conference</label>
+                        <input type="text" id="awardConferenceOther" placeholder="e.g. SEAMUN 2025">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="awardType">Award type *</label>

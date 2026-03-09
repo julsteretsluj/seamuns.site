@@ -1447,19 +1447,18 @@ class MUNTracker {
         if (conference) {
             const currentStatus = await this.getUserAttendanceStatus(id);
             let newStatus;
+            const isPast = this.isConferencePast(conference);
             
             switch (currentStatus) {
                 case 'not-attending':
-                    newStatus = 'attending';
+                    newStatus = isPast ? 'attended' : 'attending';
                     break;
                 case 'attending':
-                    newStatus = 'attended';
-                    break;
                 case 'attended':
                     newStatus = 'not-attending';
                     break;
                 default:
-                    newStatus = 'attending';
+                    newStatus = isPast ? 'attended' : 'attending';
             }
             
             // Save to Firebase if available, otherwise save locally (userAttendance_ or munConferences)
@@ -1603,6 +1602,15 @@ class MUNTracker {
         return this.currentUser.id || this.currentUser.uid || this.currentUser.email || null;
     }
 
+    isConferencePast(conference) {
+        if (!conference || !conference.endDate) return false;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const endDate = new Date(conference.endDate);
+        endDate.setHours(0, 0, 0, 0);
+        return endDate < today;
+    }
+
     getAttendanceLabel(status) {
         switch (status) {
             case 'attending':
@@ -1638,16 +1646,16 @@ class MUNTracker {
         }
     }
 
-    getAttendanceToggleText(status) {
+    getAttendanceToggleText(status, conference) {
+        const isPast = conference && this.isConferencePast(conference);
         switch (status) {
             case 'not-attending':
-                return 'Mark as Attending';
+                return isPast ? 'Mark as Attended' : 'Mark as Attending';
             case 'attending':
-                return 'Mark as Attended';
             case 'attended':
                 return 'Mark as Not Attending';
             default:
-                return 'Mark as Attending';
+                return isPast ? 'Mark as Attended' : 'Mark as Attending';
         }
     }
 

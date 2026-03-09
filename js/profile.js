@@ -161,20 +161,22 @@ function ensureUserMenuShown(user) {
 }
 
 async function loadUserProfile(user) {
-    // Load conferences and merge attendance (Firebase or localStorage)
+    // Load conferences: prefer munConferences (has attendance from index/detail pages), else MUN_CONFERENCES_DATA
     let conferences = [];
-    if (typeof window.MUN_CONFERENCES_DATA !== 'undefined' && Array.isArray(window.MUN_CONFERENCES_DATA)) {
+    const saved = JSON.parse(localStorage.getItem('munConferences') || '[]');
+    if (Array.isArray(saved) && saved.length > 0) {
+        conferences = JSON.parse(JSON.stringify(saved));
+    } else if (typeof window.MUN_CONFERENCES_DATA !== 'undefined' && Array.isArray(window.MUN_CONFERENCES_DATA)) {
         conferences = JSON.parse(JSON.stringify(window.MUN_CONFERENCES_DATA));
-    } else {
-        conferences = JSON.parse(localStorage.getItem('munConferences') || '[]');
     }
     const userKey = user.id || user.uid || user.email;
+    // Overlay Firebase attendance for Firebase users (authoritative, syncs across devices)
     if (userKey && (user.authProvider === 'firebase' || user.authProvider === 'google') && user.uid && typeof FirebaseDB !== 'undefined' && FirebaseDB.getUserAttendanceData) {
         try {
             const res = await FirebaseDB.getUserAttendanceData(user.uid);
-            if (res.success && res.data) {
+            if (res.success && res.data && Object.keys(res.data).length > 0) {
                 conferences.forEach(conf => {
-                    const status = res.data[conf.id];
+                    const status = res.data[conf.id] || res.data[String(conf.id)];
                     if (status) conf.attendanceStatus = status;
                 });
                 localStorage.setItem('munConferences', JSON.stringify(conferences));
@@ -183,7 +185,7 @@ async function loadUserProfile(user) {
     } else if (userKey) {
         const userAttendance = JSON.parse(localStorage.getItem('userAttendance_' + userKey) || '{}');
         conferences.forEach(conf => {
-            const status = userAttendance[conf.id];
+            const status = userAttendance[conf.id] || userAttendance[String(conf.id)];
             if (status) conf.attendanceStatus = status;
         });
     }
@@ -606,21 +608,69 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
+    const awardConferenceSelect = document.getElementById('awardConference');
+    if (awardConferenceSelect) {
+        awardConferenceSelect.addEventListener('change', syncAwardConferenceOtherField);
+    }
+    
     if (awardForm) {
         awardForm.addEventListener('submit', handleAwardFormSubmit);
     }
 });
+
+// Populate conference dropdown for award form
+function populateAwardConferenceSelect() {
+    const select = document.getElementById('awardConference');
+    if (!select || select.tagName !== 'SELECT') return;
+    if (select.querySelector('option[value="__other__"]')) return; // already populated
+    const conferences = (typeof window.MUN_CONFERENCES_DATA !== 'undefined' && Array.isArray(window.MUN_CONFERENCES_DATA))
+        ? window.MUN_CONFERENCES_DATA
+        : JSON.parse(localStorage.getItem('munConferences') || '[]');
+    const names = [];
+    conferences.forEach(function(c) {
+        if (c && c.name && !names.includes(c.name)) names.push(c.name);
+    });
+    names.sort();
+    names.forEach(function(n) {
+        const opt = document.createElement('option');
+        opt.value = n;
+        opt.textContent = n;
+        select.appendChild(opt);
+    });
+    const otherOpt = document.createElement('option');
+    otherOpt.value = '__other__';
+    otherOpt.textContent = 'Other (unlisted conference)';
+    select.appendChild(otherOpt);
+}
+
+function syncAwardConferenceOtherField() {
+    const select = document.getElementById('awardConference');
+    const wrap = document.getElementById('awardConferenceOtherWrap');
+    const input = document.getElementById('awardConferenceOther');
+    if (!select || !wrap || !input) return;
+    if (select.value === '__other__') {
+        wrap.style.display = 'block';
+        input.required = true;
+    } else {
+        wrap.style.display = 'none';
+        input.required = false;
+        input.value = '';
+    }
+}
 
 function openAddAwardModal() {
     currentEditingAwardId = null;
     const awardModalTitle = document.getElementById('awardModalTitle');
     const awardForm = document.getElementById('awardForm');
     const otherAwardTypeGroup = document.getElementById('otherAwardTypeGroup');
+    const awardConferenceOtherWrap = document.getElementById('awardConferenceOtherWrap');
     const awardModal = document.getElementById('awardModal');
     
     if (awardModalTitle) awardModalTitle.textContent = 'Add Award';
     if (awardForm) awardForm.reset();
     if (otherAwardTypeGroup) otherAwardTypeGroup.style.display = 'none';
+    if (awardConferenceOtherWrap) awardConferenceOtherWrap.style.display = 'none';
+    populateAwardConferenceSelect();
     if (awardModal) {
         awardModal.classList.add('show');
         awardModal.style.display = 'flex';
@@ -637,6 +687,7 @@ function openEditAwardModal(awardId) {
     currentEditingAwardId = awardId;
     const awardModalTitle = document.getElementById('awardModalTitle');
     const awardConference = document.getElementById('awardConference');
+    const awardConferenceOther = document.getElementById('awardConferenceOther');
     const awardCommittee = document.getElementById('awardCommittee');
     const awardDate = document.getElementById('awardDate');
     const awardNotes = document.getElementById('awardNotes');
@@ -646,7 +697,17 @@ function openEditAwardModal(awardId) {
     const awardModal = document.getElementById('awardModal');
     
     if (awardModalTitle) awardModalTitle.textContent = 'Edit Award';
-    if (awardConference) awardConference.value = award.conference;
+    populateAwardConferenceSelect();
+    if (awardConference) {
+        if (awardConference.options && Array.from(awardConference.options).some(o => o.value === award.conference)) {
+            awardConference.value = award.conference;
+            if (awardConferenceOther) awardConferenceOther.value = '';
+        } else {
+            awardConference.value = '__other__';
+            if (awardConferenceOther) awardConferenceOther.value = award.conference || '';
+        }
+        syncAwardConferenceOtherField();
+    }
     if (awardCommittee) awardCommittee.value = award.committee;
     if (awardDate) awardDate.value = award.date;
     if (awardNotes) awardNotes.value = award.notes || '';
@@ -677,17 +738,20 @@ function openEditAwardModal(awardId) {
 
 function closeAwardModalFunc() {
     const awardModal = document.getElementById('awardModal');
+    const awardConferenceOtherWrap = document.getElementById('awardConferenceOtherWrap');
     if (awardModal) {
         awardModal.classList.remove('show');
         awardModal.style.display = 'none';
     }
+    if (awardConferenceOtherWrap) awardConferenceOtherWrap.style.display = 'none';
     currentEditingAwardId = null;
 }
 
-function handleAwardFormSubmit(e) {
+async function handleAwardFormSubmit(e) {
     e.preventDefault();
     
     const awardConferenceEl = document.getElementById('awardConference');
+    const awardConferenceOtherEl = document.getElementById('awardConferenceOther');
     const awardTypeEl = document.getElementById('awardType');
     const awardTypeOtherEl = document.getElementById('awardTypeOther');
     const awardCommitteeEl = document.getElementById('awardCommittee');
@@ -699,7 +763,9 @@ function handleAwardFormSubmit(e) {
         return;
     }
     
-    const conference = awardConferenceEl.value.trim();
+    const conference = (awardConferenceEl.value === '__other__' && awardConferenceOtherEl)
+        ? awardConferenceOtherEl.value.trim()
+        : awardConferenceEl.value.trim();
     const awardTypeSelect = awardTypeEl.value;
     const awardType = awardTypeSelect === 'Other' && awardTypeOtherEl ? awardTypeOtherEl.value.trim() : awardTypeSelect;
     const committee = awardCommitteeEl.value.trim();
@@ -749,7 +815,10 @@ function handleAwardFormSubmit(e) {
     // Save to Firebase if available
     const firebaseUserId = currentUser.uid || currentUser.firebaseId;
     if (typeof FirebaseDB !== 'undefined' && firebaseUserId) {
-        FirebaseDB.updateAward(firebaseUserId, currentUser.awards);
+        try {
+            const res = await FirebaseDB.updateAward(firebaseUserId, currentUser.awards);
+            if (!res.success) console.warn('Firebase award save failed:', res.error);
+        } catch (e) { console.warn('Firebase award save error:', e); }
     }
     
     // Save to localStorage
@@ -768,7 +837,7 @@ function handleAwardFormSubmit(e) {
     loadUserProfile(currentUser);
 }
 
-function deleteAward(awardId) {
+async function deleteAward(awardId) {
     if (!confirm('Are you sure you want to delete this award?')) {
         return;
     }
@@ -782,7 +851,10 @@ function deleteAward(awardId) {
     // Save to Firebase if available
     const firebaseUserId = currentUser.uid || currentUser.firebaseId;
     if (typeof FirebaseDB !== 'undefined' && firebaseUserId) {
-        FirebaseDB.updateAward(firebaseUserId, currentUser.awards);
+        try {
+            const res = await FirebaseDB.updateAward(firebaseUserId, currentUser.awards);
+            if (!res.success) console.warn('Firebase award delete sync failed:', res.error);
+        } catch (e) { console.warn('Firebase award save error:', e); }
     }
     
     // Save to localStorage
