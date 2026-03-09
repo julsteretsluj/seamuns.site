@@ -1549,9 +1549,9 @@ class MUNTracker {
                 if (typeof FirebaseDB !== 'undefined') {
                     const result = await FirebaseDB.getUserAttendanceData(this.currentUser.uid);
                     if (result.success && result.data) {
-                        // Update local conference data with user's attendance
+                        // Update local conference data with user's attendance (handle both number and string IDs)
                         this.conferences.forEach(conference => {
-                            const userStatus = result.data[conference.id];
+                            const userStatus = result.data[conference.id] || result.data[String(conference.id)];
                             if (userStatus) {
                                 conference.attendanceStatus = userStatus;
                             }
@@ -1567,7 +1567,7 @@ class MUNTracker {
             if (localUserId) {
                 const userAttendance = JSON.parse(localStorage.getItem(`userAttendance_${localUserId}`) || '{}');
                 this.conferences.forEach(conference => {
-                    const userStatus = userAttendance[conference.id];
+                    const userStatus = userAttendance[conference.id] || userAttendance[String(conference.id)];
                     if (userStatus) {
                         conference.attendanceStatus = userStatus;
                     }

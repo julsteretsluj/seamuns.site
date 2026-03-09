@@ -304,7 +304,8 @@ const FirebaseDB = {
             const attendance = {};
             snapshot.forEach(doc => {
                 const data = doc.data();
-                attendance[data.conferenceId] = data.status;
+                const key = data.conferenceId != null ? String(data.conferenceId) : null;
+                if (key && data.status) attendance[key] = data.status;
             });
             
             return { success: true, data: attendance };
