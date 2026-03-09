@@ -2270,6 +2270,12 @@ function handleAwardSubmit(e) {
     
     currentUser.awards.push(newAward);
     
+    // Save to Firebase if available
+    const firebaseUserId = currentUser.uid || currentUser.firebaseId;
+    if (typeof FirebaseDB !== 'undefined' && firebaseUserId) {
+        FirebaseDB.updateAward(firebaseUserId, currentUser.awards);
+    }
+    
     // Save to localStorage
     localStorage.setItem('munCurrentUser', JSON.stringify(currentUser));
     

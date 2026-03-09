@@ -30,7 +30,7 @@ async function updateProfileUIFromAuth(user) {
                 }
             } catch (e) { console.warn('Profile fetch failed:', e); }
         }
-        loadUserProfile(user);
+        await loadUserProfile(user);
     }
 }
 
@@ -153,7 +153,34 @@ function ensureUserMenuShown(user) {
     }
 }
 
-function loadUserProfile(user) {
+async function loadUserProfile(user) {
+    // Load conferences and merge attendance (Firebase or localStorage)
+    let conferences = [];
+    if (typeof window.MUN_CONFERENCES_DATA !== 'undefined' && Array.isArray(window.MUN_CONFERENCES_DATA)) {
+        conferences = JSON.parse(JSON.stringify(window.MUN_CONFERENCES_DATA));
+    } else {
+        conferences = JSON.parse(localStorage.getItem('munConferences') || '[]');
+    }
+    const userKey = user.id || user.uid || user.email;
+    if (userKey && (user.authProvider === 'firebase' || user.authProvider === 'google') && user.uid && typeof FirebaseDB !== 'undefined' && FirebaseDB.getUserAttendanceData) {
+        try {
+            const res = await FirebaseDB.getUserAttendanceData(user.uid);
+            if (res.success && res.data) {
+                conferences.forEach(conf => {
+                    const status = res.data[conf.id];
+                    if (status) conf.attendanceStatus = status;
+                });
+                localStorage.setItem('munConferences', JSON.stringify(conferences));
+            }
+        } catch (e) { console.warn('Profile: could not load attendance from Firebase', e); }
+    } else if (userKey) {
+        const userAttendance = JSON.parse(localStorage.getItem('userAttendance_' + userKey) || '{}');
+        conferences.forEach(conf => {
+            const status = userAttendance[conf.id];
+            if (status) conf.attendanceStatus = status;
+        });
+    }
+
     // Set profile banner
     const profileBanner = document.querySelector('.profile-banner');
     if (user.bannerType === 'custom' && user.bannerImage) {
@@ -716,8 +743,9 @@ function handleAwardFormSubmit(e) {
     }
     
     // Save to Firebase if available
-    if (typeof FirebaseDB !== 'undefined' && currentUser.firebaseId) {
-        FirebaseDB.updateAward(currentUser.firebaseId, currentUser.awards);
+    const firebaseUserId = currentUser.uid || currentUser.firebaseId;
+    if (typeof FirebaseDB !== 'undefined' && firebaseUserId) {
+        FirebaseDB.updateAward(firebaseUserId, currentUser.awards);
     }
     
     // Save to localStorage
@@ -748,8 +776,9 @@ function deleteAward(awardId) {
     currentUser.awards = currentUser.awards.filter(a => a.id !== awardId);
     
     // Save to Firebase if available
-    if (typeof FirebaseDB !== 'undefined' && currentUser.firebaseId) {
-        FirebaseDB.updateAward(currentUser.firebaseId, currentUser.awards);
+    const firebaseUserId = currentUser.uid || currentUser.firebaseId;
+    if (typeof FirebaseDB !== 'undefined' && firebaseUserId) {
+        FirebaseDB.updateAward(firebaseUserId, currentUser.awards);
     }
     
     // Save to localStorage
