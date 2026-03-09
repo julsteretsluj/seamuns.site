@@ -37,7 +37,14 @@ async function updateProfileUIFromAuth(user) {
 document.addEventListener('DOMContentLoaded', () => {
     // Use auth state from MUNTracker when it's ready (profile page now runs MUNTracker)
     function applyAuthState() {
-        const user = window.__munCurrentUser !== undefined ? window.__munCurrentUser : JSON.parse(localStorage.getItem('munCurrentUser') || 'null');
+        let user = window.__munCurrentUser !== undefined ? window.__munCurrentUser : null;
+        // Prefer localStorage when event says null (race: Firebase may not have restored session yet)
+        if (!user) {
+            try {
+                const saved = localStorage.getItem('munCurrentUser');
+                if (saved) user = JSON.parse(saved);
+            } catch (e) {}
+        }
         updateProfileUIFromAuth(user);
     }
 

@@ -346,7 +346,8 @@ class MUNTracker {
             }
         } else {
             this.currentUser = null;
-            localStorage.removeItem('munCurrentUser');
+            // Don't clear localStorage here: Firebase can fire null before persistence loads (race).
+            // Explicit logout() handles clearing.
             this.showAuthButtons();
             if (document.getElementById('conferencesList')) {
                 this.updateStatistics();
