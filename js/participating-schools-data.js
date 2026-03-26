@@ -3,7 +3,6 @@
  * Used by: participating-schools.html, profile school selector.
  */
 window.MUN_PARTICIPATING_SCHOOLS = [
-    'BPS (Bangkok Patana School)',
     'CISB (Charter International School Bangkok)',
     'CIST (Canadian International School Bangkok)',
     'CIS (Concordian International School Bangkok)',
