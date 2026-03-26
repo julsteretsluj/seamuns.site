@@ -45,8 +45,6 @@ window.MUN_PARTICIPATING_SCHOOLS = [
     'RAIS2 (Ramkhamhaeng Adventist International School Bangkok)',
     'RISB (Regents International School Bangkok)',
     'BISB (Berkeley International School Bangkok)',
-    'SISB-TR (Singapore International School, Thonburi Bangkok)',
-    'SISB-PU (Singapore International School, Pracha Uthit Bangkok)',
     'SPIP (Satit Prasarnmit International Programme Bangkok)',
     'SMIS (St. Mark\'s International School Bangkok)',
     'BKP (Bangkok Prep)',
