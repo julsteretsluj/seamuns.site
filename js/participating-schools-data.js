@@ -1,98 +1,57 @@
 /**
- * Participating schools list for SEAMUNs.
- * Used by: participating-schools.html, profile school selector.
+ * Participating schools for SEAMUNs (profile selector + participating-schools page).
+ * Primary source: unique `organization` values from `window.MUN_CONFERENCES_DATA`,
+ * excluding Brighton hosts and the non-campus org "SEAMUN".
+ * Requires `conferences-data.js` loaded before this file (or load order fixed + refresh hook).
  */
 window.MUN_PARTICIPATING_SCHOOLS = [
-    'CISB (Charter International School Bangkok)',
-    'CIST (Canadian International School Bangkok)',
-    'CIS (Concordian International School Bangkok)',
-    'EIS (Ekamai International School Bangkok)',
-    'HIS (Harrow International School Bangkok)',
-    'GISB (Garden International School Bangkok)',
-    'ICS (International Community School Bangkok)',
-    'IPS (International Pioneers School Bangkok)',
-    'ASB (American International School Bangkok)',
-    'ASB (Amnuay Slipa School Bangkok)',
-    'ISB (International School Bangkok)',
-    'KCB (King\'s College International School Bangkok)',
-    'KIS (KIS International School Bangkok)',
-    'Assumption College Bangkok',
-    'NIST (NIST International School Bangkok)',
-    'WCIS (Wellington College International School Bangkok)',
-    'RIS (Rumrudee International School Bangkok)',
-    'ASBG (American School of Bangkok Green Valley)',
-    'BASIS (BASIS International School Bangkok)',
-    'NSB (Newton Business School Bangkok)',
-    'RAS (Raffles American School Bangkok)',
-    'SKIP (Satit Kaset International Program, Katesart University Bangkok)',
-    'KCS (Kwong Chow School Bangkok)',
-    'SSIS (St. Stephens International School Bangkok)',
-    'KISB (Kevalee International School Bangkok)',
-    'STA107 (St. Andrews, Sukhumvit 107 Bangkok)',
-    'TCIS (Thai-Chinese International School Bangkok)',
-    'KPIS (Keerapat International School Bangkok)',
-    'TSB (Thai-Sikh International School Bangkok)',
-    'LFIB (Lycee Francais International de Bangkok International School)',
-    'TSIS (Thai-Singapore International School Bangkok)',
-    'BCB (Brighton College Bangkok)',
-    'TUS (Triam Udom Suksa Bangkok)',
-    'NIS (Norwich International School Bangkok)',
-    'VIS (VERSO International School Bangkok)',
-    'PDS (Patumwan Demonstration School Bangkok)',
-    'WIS (Wells International School Bangkok)',
-    'RAIS (Roong Aroon International School Bangkok)',
-    'RAIS2 (Ramkhamhaeng Adventist International School Bangkok)',
-    'RISB (Regents International School Bangkok)',
-    'BISB (Berkeley International School Bangkok)',
-    'SPIP (Satit Prasarnmit International Programme Bangkok)',
-    'SMIS (St. Mark\'s International School Bangkok)',
-    'BKP (Bangkok Prep)',
-    'STA (St. Andrew\'s International School, Ekamai Bangkok)',
-    'YSB (Yothinburana School Bangkok)',
-    'BIST (Bromsgrove International School Bangkok)',
-    'AIS (Aster International School Bangkok)',
-    'ASIS (Anglo-Singapore International School Bangkok)',
-    'BCC (Bangkok Christian College)',
-    'CSB (Chonprathanwittaya School Bangkok)',
-    'CUDS (Chulalongkorn University Demonstration School Bangkok)',
-    'MUIDS (Mahidol University International Demonstration School Bangkok)',
-    'MWITS (Mahidol Wittayanusorn School, Bangkok)',
-    'SHB (Shrewsbury International School, Bangkok)',
-    'SWN (Suankularb Wittayalai Nonthaburi)',
-    'SWSB (Satriwithaya School Bangkok)',
-    'CMIS (Chiang Mai International School Thailand)',
-    'SIS (Singapore International School Chiang Mai)',
-    'MCC (Montfort International School Chiang Mai)',
-    'PTIS (Prem International School Chiang Mai)',
-    'HHIS (Hua Hin International School)',
-    'GISR (Garden International School Rayong)',
-    'REPS (Royal English Program School Rayong)',
-    'STAR (St. Andrew\'s International School, Rayong)',
-    'HSIS (HeadStart Phuket International School)',
-    'UWCT (United World College Phuket)',
-    'BISP (British International School Phuket)',
-    'PIA (Phuket International Academy)',
-    'SPS (Satree Phuket School)',
-    'PBIS (Panyadee British International School Koh Samui)',
-    'MISP (Mooltripakdee International School Pattaya)',
-    'ISE (ISE International School Eastern Seaboard, Chonburi Thailand)',
-    'DPSU (Demonstration School, Prince of Songkhla University Pattani)'
+    'Harrow International School Bangkok',
+    'King Mongkut\'s International Demonstration School',
+    'Lycée Français International de Bangkok (LFIB)',
+    'Newton Sixth Form',
+    'Ruamrudee International School',
+    'St Andrews International School, High School Campus',
+    'St Andrews International School, Sukhumvit 107',
+    'TSI Bearing Primary Campus'
 ];
 
-/** Sample universities in Thailand (for profile "Universities in Thailand" search). */
+/**
+ * Rebuilds MUN_PARTICIPATING_SCHOOLS from listed conferences. Call after MUN_CONFERENCES_DATA is available.
+ */
+window.refreshParticipatingSchoolsFromConferences = function () {
+    var conferences = window.MUN_CONFERENCES_DATA;
+    if (!Array.isArray(conferences) || conferences.length === 0) return;
+    var seen = {};
+    var out = [];
+    for (var i = 0; i < conferences.length; i++) {
+        var c = conferences[i];
+        var org = c && c.organization != null ? String(c.organization).trim() : '';
+        if (!org) continue;
+        if (/brighton/i.test(org)) continue;
+        if (org === 'SEAMUN') continue;
+        if (seen[org]) continue;
+        seen[org] = true;
+        out.push(org);
+    }
+    out.sort(function (a, b) {
+        return a.localeCompare(b, undefined, { sensitivity: 'base' });
+    });
+    if (out.length) window.MUN_PARTICIPATING_SCHOOLS = out;
+};
+
+window.refreshParticipatingSchoolsFromConferences();
+
+/** Generic higher-education categories for profile (no institution names). */
 window.MUN_UNIVERSITIES_THAILAND = [
-    'Chulalongkorn University',
-    'Mahidol University',
-    'Thammasat University',
-    'Kasetsart University',
-    'Chiang Mai University',
-    'Prince of Songkla University',
-    'King Mongkut\'s University of Technology Thonburi',
-    'Srinakharinwirot University',
-    'Assumption University',
-    'Bangkok University',
-    'Thammasat University (Rangsit)',
-    'Mahidol University International College (MUIC)',
-    'Chulalongkorn University Faculty of Engineering',
-    'Other university (please specify in notes)'
+    'Bangkok metropolitan area (university or college student)',
+    'Northern Thailand — university or college student',
+    'Northeastern Thailand — university or college student',
+    'Southern Thailand — university or college student',
+    'Eastern or central Thailand — university or college student',
+    'International or English-medium higher education in Thailand',
+    'Thai public university or college',
+    'Thai private university or college',
+    'Vocational or technical college',
+    'Online or hybrid study (based in Thailand)',
+    'Other higher education (add details in notes if you wish)'
 ];

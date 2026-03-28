@@ -549,3 +549,7 @@ window.MUN_CONFERENCES_DATA = [
 
 // Prospective conferences (not yet fully registered). Do not include "SEAMUNs" — it is the platform name, not a conference.
 window.MUN_PROSPECTIVE_CONFERENCES_DATA = [];
+
+if (typeof window.refreshParticipatingSchoolsFromConferences === 'function') {
+    window.refreshParticipatingSchoolsFromConferences();
+}

@@ -97,7 +97,7 @@ window.SEAMUNS_ANNOUNCEMENTS = [
         date: '2026-01-25',
         icon: 'fas fa-graduation-cap',
         title: 'Participating Schools',
-        body: 'Data-driven list of schools from conference data. See <a href="participating-schools.html">Participating Schools</a>.'
+        body: 'Host schools from conferences listed on SEAMUNs (Brighton excluded). See <a href="participating-schools.html">Participating Schools</a>.'
     },
     {
         date: '2026-01-24',

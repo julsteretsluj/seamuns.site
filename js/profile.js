@@ -875,11 +875,14 @@ async function deleteAward(awardId) {
 // Edit Profile Modal Functions
 function populateSchoolSelect(selectEl) {
     if (!selectEl || selectEl.options.length > 1) return; // already populated
+    if (typeof window.refreshParticipatingSchoolsFromConferences === 'function') {
+        window.refreshParticipatingSchoolsFromConferences();
+    }
     var schools = window.MUN_PARTICIPATING_SCHOOLS;
     var list = window.MUN_UNIVERSITIES_THAILAND;
     if (Array.isArray(schools)) {
         var g1 = document.createElement('optgroup');
-        g1.label = 'Participating schools';
+        g1.label = 'Registered hosting schools';
         schools.forEach(function(s) {
             var o = document.createElement('option');
             o.value = s;
@@ -892,7 +895,7 @@ function populateSchoolSelect(selectEl) {
     g2.label = 'Other options';
     [
         { value: '__other__', label: 'Other (specify below)' },
-        { value: '__university__', label: 'University in Thailand (search)' },
+        { value: '__university__', label: 'Higher education in Thailand' },
         { value: 'Gap year', label: 'Gap year' },
         { value: 'GED', label: 'GED' }
     ].forEach(function(item) {
