@@ -1278,34 +1278,38 @@ function getConferenceIdFromURL() {
     return urlParams.get('id');
 }
 
-// Get conference by id from localStorage or window.MUN_CONFERENCES_DATA (so detail page works even without index first)
+// Get conference by id from window.MUN_CONFERENCES_DATA (canonical) merged with localStorage attendance.
+// Never prefer a stale localStorage copy alone — it omits newer fields like committeeOverrides.
 function getConferenceForDetailPage(conferenceId) {
     if (!conferenceId) return null;
-    // 1) Try localStorage (may have attendance etc.)
+    var fromRef = null;
+    if (typeof window.MUN_CONFERENCES_DATA !== 'undefined' && Array.isArray(window.MUN_CONFERENCES_DATA)) {
+        fromRef = window.MUN_CONFERENCES_DATA.find(function (c) { return c.id == conferenceId; });
+    }
+    var fromStorage = null;
     try {
         const saved = localStorage.getItem('munConferences');
         if (saved) {
             const list = JSON.parse(saved);
-            const found = list.find(function (c) { return c.id == conferenceId; });
-            if (found) return found;
+            if (Array.isArray(list)) {
+                const found = list.find(function (c) { return c.id == conferenceId; });
+                if (found) fromStorage = found;
+            }
         }
     } catch (e) { /* ignore */ }
-    // 2) Use reference data (always loaded before this script)
-    if (typeof window.MUN_CONFERENCES_DATA !== 'undefined' && Array.isArray(window.MUN_CONFERENCES_DATA)) {
-        const found = window.MUN_CONFERENCES_DATA.find(function (c) { return c.id == conferenceId; });
-        if (found) {
-            var copy = JSON.parse(JSON.stringify(found));
-            try {
-                var list = JSON.parse(localStorage.getItem('munConferences') || '[]');
-                if (!Array.isArray(list)) list = [];
-                var idx = list.findIndex(function (c) { return c.id == conferenceId; });
-                if (idx >= 0 && list[idx].attendanceStatus) copy.attendanceStatus = list[idx].attendanceStatus;
-                if (idx >= 0) list[idx] = copy; else list.push(copy);
-                localStorage.setItem('munConferences', JSON.stringify(list));
-            } catch (e) { /* ignore */ }
-            return copy;
-        }
+    if (fromRef) {
+        var copy = JSON.parse(JSON.stringify(fromRef));
+        if (fromStorage && fromStorage.attendanceStatus) copy.attendanceStatus = fromStorage.attendanceStatus;
+        try {
+            var list = JSON.parse(localStorage.getItem('munConferences') || '[]');
+            if (!Array.isArray(list)) list = [];
+            var idx = list.findIndex(function (c) { return c.id == conferenceId; });
+            if (idx >= 0) list[idx] = copy; else list.push(copy);
+            localStorage.setItem('munConferences', JSON.stringify(list));
+        } catch (e) { /* ignore */ }
+        return copy;
     }
+    if (fromStorage) return JSON.parse(JSON.stringify(fromStorage));
     return null;
 }
 
@@ -1570,7 +1574,8 @@ function buildCommitteeItemHTML(conf, c, index) {
     }
     const displayName = (typeof c === 'string' && c.includes(' - ')) ? c.split(' - ')[0].trim() : committeeName;
     var desc = Object.assign({}, getCommitteeDescription(committeeName, rawCommitteeName));
-    var committeeOv = conf.committeeOverrides && conf.committeeOverrides[displayName];
+    var ovMap = conf.committeeOverrides;
+    var committeeOv = ovMap && (ovMap[displayName] || ovMap[committeeName]);
     if (committeeOv) {
         if (committeeOv.type) desc.type = committeeOv.type;
         if (committeeOv.difficulty) desc.difficulty = committeeOv.difficulty;
