@@ -802,6 +802,8 @@ const elements = {
   pointsValue: document.getElementById("pointsValue"),
   shuffleAllocations: document.getElementById("shuffleAllocations"),
   shuffleTopic: document.getElementById("shuffleTopic"),
+  committeeRoomFullscreenBtn: document.getElementById("committeeRoomFullscreenBtn"),
+  committeeRoomPanel: document.getElementById("committeeRoomPanel"),
 };
 
 // Crisis definitions for crisis/historical/fictional committees
@@ -3048,6 +3050,51 @@ pointButtons.forEach((button) => {
 elements.parliamentaryInquiry.addEventListener("click", () => {
   raisePointOfParliamentaryInquiry();
 });
+
+(function initCommitteeRoomFullscreen() {
+  const btn = elements.committeeRoomFullscreenBtn;
+  const target = elements.committeeRoomPanel;
+  if (!btn || !target) return;
+
+  const getFsEl = () =>
+    document.fullscreenElement || document.webkitFullscreenElement || null;
+
+  const isTargetFullscreen = () => getFsEl() === target;
+
+  const updateFullscreenButton = () => {
+    const on = isTargetFullscreen();
+    btn.textContent = on ? "Exit full screen" : "Full screen";
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+  };
+
+  const requestFs = () => {
+    if (target.requestFullscreen) return target.requestFullscreen();
+    if (target.webkitRequestFullscreen) return target.webkitRequestFullscreen();
+    return Promise.reject(new Error("Fullscreen not supported"));
+  };
+
+  const exitFs = () => {
+    if (document.exitFullscreen) return document.exitFullscreen();
+    if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
+    return Promise.resolve();
+  };
+
+  btn.addEventListener("click", () => {
+    if (isTargetFullscreen()) {
+      exitFs().catch(() => {});
+    } else {
+      requestFs().catch(() => {
+        logEvent("Full screen is not available in this browser.", [
+          { label: "System", variant: "system" },
+        ]);
+      });
+    }
+  });
+
+  document.addEventListener("fullscreenchange", updateFullscreenButton);
+  document.addEventListener("webkitfullscreenchange", updateFullscreenButton);
+  updateFullscreenButton();
+})();
 
 populateSelects();
 updateCommitteeInfo();

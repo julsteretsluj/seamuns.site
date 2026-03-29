@@ -30,7 +30,7 @@
     </header>
 
     <main class="app-layout">
-      <section class="room-panel">
+      <section class="room-panel committee-room-fs-panel" id="committeeRoomPanel">
         <div class="room-header">
           <div>
             <h2>Committee Room</h2>
@@ -38,6 +38,16 @@
             <p id="committeeTopic" class="topic"></p>
             <a id="ropLink" href="#" target="_blank" class="rop-link" style="display: none;">View Rules of Procedure</a>
           </div>
+          <div class="room-header-toolbar">
+            <button
+              type="button"
+              id="committeeRoomFullscreenBtn"
+              class="secondary fullscreen-room-btn"
+              aria-pressed="false"
+              title="Fill the screen with the dais and controls. Press Esc to exit."
+            >
+              Full screen
+            </button>
           <div class="room-meta">
             <div>
               <span class="label">Stage</span>
@@ -51,6 +61,7 @@
               <span class="label">Points</span>
               <span id="pointsValue" class="value points-value">0</span>
             </div>
+          </div>
           </div>
         </div>
         <div class="conference-progress">
@@ -191,7 +202,7 @@
             <div class="panel-section">
               <h3>
                 Notes to Pass
-                <span class="help" data-tooltip="Send notes to build blocs and signal alignment.">?</span>
+                <span class="help" data-tooltip="Pass notes to other delegates only. Do not use notes to lobby the dais on substance or stances—chairs stay neutral on policy.">?</span>
               </h3>
           <label class="field">
             Send to
@@ -201,16 +212,9 @@
                 <button
                   class="note-button"
                   data-note="Let's form a bloc!"
-                  title="Pass a bloc-building note."
+                  title="Pass a bloc-building note to another delegate."
                 >
                   "Let's form a bloc!"
-                </button>
-                <button
-                  class="note-button"
-                  data-note="Awesome speech, seems like we have a lot of the same stances on sub-issues"
-                  title="Send a compliment to find allies."
-                >
-                  "Awesome speech, seems like we have a lot of the same stances on sub-issues"
                 </button>
                 <button
                   class="note-button"

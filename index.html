@@ -411,9 +411,9 @@
                 </button>
             </div>
             
-            <form id="profileForm">
+            <form id="profileForm" class="profile-edit-form">
                 <!-- Banner Selection -->
-                <div class="form-group banner-selection">
+                <div class="form-group banner-selection profile-form-row-full">
                     <label for="editBannerPicture">Profile Banner</label>
                     <div class="banner-tabs">
                         <button type="button" class="banner-tab active" data-tab="preset">Preset Designs</button>
@@ -454,7 +454,7 @@
                 </div>
                 
                 <!-- Profile Picture -->
-                <div class="form-group" style="text-align: center;">
+                <div class="form-group profile-form-row-full profile-form-picture" style="text-align: center;">
                     <span class="form-group-label" style="display: block; margin-bottom: 8px; font-weight: 500;">Profile Picture</span>
                     <div style="margin-bottom: 16px;">
                         <img id="editProfilePreviewImg" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent-blue);" alt="Current Profile">
@@ -465,23 +465,23 @@
                     <input type="file" id="editProfilePicture" accept="image/*" style="display: none;" aria-label="Upload profile picture">
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group profile-form-col">
                     <label for="editProfileName">Full Name *</label>
                     <input type="text" id="editProfileName" required>
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group profile-form-col">
                     <label for="editProfilePronouns">Pronouns</label>
                     <input type="text" id="editProfilePronouns" placeholder="e.g., she/her, he/him, they/them">
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group profile-form-row-full">
                     <label for="editProfileEmail">Email</label>
                     <input type="email" id="editProfileEmail" disabled style="opacity: 0.6; cursor: not-allowed;">
                     <small style="color: var(--text-secondary); font-size: 0.85em;">Email cannot be changed</small>
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group profile-form-row-full profile-form-school">
                     <label for="editProfileSchool">School</label>
                     <select id="editProfileSchool" aria-describedby="editProfileSchoolHint">
                         <option value="">— Select school —</option>
@@ -498,7 +498,7 @@
                     </div>
                 </div>
                 
-                <div class="form-actions">
+                <div class="form-actions profile-form-row-full">
                     <button type="button" class="btn btn-secondary" id="cancelProfileBtn">Cancel</button>
                     <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
                 </div>

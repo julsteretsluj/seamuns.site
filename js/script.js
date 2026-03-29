@@ -1154,7 +1154,7 @@ class MUNTracker {
                 website: "",
                 registrationDeadline: "November 9, 2026",
                 positionPaperDeadline: "",
-                status: "upcoming",
+                status: "previous",
                 size: "TBD",
                 generalEmail: "john.bangkok@hotmail.com",
                 munAccount: "@thailandmun",

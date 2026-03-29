@@ -100,7 +100,7 @@ window.MUN_CONFERENCES_DATA = [
     website: "",
     registrationDeadline: "November 9, 2026",
     positionPaperDeadline: "",
-    status: "upcoming",
+    status: "previous",
     size: "TBD",
     generalEmail: "john.bangkok@hotmail.com",
     munAccount: "@thailandmun",
@@ -544,6 +544,63 @@ window.MUN_CONFERENCES_DATA = [
     schedule: "<p><strong>Day 1: February 28, 2026</strong></p><ul style=\"margin: 0.5em 0; padding-left: 1.25em;\"><li>08:00–09:00 — Registration &amp; Delegation Photos (60 min) — Redeemer Atrium</li><li>09:00–09:45 — Opening Ceremony (45 min) — PAC</li><li>09:45–10:00 — Transition to Committee Rooms (15 min)</li><li>10:00–11:00 — Committee Session 1 (60 min) — HS Building Committee Rooms</li><li>11:05–11:25 — Break 1 (20 min) — Canteen (HS Side)</li><li>11:30–12:30 — Committee Session 2 (60 min) — HS Building Committee Rooms</li><li>12:30–13:35 — Lunch — Canteen (HS Side)</li><li>13:30–14:30 — Committee Session 3 (60 min) — HS Building Committee Rooms</li><li>14:35–14:50 — Break 2 (15 min) — Canteen (HS Side)</li><li>14:55–16:00 — Committee Session 4 (65 min) — HS Building Committee Rooms</li></ul><p><strong>Day 2: March 1, 2026</strong></p><ul style=\"margin: 0.5em 0; padding-left: 1.25em;\"><li>08:30–09:00 — Delegates arrive — HS Building</li><li>09:00–10:30 — Committee Session 1 (90 min) — HS Building Committee Rooms</li><li>10:35–10:50 — Break (15 min) — Canteen (HS Side)</li><li>10:55–11:55 — Committee Session 2 (60 min) — HS Building Committee Rooms</li><li>11:55–13:00 — Lunch — Canteen (HS Side)</li><li>12:55–13:45 — Committee Session 3 (50 min) — HS Building Committee Rooms</li><li>13:45–14:00 — Goodbyes &amp; transition to PAC (15 min)</li><li>14:00–15:00 — Closing Ceremony (60 min) — PAC</li></ul>",
     venueGuide: "<p>Conference at Ruamrudee International School Minburi Campus. PAC (Performing Arts Centre), HS Building Committee Rooms, Redeemer Atrium, Canteen (HS Side). Wheelchair accessible and sensory-friendly.</p>",
     extraNotes: "<p>RISMUN XIX — Feb 28–Mar 1, 2026. <strong>Fees:</strong> Delegate 2,000 THB; Chair &amp; Page free. <strong>Delegate estimate:</strong> 150+. <strong>Delegate application:</strong> Via Instagram. <strong>Independent Delegates:</strong> Yes. <strong>Accessibility:</strong> Wheelchair accessible and sensory-friendly. Follow us on Instagram: <a href='https://www.instagram.com/ruamrudee_MUN/' target='_blank' rel='noopener noreferrer'>@ruamrudee_MUN</a>. Secretariat: Sec Gen Prim S. (prims26@rism.ac.th / @ppr1mm), Voranan (Bene) P. (vorananp26@rism.ac.th / @bean_bene).</p>"
+},
+{
+    id: 11,
+    name: "NTMUN",
+    organization: "Student-led",
+    location: "Chiang Mai, Thailand",
+    countryCode: "TH",
+    startDate: "2026-06-13",
+    endDate: "2026-06-13",
+    description: "TBD",
+    website: "",
+    registrationDeadline: "TBD",
+    positionPaperDeadline: "2026-05-30",
+    status: "upcoming",
+    size: "TBD",
+    generalEmail: "",
+    munAccount: "@ntmun.official",
+    advisorAccount: "",
+    secGenAccounts: "TBD",
+    parliamentarianAccounts: "TBD",
+    pricePerDelegate: "1,200 THB",
+    independentDelsWelcome: true,
+    independentSignupLink: "",
+    advisorSignupLink: "",
+    disabledSuitable: false,
+    sensorySuitable: false,
+    committees: [
+        "UNSC - The Question of Discussing Conflict in the Democratic Republic of the Congo and Implementing Measures to Tackle the Humanitarian Crisis",
+        "UNHRC - The Question of Combatting the Systemic Restriction of Women's Rights and Gender-Based Discrimination in Afghanistan Under the Taliban Rule",
+        "UNICEF - The Question of Curbing the Spread of Disease and Malnutrition for Children in Warzones",
+        "HCC - The American Revolution",
+        "FWC (Fantasy World Committee) - Heroes of Olympus: Addressing the Possibility of Conflict between Camp Half-Blood and Camp Jupiter",
+        "USCC - The Question of Examining the Conditions, Accountability, and Treatment of Undocumented Immigrants, Particularly Children and Families, within US Detention Facilities Operated by US Immigrations and Customs Enforcement (ICE)"
+    ],
+    uniqueTopics: [
+        "DRC conflict and humanitarian crisis",
+        "Women's rights in Afghanistan",
+        "Children in warzones",
+        "American Revolution",
+        "Heroes of Olympus",
+        "ICE detention and immigration"
+    ],
+    chairsPages: "<p><strong>Chair applications:</strong> <a href='https://docs.google.com/forms/d/e/1FAIpQLSfVnpmkq1LI-ll8J3fov0sUVKkg_53b1k5Sx_BpwsPTB47Ufg/viewform' target='_blank' rel='noopener noreferrer'>Apply via Google Form</a></p>",
+    allocations: ["TBD - Contact conference for country assignments"],
+    availableAwards: [
+        "Best Delegate (per committee)",
+        "Honorable Mention (2 per committee)",
+        "Best Resolution (GA)",
+        "Best Speech (GA)",
+        "Best Chairs (committee award)",
+        "Overall Best Delegate",
+        "Overall Best Position Paper"
+    ],
+    previousWinners: [],
+    schedule: "<p><strong>June 13, 2026:</strong> Full-day conference — schedule TBD.</p>",
+    venueGuide: "<p>Conference at <strong>Empress Convention Center</strong>, Chiang Mai, Thailand. <a href='https://www.google.com/maps/search/?api=1&amp;query=Empress%20Convention%20Center%20Chiang%20Mai%20Thailand' target='_blank' rel='noopener noreferrer'>View on Google Maps</a>.</p>",
+    extraNotes: "<p><strong>NTMUN</strong> — student-led, Chiang Mai. <strong>Delegate fee:</strong> 1,200 THB. Follow <a href='https://www.instagram.com/ntmun.official/' target='_blank' rel='noopener noreferrer'>@ntmun.official</a> on Instagram for updates.</p><p><strong>Key dates (2026):</strong></p><ul style='margin: 0.5em 0; padding-left: 1.25em;'><li><strong>15 April</strong> — Chair applications close</li><li><strong>20 April</strong> — Delegate sign-ups close; chairs announced</li><li><strong>25 April</strong> — Allocations released</li><li><strong>1 May</strong> — Payments due</li><li><strong>5 May</strong> — Chair reports due</li><li><strong>30 May</strong> — Position papers due</li><li><strong>12 June</strong> — Chair and advisor dinner</li><li><strong>13 June</strong> — Conference day</li></ul><p><strong>Independent delegates</strong> are welcome; online signup link will be posted when open. <strong>School/advisor</strong> signup: TBD. <strong>General email:</strong> TBD.</p><p><strong>Accessibility:</strong> Not advertised as wheelchair/mobility accessible; not sensory-friendly — contact organisers if you have access needs.</p>"
 }
 ];
 

@@ -156,6 +156,23 @@ body {
   border-bottom: 1px solid var(--separator);
 }
 
+.room-header-toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.fullscreen-room-btn {
+  white-space: nowrap;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
 .room-header h2 {
   font-size: 20px;
   font-weight: 700;
@@ -321,6 +338,40 @@ body {
   gap: 16px;
   align-items: start;
   min-width: 0;
+}
+
+/* Fullscreen: entire committee panel (header + setup + dais + controls; exit button stays visible) */
+.committee-room-fs-panel:fullscreen {
+  width: 100%;
+  min-height: 100%;
+  max-width: none;
+  margin: 0;
+  padding: clamp(12px, 2.5vw, 24px);
+  background: var(--card-bg);
+  box-sizing: border-box;
+  overflow: auto;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+}
+
+.committee-room-fs-panel:-webkit-full-screen {
+  width: 100%;
+  min-height: 100%;
+  max-width: none;
+  margin: 0;
+  padding: clamp(12px, 2.5vw, 24px);
+  background: var(--card-bg);
+  box-sizing: border-box;
+  overflow: auto;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+}
+
+.committee-room-fs-panel:fullscreen .room,
+.committee-room-fs-panel:-webkit-full-screen .room {
+  min-height: min(62vh, 880px);
 }
 
 .room {
