@@ -540,8 +540,8 @@ function getCommitteeDescription(committee, rawCommitteeName = '') {
 }
 
 // Analyze topic complexity and assign difficulty level based on topic content
-function getTopicDifficulty(topic, committeeType = 'traditional') {
-    if (!topic) return 'intermediate';
+function getTopicDifficulty(topic, committeeType = 'traditional', committeeBaseDifficulty = null) {
+    if (!topic) return committeeBaseDifficulty === 'advanced' ? 'advanced' : 'intermediate';
     
     const topicLower = topic.toLowerCase();
     const topicLength = topic.length;
@@ -616,10 +616,12 @@ function getTopicDifficulty(topic, committeeType = 'traditional') {
     // Calculate final difficulty score
     const difficultyScore = (advancedCount) - (beginnerCount * 0.8) + lengthScore + (complexityCount * 0.3) + committeeModifier;
     
-    // Determine difficulty level
-    if (difficultyScore >= 3) return 'advanced';
-    if (difficultyScore <= 0.5) return 'beginner';
-    return 'intermediate';
+    // Determine difficulty level (committees marked advanced in the registry always show advanced for the topic badge)
+    let level = 'intermediate';
+    if (difficultyScore >= 3) level = 'advanced';
+    else if (difficultyScore <= 0.5) level = 'beginner';
+    if (committeeBaseDifficulty === 'advanced') level = 'advanced';
+    return level;
 }
 
 // Award descriptions with unique icons for all award types
@@ -1566,21 +1568,26 @@ function buildCommitteeItemHTML(conf, c, index) {
     } else if (typeof c === 'string') {
         rawCommitteeName = c;
     }
-    const desc = getCommitteeDescription(committeeName, rawCommitteeName);
-    const sizeInfo = conf.committeeSizes && Array.isArray(conf.committeeSizes) && conf.committeeSizes.find(function (s) { return s.abbrev === committeeName; });
     const displayName = (typeof c === 'string' && c.includes(' - ')) ? c.split(' - ')[0].trim() : committeeName;
+    var desc = Object.assign({}, getCommitteeDescription(committeeName, rawCommitteeName));
+    var committeeOv = conf.committeeOverrides && conf.committeeOverrides[displayName];
+    if (committeeOv) {
+        if (committeeOv.type) desc.type = committeeOv.type;
+        if (committeeOv.difficulty) desc.difficulty = committeeOv.difficulty;
+    }
+    const sizeInfo = conf.committeeSizes && Array.isArray(conf.committeeSizes) && conf.committeeSizes.find(function (s) { return s.abbrev === committeeName; });
     const tagInfo = conf.committeeTags && conf.committeeTags[displayName];
     const difficultyEmojis = { beginner: '🌱', intermediate: '⭐', advanced: '🔥' };
     var topicsHtml = '';
     if (Array.isArray(committeeTopic) && committeeTopic.length > 0) {
         topicsHtml = committeeTopic.map(function (topic, tIdx) {
             var cleanTopic = topic.replace(/^Topic \d+:\s*/, '');
-            var topicDifficulty = getTopicDifficulty(cleanTopic, desc.type);
+            var topicDifficulty = getTopicDifficulty(cleanTopic, desc.type, desc.difficulty || null);
             return '<li class="topic-difficulty-row topic-difficulty-row--' + topicDifficulty + '" style="margin-bottom: 8px; padding: 8px; background: rgba(0,0,0,0.02); border-radius: 8px; border-left: 3px solid ' + (topicDifficulty === 'beginner' ? '#81c784' : topicDifficulty === 'intermediate' ? '#ffb74d' : '#ef5350') + ';"><div style="display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap;"><strong style="flex: 1;">Topic ' + (tIdx + 1) + ':</strong><span class="difficulty-tag difficulty-tag--' + topicDifficulty + '">' + difficultyEmojis[topicDifficulty] + ' ' + topicDifficulty + '</span></div><div style="margin-top: 4px; color: var(--text-secondary);">' + cleanTopic + '</div></li>';
         }).join('');
         topicsHtml = '<div style="margin: 8px 0;"><strong style="color: var(--accent-blue); font-size: 0.95em;">Topics:</strong><ul style="margin: 4px 0 0 0; padding-left: 20px; color: var(--accent-blue); font-size: 0.95em; list-style: none;">' + topicsHtml + '</ul></div>';
     } else if (committeeTopic) {
-        var topicDifficulty = getTopicDifficulty(committeeTopic, desc.type);
+        var topicDifficulty = getTopicDifficulty(committeeTopic, desc.type, desc.difficulty || null);
         topicsHtml = '<div class="topic-difficulty-row topic-difficulty-row--' + topicDifficulty + '" style="margin: 8px 0; padding: 8px; background: rgba(0,0,0,0.02); border-radius: 8px; border-left: 3px solid ' + (topicDifficulty === 'beginner' ? '#81c784' : topicDifficulty === 'intermediate' ? '#ffb74d' : '#ef5350') + ';"><div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px;"><strong style="color: var(--accent-blue); font-size: 0.95em;">Topic:</strong><span class="difficulty-tag difficulty-tag--' + topicDifficulty + '">' + difficultyEmojis[topicDifficulty] + ' ' + topicDifficulty + '</span></div><div style="color: var(--text-secondary);">' + committeeTopic + '</div></div>';
     }
     var gradeRangeHtml = '';

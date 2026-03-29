@@ -562,9 +562,9 @@ window.MUN_CONFERENCES_DATA = [
     generalEmail: "",
     munAccount: "@ntmun.official",
     advisorAccount: "",
-    secGenAccounts: "TBD",
+    secGenAccounts: "28ylvieschaffranek@lannaist.ac.th",
     parliamentarianAccounts: "TBD",
-    pricePerDelegate: "1,200 THB",
+    pricePerDelegate: "TBD (no higher than 1,200 THB)",
     independentDelsWelcome: true,
     independentSignupLink: "",
     advisorSignupLink: "",
@@ -578,6 +578,9 @@ window.MUN_CONFERENCES_DATA = [
         "FWC (Fantasy World Committee) - Heroes of Olympus: Addressing the Possibility of Conflict between Camp Half-Blood and Camp Jupiter",
         "USCC - The Question of Examining the Conditions, Accountability, and Treatment of Undocumented Immigrants, Particularly Children and Families, within US Detention Facilities Operated by US Immigrations and Customs Enforcement (ICE)"
     ],
+    committeeOverrides: {
+        UNICEF: { type: "traditional" }
+    },
     uniqueTopics: [
         "DRC conflict and humanitarian crisis",
         "Women's rights in Afghanistan",
@@ -600,7 +603,7 @@ window.MUN_CONFERENCES_DATA = [
     previousWinners: [],
     schedule: "<p><strong>June 13, 2026:</strong> Full-day conference — schedule TBD.</p>",
     venueGuide: "<p>Conference at <strong>Empress Convention Center</strong>, Chiang Mai, Thailand. <a href='https://www.google.com/maps/search/?api=1&amp;query=Empress%20Convention%20Center%20Chiang%20Mai%20Thailand' target='_blank' rel='noopener noreferrer'>View on Google Maps</a>.</p>",
-    extraNotes: "<p><strong>NTMUN</strong> — student-led, Chiang Mai. <strong>Delegate fee:</strong> 1,200 THB. Follow <a href='https://www.instagram.com/ntmun.official/' target='_blank' rel='noopener noreferrer'>@ntmun.official</a> on Instagram for updates.</p><p><strong>Key dates (2026):</strong></p><ul style='margin: 0.5em 0; padding-left: 1.25em;'><li><strong>15 April</strong> — Chair applications close</li><li><strong>20 April</strong> — Delegate sign-ups close; chairs announced</li><li><strong>25 April</strong> — Allocations released</li><li><strong>1 May</strong> — Payments due</li><li><strong>5 May</strong> — Chair reports due</li><li><strong>30 May</strong> — Position papers due</li><li><strong>12 June</strong> — Chair and advisor dinner</li><li><strong>13 June</strong> — Conference day</li></ul><p><strong>Independent delegates</strong> are welcome; online signup link will be posted when open. <strong>School/advisor</strong> signup: TBD. <strong>General email:</strong> TBD.</p><p><strong>Accessibility:</strong> Not advertised as wheelchair/mobility accessible; not sensory-friendly — contact organisers if you have access needs.</p>"
+    extraNotes: "<p><strong>NTMUN</strong> — student-led, Chiang Mai. <strong>Delegate fee:</strong> TBD (no higher than 1,200 THB). <strong>Secretary-General:</strong> <a href='mailto:28ylvieschaffranek@lannaist.ac.th'>28ylvieschaffranek@lannaist.ac.th</a>. Follow <a href='https://www.instagram.com/ntmun.official/' target='_blank' rel='noopener noreferrer'>@ntmun.official</a> on Instagram for updates.</p><p><strong>Key dates (2026):</strong></p><ul style='margin: 0.5em 0; padding-left: 1.25em;'><li><strong>15 April</strong> — Chair applications close</li><li><strong>20 April</strong> — Delegate sign-ups close; chairs announced</li><li><strong>25 April</strong> — Allocations released</li><li><strong>1 May</strong> — Payments due</li><li><strong>5 May</strong> — Chair reports due</li><li><strong>30 May</strong> — Position papers due</li><li><strong>12 June</strong> — Chair and advisor dinner</li><li><strong>13 June</strong> — Conference day</li></ul><p><strong>Independent delegates</strong> are welcome; online signup link will be posted when open. <strong>School/advisor</strong> signup: TBD.</p><p><strong>Accessibility:</strong> Not advertised as wheelchair/mobility accessible; not sensory-friendly — contact organisers if you have access needs.</p>"
 }
 ];
 
