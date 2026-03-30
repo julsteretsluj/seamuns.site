@@ -503,6 +503,18 @@
       { "abbrev": "ECOSOC", "chairLabel": "Chairs", "chairs": 2, "delegates": 22, "total": 24 },
       { "abbrev": "FWC", "chairLabel": "Chairs", "chairs": 2, "delegates": 10, "total": 12 }
     ],
+    "committeeOverrides": {
+      "ECOSOC": { "difficulty": "beginner" },
+      "Press Corps": { "difficulty": "beginner" },
+      "UNHRC": { "difficulty": "intermediate" },
+      "UNODC": { "difficulty": "intermediate" },
+      "UNSC": { "difficulty": "intermediate" },
+      "UN Women": { "difficulty": "intermediate" },
+      "DISEC": { "difficulty": "advanced" },
+      "FWC": { "difficulty": "advanced" },
+      "Interpol": { "difficulty": "advanced" },
+      "WHO": { "difficulty": "advanced" }
+    },
     "committees": [
       "UNHRC (United Nations Human Rights Council) - The Question of Promoting the Standardized Regulation of the Death Penalty and Respect for the Right to Life | The Question of The Obligation to Prevent Cruel, Inhuman or Degrading Treatment Arising from Deficiencies in Prison Administration and Justice Systems",
       "DISEC (Disarmament and International Security Committee) - The Question of Strengthening International Protocols and Logistics for Securing the Cross-Border Transport of Lethal Military Weapons and Related Materials | The Question of Developing Mechanisms to Prevent the Diversion of Legally Traded Conventional Arms to Illicit Markets and Non-State Actors",
