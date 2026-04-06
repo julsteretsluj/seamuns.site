@@ -174,11 +174,13 @@
                 Points
                 <span
                   class="help"
-                  data-tooltip="Points are raised from your placard. No POIs or POCs in this simulation."
+                  data-tooltip="Points are raised from your placard. Simulated points follow SEAMUN's allowed list."
                   >?</span
                 >
               </h3>
-              <p class="muted">No POIs or POCs.</p>
+              <p class="muted">
+                Simulated points: PoI, PoC, Parliamentary Inquiry, Point of Order, Personal Privilege, Right of Reply, Fact Check.
+              </p>
               <div class="point-grid">
                 <button class="point-button" data-point="Point of Personal Privilege: Aircon temperature change.">
                   Point of Personal Privilege: Aircon temp change
@@ -191,6 +193,21 @@
                 </button>
                 <button class="point-button" data-point="Point of Personal Privilege: Charger, getting up to plug in a device.">
                   Point of Personal Privilege: Charger
+                </button>
+                <button class="point-button" data-point-type="poi" data-point="Point of Information: Requesting committee procedure details.">
+                  Point of Information
+                </button>
+                <button class="point-button" data-point-type="poc" data-point="Point of Clarification: Seeking clarification on a delegate's statement.">
+                  Point of Clarification
+                </button>
+                <button class="point-button" data-point-type="order" data-point="Point of Order: Requesting correction of procedure.">
+                  Point of Order
+                </button>
+                <button class="point-button" data-point-type="reply" data-point="Right of Reply: Responding to a statement made in debate.">
+                  Right of Reply
+                </button>
+                <button class="point-button" data-point-type="fact_check" data-point="Fact Check: Verifying a claim mentioned in debate.">
+                  Fact Check
                 </button>
                 <button id="parliamentaryInquiry" class="secondary">
                   Point of Parliamentary Inquiry

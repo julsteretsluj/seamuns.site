@@ -1070,6 +1070,11 @@ const POINT_VALUES = {
   MOTION_VOTE_YES: 5,
   MOTION_VOTE_NO: 3,
   MOTION_VOTE_ABSTAIN: 2,
+  RAISE_POINT_INFORMATION: 6,
+  RAISE_POINT_CLARIFICATION: 6,
+  RAISE_POINT_ORDER: 6,
+  RAISE_RIGHT_OF_REPLY: 8,
+  RAISE_FACT_CHECK: 8,
   RAISE_POINT_PERSONAL_PRIVILEGE: 5,
   RAISE_POINT_PARLIAMENTARY_INQUIRY: 10,
   SPEAK_IN_MODERATED_CAUCUS: 12,
@@ -1202,28 +1207,105 @@ const motionTemplates = [
     type: "unmoderated",
     durationMinutes: 20,
     speakerSeconds: 0,
-    label: "Motion for an unmoderated caucus of 20 minutes.",
+    label: "Motion for an Unmoderated Caucus of 20 minutes.",
   },
   {
     id: "motion3",
     type: "consultation",
     durationMinutes: 12,
     speakerSeconds: 0,
-    label: "Motion for a consultation of the whole on Sub-issue 2.",
+    label: "Motion for a Consultation of the Whole on Sub-issue 2.",
   },
   {
     id: "motion4",
     type: "unmoderated",
     durationMinutes: 30,
     speakerSeconds: 0,
-    label: "Motion for an unmoderated caucus of 30 minutes.",
+    label: "Motion for an Unmoderated Caucus of 30 minutes.",
   },
   {
     id: "motion5",
     type: "moderated",
     durationMinutes: 15,
     speakerSeconds: 90,
-    label: "Motion for a moderated caucus on Sub-issue 3 for 15 minutes with 90 seconds per speaker.",
+    label: "Motion for a Moderated Caucus on Sub-issue 3 for 15 minutes with 90 seconds per speaker.",
+  },
+  {
+    id: "motion6",
+    type: "close_debate",
+    durationMinutes: 0,
+    speakerSeconds: 0,
+    label: "Motion to Close Debate",
+  },
+  {
+    id: "motion7",
+    type: "adjourn_session",
+    durationMinutes: 0,
+    speakerSeconds: 0,
+    label: "Motion to Adjourn Session",
+  },
+  {
+    id: "motion8",
+    type: "set_agenda",
+    durationMinutes: 0,
+    speakerSeconds: 0,
+    label: "Motion to Set Agenda",
+  },
+  {
+    id: "motion9",
+    type: "exclude_public",
+    durationMinutes: 0,
+    speakerSeconds: 0,
+    label: "Motion to Exclude the Public",
+  },
+  {
+    id: "motion10",
+    type: "silent_prayer",
+    durationMinutes: 1,
+    speakerSeconds: 0,
+    label: "Motion for a Minute of Silent Prayer or Meditation",
+  },
+  {
+    id: "motion11",
+    type: "divide_question",
+    durationMinutes: 0,
+    speakerSeconds: 0,
+    label: "Motion to Divide the Question",
+  },
+  {
+    id: "motion12",
+    type: "vote_clause_by_clause",
+    durationMinutes: 0,
+    speakerSeconds: 0,
+    label: "Motion to Vote Clause by Clause",
+  },
+  {
+    id: "motion13",
+    type: "suspend_session",
+    durationMinutes: 5,
+    speakerSeconds: 0,
+    label: "Motion to Suspend Session",
+  },
+  {
+    id: "motion14",
+    type: "roll_call_vote",
+    durationMinutes: 0,
+    speakerSeconds: 0,
+    label: "Motion for a Roll Call Vote",
+  },
+  {
+    id: "motion15",
+    type: "open_debate",
+    durationMinutes: 0,
+    speakerSeconds: 0,
+    label: "Motion to Open Debate",
+  },
+  {
+    id: "motion16",
+    type: "extend_opening_speech_time",
+    durationMinutes: 0,
+    speakerSeconds: 0,
+    label: "Motion to Extend Opening Speech Time",
   },
 ];
 
@@ -1898,7 +1980,11 @@ const getSubIssueLabel = (index) => {
   if (!state.committee) {
     return "General discussion";
   }
-  const issue = state.committee.subIssues[index];
+  const mappedIndex =
+    Array.isArray(state.agendaOrder) && state.agendaOrder.length > 0
+      ? state.agendaOrder[index] ?? index
+      : index;
+  const issue = state.committee.subIssues[mappedIndex];
   return issue ? `Sub-issue ${index + 1}: ${issue}` : "General discussion";
 };
 
@@ -2013,6 +2099,13 @@ const resetSimulation = () => {
   state.roundInProgress = false;
   state.raised = false;
   state.votingStatus = "present";
+  state.agendaOrder = null;
+  state.divideQuestionRequested = false;
+  state.voteClauseByClauseRequested = false;
+  state.excludePublic = false;
+  state.openingSpeechExtraMinutes = 0;
+  state.sessionSuspended = false;
+  state.silentPrayerCompleted = false;
   returnPlacardHome();
   elements.log.innerHTML = "";
   setStage("Waiting");
@@ -2159,7 +2252,7 @@ const startOpeningSpeeches = () => {
     { label: "System", variant: "system" },
   ]);
   const ordered = [...getActiveDelegations()].sort();
-  const totalSeconds = 20 * 60;
+  const totalSeconds = (20 + (state.openingSpeechExtraMinutes || 0)) * 60;
   const speakerSeconds = Math.max(30, Math.floor(totalSeconds / ordered.length));
   let index = 0;
 
@@ -2227,10 +2320,6 @@ const openFloor = () => {
   state.round += 1;
   setRoundLabel();
   state.skipHandler = null;
-  if (state.round > 5) {
-    startResolutionVote();
-    return;
-  }
   setStage("Floor Open");
   state.roundInProgress = true;
   state.motionQueue = [];
@@ -2268,13 +2357,13 @@ const openFloor = () => {
 
 const formatMotionLabel = (motion) => {
   if (motion.id === "motion1") {
-    return `Motion for a moderated caucus on ${getSubIssueLabel(0)} for 10 minutes with 60 seconds per speaker.`;
+    return `Motion for a Moderated Caucus on ${getSubIssueLabel(0)} for 10 minutes with 60 seconds per speaker.`;
   }
   if (motion.id === "motion3") {
-    return `Motion for a consultation of the whole on ${getSubIssueLabel(1)}.`;
+    return `Motion for a Consultation of the Whole on ${getSubIssueLabel(1)}.`;
   }
   if (motion.id === "motion5") {
-    return `Motion for a moderated caucus on ${getSubIssueLabel(2)} for 15 minutes with 90 seconds per speaker.`;
+    return `Motion for a Moderated Caucus on ${getSubIssueLabel(2)} for 15 minutes with 90 seconds per speaker.`;
   }
   return motion.label;
 };
@@ -2290,7 +2379,7 @@ const chooseMotion = (motion) => {
     { label: "Raised", variant: "motion" },
     { label: userMotion.type, variant: "motion" },
   ]);
-  awardPoints("RAISE_MOTION", null, `Raised motion: ${motion.type} caucus`);
+  awardPoints("RAISE_MOTION", null, `Raised motion: ${motion.type}`);
   chairCallsForVote(userMotion);
 };
 
@@ -2355,7 +2444,13 @@ const resolveMotionVote = (motion, vote) => {
     yesPercent = randBetween(45, 55);
     awardPoints("MOTION_VOTE_ABSTAIN", null, "Abstained on motion vote");
   }
-  const passes = yesPercent >= 50;
+  const totalDelegates = getActiveDelegations().length || 1;
+  const simpleMajorityThreshold = Math.floor(totalDelegates / 2) + 1; // 50% present + 1
+  const yesCount = Math.max(
+    0,
+    Math.min(totalDelegates, Math.round((totalDelegates * yesPercent) / 100))
+  );
+  const passes = yesCount >= simpleMajorityThreshold;
   logEvent(
     `Motion vote result: ${yesPercent}% in favor. Motion ${
       passes ? "passes" : "fails"
@@ -2403,7 +2498,148 @@ const runMotion = (motion) => {
     runConsultation(motion, topicLine);
     return;
   }
-  runUnmoderatedCaucus(motion, topicLine);
+  if (motion.type === "unmoderated") {
+    runUnmoderatedCaucus(motion, topicLine);
+    return;
+  }
+  if (motion.type === "close_debate") {
+    startResolutionVote();
+    return;
+  }
+  if (motion.type === "adjourn_session") {
+    adjournCommittee();
+    return;
+  }
+
+  if (motion.type === "set_agenda") {
+    const subIssuesCount = state.committee?.subIssues?.length || 0;
+    if (subIssuesCount > 0) {
+      const indices = [...Array(subIssuesCount).keys()];
+      state.agendaOrder = shuffleArray(indices);
+      logEvent("Agenda has been set for the committee.", [
+        { label: "Motion", variant: "motion" },
+        { label: "Agenda", variant: "system" },
+      ]);
+      setChairBubble("The agenda has been set. The committee will proceed.");
+    } else {
+      setChairBubble("No agenda topics are available for this committee.");
+      logEvent("Set agenda motion failed: no sub-issues.", [
+        { label: "Motion", variant: "motion" },
+        { label: "Agenda", variant: "system" },
+      ]);
+    }
+    queueAction(() => openFloor());
+    return;
+  }
+
+  if (motion.type === "exclude_public") {
+    state.excludePublic = true;
+    logEvent("The public has been excluded from the session.", [
+      { label: "Motion", variant: "motion" },
+      { label: "Public Excluded", variant: "system" },
+    ]);
+    setChairBubble("The public is excluded. The committee proceeds in formal session.");
+    queueAction(() => openFloor());
+    return;
+  }
+
+  if (motion.type === "silent_prayer") {
+    setChairBubble("The committee observes a minute of silent prayer/meditation.");
+    const seconds = (motion.durationMinutes || 1) * 60;
+    logEvent("Silent prayer/meditation begins.", [
+      { label: "Motion", variant: "motion" },
+      { label: "Prayer", variant: "system" },
+    ]);
+    startTimer(seconds, null, () => {
+      setChairBubble("The committee resumes formal debate.");
+      logEvent("Silent prayer/meditation concluded.", [
+        { label: "Motion", variant: "motion" },
+        { label: "Prayer", variant: "system" },
+      ]);
+      queueAction(() => openFloor());
+    });
+    return;
+  }
+
+  if (motion.type === "divide_question") {
+    state.divideQuestionRequested = true;
+    logEvent("A motion to divide the question has been adopted.", [
+      { label: "Motion", variant: "motion" },
+      { label: "Division of the Question", variant: "system" },
+    ]);
+    setChairBubble("Division of the question has been signaled for the voting procedure.");
+    queueAction(() => openFloor());
+    return;
+  }
+
+  if (motion.type === "vote_clause_by_clause") {
+    state.voteClauseByClauseRequested = true;
+    logEvent("Clause-by-clause voting has been requested.", [
+      { label: "Motion", variant: "motion" },
+      { label: "Clause-by-clause", variant: "system" },
+    ]);
+    setChairBubble("Clause-by-clause voting will be used if division is adopted.");
+    queueAction(() => openFloor());
+    return;
+  }
+
+  if (motion.type === "suspend_session") {
+    setChairBubble("The session is suspended.");
+    const seconds = (motion.durationMinutes || 5) * 60;
+    logEvent("Session suspension begins.", [
+      { label: "Motion", variant: "motion" },
+      { label: "Suspension", variant: "system" },
+    ]);
+    startTimer(seconds, null, () => {
+      setChairBubble("The session resumes.");
+      logEvent("Session suspension concluded.", [
+        { label: "Motion", variant: "motion" },
+        { label: "Suspension", variant: "system" },
+      ]);
+      queueAction(() => openFloor());
+    });
+    return;
+  }
+
+  if (motion.type === "roll_call_vote") {
+    setChairBubble("The committee will proceed to roll call.");
+    logEvent("Roll call is called by motion.", [
+      { label: "Motion", variant: "motion" },
+      { label: "Roll Call", variant: "system" },
+    ]);
+    clearTimer();
+    clearSpeechAddress();
+    returnPlacardHome();
+    queueAction(() => runRollCall());
+    return;
+  }
+
+  if (motion.type === "open_debate") {
+    setChairBubble("The debate is reopened. The floor is open for motions.");
+    logEvent("Debate is opened by motion.", [
+      { label: "Motion", variant: "motion" },
+      { label: "Open Debate", variant: "system" },
+    ]);
+    queueAction(() => openFloor());
+    return;
+  }
+
+  if (motion.type === "extend_opening_speech_time") {
+    state.openingSpeechExtraMinutes = (state.openingSpeechExtraMinutes || 0) + 5;
+    setChairBubble("Opening speech time has been extended by 5 minutes (for next opening speeches).");
+    logEvent("Opening speech time extended.", [
+      { label: "Motion", variant: "motion" },
+      { label: "Opening Speeches", variant: "system" },
+    ]);
+    queueAction(() => openFloor());
+    return;
+  }
+
+  // Unsupported motion type for this simulation build.
+  logEvent("This motion is not implemented in the simulation yet.", [
+    { label: "Motion", variant: "motion" },
+    { label: motion.type, variant: "motion" },
+  ]);
 };
 
 const runModeratedCaucus = (motion, topicLine) => {
@@ -2644,14 +2880,10 @@ const showDraftResolutionsModal = () => {
     buildDraftResolutionsBody(),
     [
       {
-        label: "Proceed to Vote",
+        label: "Proceed to Voting Procedure",
         className: "primary",
         onClick: () => {
-          openModal(
-            "Resolution Vote",
-            "Vote on the draft resolution package.",
-            buildVoteActions((vote) => finishResolutionVote(vote))
-          );
+          showAmendmentVoteModal();
         },
       },
     ]
@@ -2661,12 +2893,170 @@ const showDraftResolutionsModal = () => {
 const startResolutionVote = () => {
   setStage("Resolution Vote");
   state.skipHandler = null;
-  setChairBubble("We will now move into voting procedure.");
+  clearTimer();
+  clearSpeechAddress();
+  clearConsultation?.();
+  returnPlacardHome();
+  setChairBubble("Voting procedure begins (amendments → division → resolution).");
   logEvent("Committee moves into voting on draft resolutions.", [
     { label: "System", variant: "system" },
     { label: "Voting", variant: "system" },
   ]);
+  logEvent("Administrative actions: chair clears outstanding amendments and division motions.", [
+    { label: "System", variant: "system" },
+  ]);
   queueAction(() => showDraftResolutionsModal());
+};
+
+const getActiveDelegatesSimpleMajority = () => {
+  const totalDelegates = getActiveDelegations().length || 1;
+  return {
+    totalDelegates,
+    simpleMajorityThreshold: Math.floor(totalDelegates / 2) + 1, // 50% present + 1
+  };
+};
+
+const computeVoteOutcome = (vote, yesRange, noRange, abstainRange) => {
+  let yesPercent = 50;
+  if (vote === "yes") {
+    yesPercent = randBetween(yesRange[0], yesRange[1]);
+    return yesPercent;
+  }
+  if (vote === "no") {
+    yesPercent = randBetween(noRange[0], noRange[1]);
+    return yesPercent;
+  }
+  if (vote === "abstain") {
+    yesPercent = randBetween(abstainRange[0], abstainRange[1]);
+    return yesPercent;
+  }
+  return yesPercent;
+};
+
+const resolveSubstantiveVoteOutcome = (vote, voteKindLabel) => {
+  const { totalDelegates, simpleMajorityThreshold } =
+    getActiveDelegatesSimpleMajority();
+
+  const yesPercent = computeVoteOutcome(
+    vote,
+    [55, 85],
+    [25, 45],
+    [45, 55]
+  );
+
+  const yesCount = Math.max(
+    0,
+    Math.min(totalDelegates, Math.round((totalDelegates * yesPercent) / 100))
+  );
+  const passes = yesCount >= simpleMajorityThreshold;
+
+  if (vote === "yes") {
+    awardPoints("MOTION_VOTE_YES", null, `Voted 'Yes' on ${voteKindLabel}`);
+  } else if (vote === "no") {
+    awardPoints("MOTION_VOTE_NO", null, `Voted 'No' on ${voteKindLabel}`);
+  } else if (vote === "abstain") {
+    awardPoints(
+      "MOTION_VOTE_ABSTAIN",
+      null,
+      `Abstained on ${voteKindLabel}`
+    );
+  }
+
+  logEvent(
+    `${voteKindLabel} vote result: ${yesPercent}% in favor.`,
+    [
+      { label: "System", variant: "system" },
+      { label: "Vote Result", variant: "system" },
+    ]
+  );
+
+  return { yesPercent, yesCount, passes, totalDelegates, simpleMajorityThreshold };
+};
+
+const showFinalResolutionVoteModal = () => {
+  openModal(
+    "Resolution Vote",
+    "Vote on the draft resolution as a whole.",
+    buildVoteActions((vote) => finishResolutionVote(vote))
+  );
+};
+
+const showAmendmentVoteModal = () => {
+  openModal(
+    "Voting on Amendments",
+    "Voting on amendments to the draft resolution.",
+    buildVoteActions((vote) => {
+      const outcome = resolveSubstantiveVoteOutcome(vote, "amendments");
+      const outcomeText = outcome.passes
+        ? "Amendment(s) adopted."
+        : "Amendment(s) rejected.";
+      setChairBubble(outcomeText);
+      logEvent(outcomeText, [{ label: "System", variant: "system" }]);
+      const shouldDivide = Boolean(state.divideQuestionRequested);
+      if (shouldDivide) {
+        queueAction(() => showDivisionVoteModal());
+      } else {
+        queueAction(() => showFinalResolutionVoteModal());
+      }
+    })
+  );
+};
+
+const showDivisionVoteModal = () => {
+  openModal(
+    "Division of the Question",
+    "Vote on motions for division of the question.",
+    buildVoteActions((vote) => {
+      const outcome = resolveSubstantiveVoteOutcome(vote, "division of the question");
+      const outcomeText = outcome.passes
+        ? state.voteClauseByClauseRequested
+          ? "The question is divided. Clause-by-clause votes will follow."
+          : "The question is divided. The committee will proceed to the final vote."
+        : "No division. The committee will vote on the resolution as a whole.";
+      setChairBubble(outcomeText);
+      logEvent(outcomeText, [{ label: "System", variant: "system" }]);
+      if (outcome.passes) {
+        if (state.voteClauseByClauseRequested) {
+          queueAction(() => showClauseVoteModal(0));
+        } else {
+          queueAction(() => showFinalResolutionVoteModal());
+        }
+      } else {
+        queueAction(() => showFinalResolutionVoteModal());
+      }
+    })
+  );
+};
+
+const operativeClauseVoteLabels = [
+  "Operative clause 1",
+  "Operative clause 2",
+  "Operative clause 3",
+];
+
+const showClauseVoteModal = (clauseIndex) => {
+  const label = operativeClauseVoteLabels[clauseIndex] || `Operative clause ${clauseIndex + 1}`;
+  openModal(
+    `Clause-by-Clause Vote: ${label}`,
+    "Vote on this operative clause group.",
+    buildVoteActions((vote) => {
+      const outcome = resolveSubstantiveVoteOutcome(
+        vote,
+        label.toLowerCase()
+      );
+      const outcomeText = outcome.passes
+        ? `${label} adopted.`
+        : `${label} rejected.`;
+      setChairBubble(outcomeText);
+      logEvent(outcomeText, [{ label: "System", variant: "system" }]);
+
+      if (clauseIndex + 1 < operativeClauseVoteLabels.length) {
+        queueAction(() => showClauseVoteModal(clauseIndex + 1));
+      } else {
+        queueAction(() => showFinalResolutionVoteModal());
+      }
+    })
+  );
 };
 
 const finishResolutionVote = (vote) => {
@@ -2683,18 +3073,37 @@ const finishResolutionVote = (vote) => {
     yesPercent = randBetween(45, 55);
     awardPoints("RESOLUTION_VOTE_ABSTAIN", null, "Abstained on resolution vote");
   }
+
+  const totalDelegates = getActiveDelegations().length || 1;
+  const simpleMajorityThreshold = Math.floor(totalDelegates / 2) + 1; // 50% present + 1
+  const yesCount = Math.max(
+    0,
+    Math.min(totalDelegates, Math.round((totalDelegates * yesPercent) / 100))
+  );
+  const passes = yesCount >= simpleMajorityThreshold;
+
   logEvent(`Resolution vote result: ${yesPercent}% in favor.`, [
     { label: "System", variant: "system" },
     { label: "Vote Result", variant: "system" },
   ]);
-  const clapping = yesPercent >= 50 ? "Clapping is in order." : "Clapping is not in order.";
+  const clapping = passes ? "Clapping is in order." : "Clapping is not in order.";
   setChairBubble(clapping);
   logEvent(clapping, [{ label: "System", variant: "system" }]);
-  elements.adjournButton.disabled = false;
-  setStage("Awaiting Adjournment");
-  state.skipHandler = () => {
-    adjournCommittee();
-  };
+  if (passes) {
+    elements.adjournButton.disabled = false;
+    setStage("Awaiting Adjournment");
+    state.skipHandler = () => {
+      adjournCommittee();
+    };
+    return;
+  }
+
+  // If the resolution package fails, go back to motions.
+  elements.adjournButton.disabled = true;
+  logEvent("The draft resolution package was rejected. The floor returns to motions.", [
+    { label: "System", variant: "system" },
+  ]);
+  queueAction(() => openFloor());
 };
 
 const adjournCommittee = () => {
@@ -2845,6 +3254,11 @@ elements.resetSimulation.addEventListener("click", () => {
 });
 
 const raisePointOfPersonalPrivilege = (pointText) => {
+  if (state.stage === "Resolution Vote") {
+    setChairBubble("Voting procedure is in progress. Points are not in order.");
+    logEvent("Point not in order during voting procedure.", [{ label: "System", variant: "system" }]);
+    return;
+  }
   logEvent(`${state.delegation} raises ${pointText}`, [
     { label: "Point", variant: "point" },
     { label: "Personal Privilege", variant: "point" },
@@ -2854,6 +3268,11 @@ const raisePointOfPersonalPrivilege = (pointText) => {
 };
 
 const raisePointOfParliamentaryInquiry = () => {
+  if (state.stage === "Resolution Vote") {
+    setChairBubble("Voting procedure is in progress. Points are not in order.");
+    logEvent("Point not in order during voting procedure.", [{ label: "System", variant: "system" }]);
+    return;
+  }
   const question =
     elements.parliamentaryInquirySelect?.value ||
     parliamentaryInquiryQuestions[0];
@@ -2865,7 +3284,84 @@ const raisePointOfParliamentaryInquiry = () => {
   awardPoints("RAISE_POINT_PARLIAMENTARY_INQUIRY", null, "Raised Point of Parliamentary Inquiry");
 };
 
+const raisePointOfInformation = (pointText) => {
+  if (state.stage === "Resolution Vote") {
+    setChairBubble("Voting procedure is in progress. Points are not in order.");
+    logEvent("Point not in order during voting procedure.", [{ label: "System", variant: "system" }]);
+    return;
+  }
+  logEvent(`${state.delegation} raises ${pointText}`, [
+    { label: "Point", variant: "point" },
+    { label: "Point of Information", variant: "point" },
+  ]);
+  setChairBubble("Information request acknowledged. The chair will respond if possible.");
+  awardPoints("RAISE_POINT_INFORMATION", null, "Raised Point of Information");
+};
+
+const raisePointOfClarification = (pointText) => {
+  if (state.stage === "Resolution Vote") {
+    setChairBubble("Voting procedure is in progress. Points are not in order.");
+    logEvent("Point not in order during voting procedure.", [{ label: "System", variant: "system" }]);
+    return;
+  }
+  logEvent(`${state.delegation} raises ${pointText}`, [
+    { label: "Point", variant: "point" },
+    { label: "Point of Clarification", variant: "point" },
+  ]);
+  setChairBubble("Clarification request acknowledged. Please keep it concise.");
+  awardPoints("RAISE_POINT_CLARIFICATION", null, "Raised Point of Clarification");
+};
+
+const raisePointOfOrder = (pointText) => {
+  if (state.stage === "Resolution Vote") {
+    setChairBubble("Voting procedure is in progress. Points are not in order.");
+    logEvent("Point not in order during voting procedure.", [{ label: "System", variant: "system" }]);
+    return;
+  }
+  logEvent(`${state.delegation} raises ${pointText}`, [
+    { label: "Point", variant: "point" },
+    { label: "Point of Order", variant: "point" },
+  ]);
+  setChairBubble("Point of order acknowledged. The chair will rule on procedure.");
+  awardPoints("RAISE_POINT_ORDER", null, "Raised Point of Order");
+};
+
+const raiseRightOfReply = (pointText) => {
+  if (state.stage === "Resolution Vote") {
+    setChairBubble("Voting procedure is in progress. Points are not in order.");
+    logEvent("Point not in order during voting procedure.", [{ label: "System", variant: "system" }]);
+    return;
+  }
+  logEvent(`${state.delegation} raises ${pointText}`, [
+    { label: "Point", variant: "point" },
+    { label: "Right of Reply", variant: "point" },
+  ]);
+  setChairBubble("Right of reply acknowledged. You may respond briefly.");
+  awardPoints("RAISE_RIGHT_OF_REPLY", null, "Raised Right of Reply");
+};
+
+const raiseFactCheck = (pointText) => {
+  if (state.stage === "Resolution Vote") {
+    setChairBubble("Voting procedure is in progress. Points are not in order.");
+    logEvent("Point not in order during voting procedure.", [{ label: "System", variant: "system" }]);
+    return;
+  }
+  logEvent(`${state.delegation} raises ${pointText}`, [
+    { label: "Point", variant: "point" },
+    { label: "Fact Check", variant: "point" },
+  ]);
+  setChairBubble("Fact check request acknowledged. Please cite sources if possible.");
+  awardPoints("RAISE_FACT_CHECK", null, "Raised Fact Check");
+};
+
 elements.raisePlacard.addEventListener("click", () => {
+  if (state.stage === "Resolution Vote") {
+    setChairBubble("Voting procedure is in progress. Please remain silent.");
+    logEvent("Placards are not permitted during voting procedure.", [
+      { label: "System", variant: "system" },
+    ]);
+    return;
+  }
   state.raised = !state.raised;
   const seatInfo = state.seats[state.delegation];
   if (seatInfo) {
@@ -3003,6 +3499,13 @@ if (elements.continueButton && elements.continueOverlay) {
 
 noteButtons.forEach((button) => {
   button.addEventListener("click", () => {
+    if (state.stage === "Resolution Vote") {
+      setChairBubble("Voting procedure is in progress. Note passing is suspended.");
+      logEvent("Notes are suspended during voting procedure.", [
+        { label: "System", variant: "system" },
+      ]);
+      return;
+    }
     const note = button.dataset.note;
     const recipient = elements.noteRecipientSelect?.value;
     if (!recipient) {
@@ -3042,7 +3545,41 @@ noteButtons.forEach((button) => {
 
 pointButtons.forEach((button) => {
   button.addEventListener("click", () => {
+    if (state.stage === "Resolution Vote") {
+      setChairBubble("Voting procedure is in progress. Points are not in order.");
+      logEvent("Point not in order during voting procedure.", [
+        { label: "System", variant: "system" },
+      ]);
+      return;
+    }
     const point = button.dataset.point;
+    const pointType = button.dataset.pointType || "personal_privilege";
+    if (pointType === "personal_privilege") {
+      raisePointOfPersonalPrivilege(point);
+      return;
+    }
+    if (pointType === "poi") {
+      raisePointOfInformation(point);
+      return;
+    }
+    if (pointType === "poc") {
+      raisePointOfClarification(point);
+      return;
+    }
+    if (pointType === "order") {
+      raisePointOfOrder(point);
+      return;
+    }
+    if (pointType === "reply") {
+      raiseRightOfReply(point);
+      return;
+    }
+    if (pointType === "fact_check") {
+      raiseFactCheck(point);
+      return;
+    }
+
+    // Fallback: treat as personal privilege
     raisePointOfPersonalPrivilege(point);
   });
 });
