@@ -8484,6 +8484,53 @@ i.fas, i.far, i.fab {
     border-top: 1px solid var(--border-color);
 }
 
+/* Chair Guide: default .info-card is row flex — stack content vertically */
+.info-card.info-card--vertical {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+}
+.info-card.info-card--vertical > h3 {
+    margin: 0 0 0.25rem 0;
+    width: 100%;
+}
+
+.chair-template-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+.chair-template-bar__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem;
+}
+.chair-template-bar__link {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: var(--text-secondary);
+}
+
+.chair-report-checklist-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 100%;
+}
+@media (min-width: 900px) {
+    .chair-report-checklist-grid {
+        grid-template-columns: repeat(3, 1fr);
+        align-items: stretch;
+        gap: 1rem;
+    }
+}
+.chair-report-checklist-grid > div {
+    margin-bottom: 0 !important;
+}
+
 /* Position paper upload modal — spacing and native-looking radios */
 #posPaperUploadModal .modal-content {
     max-width: min(520px, 96vw);

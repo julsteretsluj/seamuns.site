@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://*.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://www.gstatic.com https://*.firebaseio.com https://*.cloudfunctions.net https://*.firebaseapp.com wss://*.firebaseio.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' https: data: blob:;">
     <title>Chair Guide - SEAMUNs</title>
     <link rel="icon" type="image/png" href="../assets/logo.png">
-    <link rel="stylesheet" href="../css/styles.css?v=4">
+    <link rel="stylesheet" href="../css/styles.css?v=5">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -185,61 +185,68 @@
                     </div>
                 </a>
 
-                <div class="info-card" style="margin-bottom: 24px;">
-                    <h3 style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                <div class="info-card info-card--vertical" style="margin-bottom: 24px;">
+                    <h3 style="display: flex; align-items: center; gap: 8px;">
                         <i class="fas fa-file-alt" style="color: var(--accent-blue);"></i>
                         Chair Report
                     </h3>
-                    <div style="margin-bottom: 16px;">
-                        <div class="template-pdf-toolbar" style="margin-top: 0;">
-                            <a href="../assets/seamun-i-2027-chair-report-template.pdf" class="btn btn-primary btn-sm" download="SEAMUN-I-2027-Chair-Report-Template.pdf" style="display: inline-flex; align-items: center; gap: 0.5rem;">
-                                <i class="fas fa-download"></i> Download PDF
-                            </a>
-                            <a href="../assets/seamun-i-2027-chair-report-template.pdf" class="btn btn-secondary btn-sm" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.5rem;">
-                                <i class="fas fa-external-link-alt"></i> Open in new tab
-                            </a>
-                            <span style="font-size: 0.9rem; color: var(--text-secondary);">Full preview: <a href="templates.html#chair-report-template">Templates</a></span>
+
+                    <div class="chair-template-section">
+                        <p style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5;">Use the official SEAMUN I 2027 PDF template. Preview below; download to edit.</p>
+                        <div class="chair-template-bar">
+                            <div class="chair-template-bar__actions">
+                                <a href="../assets/seamun-i-2027-chair-report-template.pdf" class="btn btn-primary btn-sm" download="SEAMUN-I-2027-Chair-Report-Template.pdf" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-download"></i> Download PDF
+                                </a>
+                                <a href="../assets/seamun-i-2027-chair-report-template.pdf" class="btn btn-secondary btn-sm" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fas fa-external-link-alt"></i> Open in new tab
+                                </a>
+                            </div>
+                            <p class="chair-template-bar__link">Larger preview: <a href="templates.html#chair-report-template">Templates page</a></p>
                         </div>
                         <div class="template-pdf-preview-wrap template-pdf-preview-wrap--compact">
                             <iframe class="template-pdf-preview-frame" title="Chair report template preview" src="../assets/seamun-i-2027-chair-report-template.pdf#view=FitH"></iframe>
                         </div>
-                        <p class="text-secondary" style="font-size: 0.82rem; margin: 0.5rem 0 0 0;">If the preview does not show, use Open in new tab or Download.</p>
+                        <p class="text-secondary" style="font-size: 0.82rem; margin: 0.5rem 0 0 0;">If the preview is blank, use <strong>Open in new tab</strong> or <strong>Download PDF</strong>.</p>
                     </div>
 
-                    <div style="background: var(--bg-glass); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-                        <h4 style="margin-bottom: 8px; color: var(--text-primary); font-size: 1em;">General Info</h4>
-                        <ul style="margin: 0; padding-left: 20px; color: var(--text-secondary); line-height: 1.6;">
-                            <li>Cover page</li>
-                            <li>Conference logo</li>
-                            <li>Committee name and topics</li>
-                            <li>Chair role, name, and email</li>
-                            <li>Chair introduction</li>
-                            <li>Blurb and image</li>
-                        </ul>
-                    </div>
+                    <h4 style="margin: 0.5rem 0 0 0; font-size: 1rem; color: var(--text-primary); width: 100%;">What to include</h4>
+                    <div class="chair-report-checklist-grid">
+                        <div style="background: var(--bg-glass); padding: 18px; border-radius: 10px; border: 1px solid var(--border-color);">
+                            <h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-size: 1em;">General Info</h4>
+                            <ul style="margin: 0; padding-left: 20px; color: var(--text-secondary); line-height: 1.65;">
+                                <li>Cover page</li>
+                                <li>Conference logo</li>
+                                <li>Committee name and topics</li>
+                                <li>Chair role, name, and email</li>
+                                <li>Chair introduction</li>
+                                <li>Blurb and image</li>
+                            </ul>
+                        </div>
 
-                    <div style="background: var(--bg-glass); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 16px;">
-                        <h4 style="margin-bottom: 8px; color: var(--text-primary); font-size: 1em;">Committee Overview</h4>
-                        <ul style="margin: 0; padding-left: 20px; color: var(--text-secondary); line-height: 1.6;">
-                            <li>Committee: what is this committee? What issues do they deal with?</li>
-                            <li>Topic introduction: what topics will be debated?</li>
-                            <li>Expectation: how should the committee be? What should be achieved at the end of the conference?</li>
-                            <li>Procedure in use: which MUN procedure will be followed for this conference?</li>
-                        </ul>
-                    </div>
+                        <div style="background: var(--bg-glass); padding: 18px; border-radius: 10px; border: 1px solid var(--border-color);">
+                            <h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-size: 1em;">Committee Overview</h4>
+                            <ul style="margin: 0; padding-left: 20px; color: var(--text-secondary); line-height: 1.65;">
+                                <li>Committee: what is this committee? What issues do they deal with?</li>
+                                <li>Topic introduction: what topics will be debated?</li>
+                                <li>Expectation: how should the committee be? What should be achieved at the end of the conference?</li>
+                                <li>Procedure in use: which MUN procedure will be followed for this conference?</li>
+                            </ul>
+                        </div>
 
-                    <div style="background: var(--bg-glass); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
-                        <h4 style="margin-bottom: 8px; color: var(--text-primary); font-size: 1em;">Important Notes</h4>
-                        <p style="margin: 0 0 8px; color: var(--text-secondary); line-height: 1.5;">Auxiliary information that delegates should know prior to the debates.</p>
-                        <ul style="margin: 0; padding-left: 20px; color: var(--text-secondary); line-height: 1.6;">
-                            <li>Mentions of plagiarism, AI, and citations (chair digressions)</li>
-                            <li>Chair report should not be used as the only source of information</li>
-                            <li>Other housekeeping rules for these specific committees</li>
-                        </ul>
+                        <div style="background: var(--bg-glass); padding: 18px; border-radius: 10px; border: 1px solid var(--border-color);">
+                            <h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-size: 1em;">Important Notes</h4>
+                            <p style="margin: 0 0 10px 0; color: var(--text-secondary); line-height: 1.55;">Auxiliary information that delegates should know prior to the debates.</p>
+                            <ul style="margin: 0; padding-left: 20px; color: var(--text-secondary); line-height: 1.65;">
+                                <li>Mentions of plagiarism, AI, and citations (chair digressions)</li>
+                                <li>Chair report should not be used as the only source of information</li>
+                                <li>Other housekeeping rules for these specific committees</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
-                <div class="info-card">
+                <div class="info-card info-card--vertical">
                     <h3 style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
                         <i class="fas fa-list" style="color: var(--accent-purple);"></i>
                         Per Topic
