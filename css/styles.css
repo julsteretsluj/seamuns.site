@@ -8346,3 +8346,32 @@ i.fas, i.far, i.fab {
     color: #854d0e !important;
     border-color: rgba(234, 179, 8, 0.5);
 }
+
+/* Position Paper Archive — self-reported award tags */
+.pos-paper-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25em 0.6em;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+    border: 1px solid transparent;
+}
+.pos-paper-badge--committee {
+    background: rgba(33, 150, 243, 0.18);
+    color: var(--accent-blue, #1976d2);
+    border-color: rgba(33, 150, 243, 0.4);
+}
+.pos-paper-badge--overall {
+    background: rgba(156, 39, 176, 0.15);
+    color: #7b1fa2;
+    border-color: rgba(156, 39, 176, 0.35);
+}
+[data-theme="dark"] .pos-paper-badge--overall {
+    color: #ce93d8;
+}
+[data-theme="dark"] .pos-paper-badge--committee {
+    color: #90caf9;
+}

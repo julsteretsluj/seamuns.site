@@ -110,6 +110,7 @@
                         <a href="crisis.html"><i class="fas fa-exclamation-triangle"></i> Crisis</a>
                         <a href="ga.html"><i class="fas fa-globe-americas"></i> General Assembly</a>
                         <a href="position-papers.html"><i class="fas fa-file-word"></i> Position Papers</a>
+                        <a href="position-paper-archive.html"><i class="fas fa-folder-open"></i> Position Paper Archive</a>
                         <a href="chair-superlatives.html"><i class="fas fa-award"></i> Chair Superlatives</a>
                         <a href="examples.html"><i class="fas fa-lightbulb"></i> Examples</a>
                         <a href="awards.html"><i class="fas fa-trophy"></i> Awards</a>
@@ -199,6 +200,21 @@
                 <div class="form-group">
                     <label for="archiveDescription">Description (optional)</label>
                     <textarea id="archiveDescription" rows="2" placeholder="Brief description or context"></textarea>
+                </div>
+                <div class="form-group" id="archivePosPaperAwardWrap" style="display: none;">
+                    <span class="label" style="display: block; margin-bottom: 0.5rem;">Position paper award tag</span>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; margin-bottom: 0.35rem;">
+                        <input type="radio" name="archivePosPaperAward" value="none" checked>
+                        No award tag
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; margin-bottom: 0.35rem;">
+                        <input type="radio" name="archivePosPaperAward" value="committee">
+                        Best Position Paper (committee)
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                        <input type="radio" name="archivePosPaperAward" value="overall">
+                        Best Position Paper (overall)
+                    </label>
                 </div>
                 <div class="form-group">
                     <label for="archiveFile">File *</label>

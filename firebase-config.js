@@ -425,6 +425,11 @@ const FirebaseArchive = {
                 authorId: metadata.authorId || '',
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
+            if (metadata.type === 'position-papers') {
+                const allowed = ['none', 'committee', 'overall'];
+                const v = metadata.posPaperAward;
+                doc.posPaperAward = allowed.includes(v) ? v : 'none';
+            }
             await docRef.set(doc);
             return { success: true, id };
         } catch (error) {

@@ -25,6 +25,17 @@
         return t ? t.icon : 'fa-file';
     }
 
+    function getPosPaperAwardBadgeHtml(award) {
+        const a = award || 'none';
+        if (a === 'committee') {
+            return '<span class="pos-paper-badge pos-paper-badge--committee" title="Self-reported: Best Position Paper (committee)"><i class="fas fa-medal"></i> Best (committee)</span>';
+        }
+        if (a === 'overall') {
+            return '<span class="pos-paper-badge pos-paper-badge--overall" title="Self-reported: Best Position Paper (overall)"><i class="fas fa-trophy"></i> Best (overall)</span>';
+        }
+        return '';
+    }
+
     function renderList() {
         const listEl = document.getElementById('archiveList');
         const emptyEl = document.getElementById('archiveEmpty');
@@ -66,6 +77,7 @@
                     <div style="flex: 1; min-width: 0;">
                         <h3 style="margin: 0 0 0.25rem 0; font-size: 1rem;">${escapeHtml(item.title || 'Untitled')}</h3>
                         <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary);">${getTypeLabel(item.type)}</p>
+                        ${item.type === 'position-papers' && getPosPaperAwardBadgeHtml(item.posPaperAward) ? `<div style="margin-top: 0.35rem; display: flex; flex-wrap: wrap; gap: 0.35rem;">${getPosPaperAwardBadgeHtml(item.posPaperAward)}</div>` : ''}
                         ${item.description ? `<p style="margin: 0.5rem 0 0 0; font-size: 0.85rem; color: var(--text-secondary);">${escapeHtml(item.description)}</p>` : ''}
                         <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; color: var(--text-tertiary);">${escapeHtml(item.authorName || 'Anonymous')} · ${dateStr}</p>
                         <a href="${escapeHtml(item.fileUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" style="margin-top: 0.75rem; display: inline-flex; align-items: center; gap: 0.5rem;">
@@ -153,14 +165,20 @@
         submitBtn.disabled = true;
         submitBtn.textContent = 'Uploading…';
 
+        const payload = {
+            type: typeEl.value,
+            title: titleEl.value.trim(),
+            description: (descEl && descEl.value) ? descEl.value.trim() : '',
+            authorName: user ? (user.name || user.email || '') : '',
+            authorId: user ? (user.id || user.uid || '') : ''
+        };
+        if (typeEl.value === 'position-papers') {
+            const awardEl = document.querySelector('input[name="archivePosPaperAward"]:checked');
+            payload.posPaperAward = awardEl ? awardEl.value : 'none';
+        }
+
         try {
-            const result = await FirebaseArchive.addArchiveItem(file, {
-                type: typeEl.value,
-                title: titleEl.value.trim(),
-                description: (descEl && descEl.value) ? descEl.value.trim() : '',
-                authorName: user ? (user.name || user.email || '') : '',
-                authorId: user ? (user.id || user.uid || '') : ''
-            });
+            const result = await FirebaseArchive.addArchiveItem(file, payload);
             if (result.success) {
                 closeUploadModal();
                 await loadArchive();
@@ -176,12 +194,27 @@
         }
     }
 
+    function syncArchivePosPaperAwardVisibility() {
+        const typeEl = document.getElementById('archiveType');
+        const wrap = document.getElementById('archivePosPaperAwardWrap');
+        if (!typeEl || !wrap) return;
+        wrap.style.display = typeEl.value === 'position-papers' ? 'block' : 'none';
+    }
+
     function init() {
         loadArchive();
         setupFilters();
         showUploadButton();
 
-        document.getElementById('archiveUploadBtn') && document.getElementById('archiveUploadBtn').addEventListener('click', openUploadModal);
+        const archiveTypeEl = document.getElementById('archiveType');
+        if (archiveTypeEl) {
+            archiveTypeEl.addEventListener('change', syncArchivePosPaperAwardVisibility);
+        }
+
+        document.getElementById('archiveUploadBtn') && document.getElementById('archiveUploadBtn').addEventListener('click', function () {
+            openUploadModal();
+            syncArchivePosPaperAwardVisibility();
+        });
         document.getElementById('archiveUploadModalClose') && document.getElementById('archiveUploadModalClose').addEventListener('click', closeUploadModal);
         document.getElementById('archiveUploadCancel') && document.getElementById('archiveUploadCancel').addEventListener('click', closeUploadModal);
         document.getElementById('archiveUploadModal') && document.getElementById('archiveUploadModal').addEventListener('click', function (e) {
