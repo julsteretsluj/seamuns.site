@@ -4,6 +4,143 @@
  */
 window.SEAMUNS_ANNOUNCEMENTS = [
     {
+        date: '2026-04-06',
+        icon: 'fas fa-file-word',
+        title: 'Position Paper Archive',
+        body: 'Community uploads for position papers: optional self-reported <strong>Best Position Paper</strong> tags (committee or overall), PDF or <strong>HTTPS link</strong> (e.g. Google Docs) with in-page preview where supported, own-work confirmation, no public uploader names, and <strong>edit or delete</strong> for your own entries when logged in.',
+        linkText: 'Position Paper Archive →',
+        linkHref: 'position-paper-archive.html'
+    },
+    {
+        date: '2026-04-06',
+        icon: 'fas fa-folder-open',
+        title: 'Archive — edit, link uploads, and forms',
+        body: 'General <strong>Archive</strong> now lets signed-in owners <strong>edit and delete</strong> their submissions. Position-paper style flows support <strong>link-only</strong> entries; upload modals use clearer radios and layout. Same Firebase-backed library as before.',
+        linkText: 'Archive →',
+        linkHref: 'archive.html'
+    },
+    {
+        date: '2026-04-06',
+        icon: 'fas fa-file-pdf',
+        title: 'Official SEAMUN I 2027 chair report template',
+        body: 'Download the <strong>PDF template</strong>, preview it in the browser, or open in a new tab. Linked from <strong>Chair Guide</strong> and <strong>Templates</strong> (chair report section).',
+        linkText: 'Templates — chair report →',
+        linkHref: 'templates.html#chair-report-template'
+    },
+    {
+        date: '2026-04-06',
+        icon: 'fas fa-columns',
+        title: 'Chair Guide — layout and checklist',
+        body: 'Chair Report section reworked: vertical layout, template toolbar (download / open / link to full preview), and a <strong>three-column checklist</strong> (General info, Committee overview, Important notes) that lines up cleanly on wide screens.',
+        linkText: 'Chair Guide →',
+        linkHref: 'chair-guide.html'
+    },
+    {
+        date: '2026-04-06',
+        icon: 'fas fa-book',
+        title: 'Rules of Procedure (RoP) 2027',
+        body: 'Dedicated <strong>SEAMUN I 2027</strong> RoP page with extracted rules, committee notes, optional <strong>DOCX</strong> download, and difficulty/override hints aligned with the committee list.',
+        linkText: 'RoP 2027 →',
+        linkHref: 'rop-2027.html'
+    },
+    {
+        date: '2026-04-06',
+        icon: 'fas fa-star',
+        title: 'SEAMUN I 2027 — on the conference tracker',
+        body: '<strong>SEAMUN</strong> — Thailand (venue TBD), <strong>23–24 January 2027</strong>. Fifteen committees (UN bodies, crisis, FWC, F1, etc.). Policies with a Purpose; fees and capacity on the listing. Use the site for RoP, templates, and FWC/SMT forms linked from announcements.',
+        linkText: 'Upcoming & previous MUNs →',
+        linkHref: '../index.html'
+    },
+    {
+        date: '2026-04-06',
+        icon: 'fas fa-landmark',
+        title: 'HEXAMUN \'26 — on the conference tracker',
+        body: '<strong>Lycée Français International de Bangkok (LFIB)</strong> — <strong>25 April 2026</strong>, Bangkok. Five committees (including EU committee in French). Delegate and chair fees 850 THB; independent delegates welcome; wheelchair and sensory-friendly.',
+        linkText: 'Upcoming & previous MUNs →',
+        linkHref: '../index.html'
+    },
+    {
+        date: '2026-04-06',
+        icon: 'fas fa-mountain',
+        title: 'NTMUN — on the conference tracker',
+        body: '<strong>Chiang Mai</strong> — <strong>13 June 2026</strong> (Empress Convention Center). Student-led; six committees (UNSC, UNHRC, UNICEF, HCC, FWC, USCC). Delegate fee cap 1,200 THB TBD; chair applications and timeline on the listing.',
+        linkText: 'Upcoming & previous MUNs →',
+        linkHref: '../index.html'
+    },
+    {
+        date: '2026-04-06',
+        icon: 'fas fa-school',
+        title: 'RISMUN XIX — on the conference tracker',
+        body: '<strong>Ruamrudee International School</strong>, Minburi — <strong>28 February – 1 March 2026</strong>. Two days, eleven committees (ECOSOC through SOC). Delegate fee 2,000 THB; chairs and page free; 150+ delegates.',
+        linkText: 'Upcoming & previous MUNs →',
+        linkHref: '../index.html'
+    },
+    {
+        date: '2026-04-06',
+        icon: 'fas fa-calendar-check',
+        title: 'MUN07 IV — on the conference tracker',
+        body: '<strong>St Andrews International School Sukhumvit 107</strong> — <strong>7 March 2026</strong>, Bangkok. Ten committees (UNHRC through Press Corps). Delegate fee 900 THB; independents welcome.',
+        linkText: 'Upcoming & previous MUNs →',
+        linkHref: '../index.html'
+    },
+    {
+        date: '2026-04-06',
+        icon: 'fas fa-calendar-check',
+        title: 'THAIMUN XIII — on the conference tracker',
+        body: '<strong>Brighton College</strong> — <strong>20–22 March 2026</strong>, Bangkok. Nineteen committees across UN and specialized bodies. Three-day conference; see listing for registration and advisor requirements.',
+        linkText: 'Upcoming & previous MUNs →',
+        linkHref: '../index.html'
+    },
+    {
+        date: '2026-04-06',
+        icon: 'fas fa-calendar-check',
+        title: 'Newton MUN I — on the conference tracker',
+        body: '<strong>Newton Sixth Form</strong>, Siamscape — <strong>14–15 February 2026</strong>. Inaugural conference; five committees including FWC (<em>Wizard of Oz</em>). Delegate fee 1,500 THB; independents welcome.',
+        linkText: 'Upcoming & previous MUNs →',
+        linkHref: '../index.html'
+    },
+    {
+        date: '2026-04-06',
+        icon: 'fas fa-calendar-check',
+        title: 'TSIMUN 2026 — on the conference tracker',
+        body: '<strong>TSI Bearing Primary Campus</strong> — <strong>31 January 2026</strong>, Bangkok. Six committees (UNEP through World Bank). ~150–200 attendees; delegate fee 600 THB.',
+        linkText: 'Upcoming & previous MUNs →',
+        linkHref: '../index.html'
+    },
+    {
+        date: '2026-04-06',
+        icon: 'fas fa-calendar-check',
+        title: 'HISMUN VI — on the conference tracker',
+        body: '<strong>Harrow International School Bangkok</strong> — <strong>31 January 2026</strong>. Six committees (beginner through advanced UNEP). Tiered delegate fees; position papers required for awards eligibility.',
+        linkText: 'Upcoming & previous MUNs →',
+        linkHref: '../index.html'
+    },
+    {
+        date: '2026-04-06',
+        icon: 'fas fa-calendar-check',
+        title: 'KMIDSMUN II — on the conference tracker',
+        body: '<strong>King Mongkut\'s International Demonstration School</strong> — <strong>24 January 2026</strong>, Bangkok. Seven committees including ICJ and Press Corps. Delegate fee 800 THB; independents welcome.',
+        linkText: 'Upcoming & previous MUNs →',
+        linkHref: '../index.html'
+    },
+    {
+        date: '2026-04-06',
+        icon: 'fas fa-calendar-check',
+        title: 'STAMUN XI — on the conference tracker',
+        body: '<strong>St Andrews International School</strong> (High School Campus) — <strong>16 November 2025</strong>, Bangkok. Five committees (DISEC through UNHRC). ~130 attendees.',
+        linkText: 'Upcoming & previous MUNs →',
+        linkHref: '../index.html'
+    },
+    {
+        date: '2026-04-06',
+        icon: 'fas fa-gamepad',
+        title: 'MUN Simulation',
+        body: 'The single-player procedure simulator has been updated — practice points, motions, and flow from the nav or <a href="about.html">About</a>.',
+        linkText: 'MUN Simulation →',
+        linkHref: '../munsimulation/',
+        external: true
+    },
+    {
         date: '2026-02-04',
         icon: 'fas fa-wand-magic-sparkles',
         title: 'FWC — Topic & Allocations Preference Form',
