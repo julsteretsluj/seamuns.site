@@ -482,5 +482,91 @@ const FirebaseArchive = {
             console.error('❌ Add archive link error:', error);
             return { success: false, error: error.message };
         }
+    },
+    async deleteArchiveItem(itemId, authorId) {
+        try {
+            if (!db) return { success: false, error: 'Firestore not available' };
+            if (!authorId) return { success: false, error: 'You must be signed in.' };
+            const docRef = db.collection('archive').doc(itemId);
+            const snap = await docRef.get();
+            if (!snap.exists) return { success: false, error: 'Not found.' };
+            const data = snap.data();
+            if (data.authorId !== authorId) {
+                return { success: false, error: 'You can only delete your own submissions.' };
+            }
+            if (!data.externalLink && storage && data.fileName) {
+                const path = `archive/${itemId}/${encodeURIComponent(data.fileName)}`;
+                try {
+                    await storage.ref(path).delete();
+                } catch (e) {
+                    console.warn('Storage delete (non-fatal):', e && e.message);
+                }
+            }
+            await docRef.delete();
+            return { success: true };
+        } catch (error) {
+            console.error('❌ Delete archive error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+    async updateArchiveItem(itemId, authorId, updates, options) {
+        options = options || {};
+        const file = options.file;
+        try {
+            if (!db) return { success: false, error: 'Firestore not available' };
+            if (!authorId) return { success: false, error: 'You must be signed in.' };
+            const docRef = db.collection('archive').doc(itemId);
+            const snap = await docRef.get();
+            if (!snap.exists) return { success: false, error: 'Not found.' };
+            const data = snap.data();
+            if (data.authorId !== authorId) {
+                return { success: false, error: 'You can only edit your own submissions.' };
+            }
+            const next = {};
+            if (updates.title != null) next.title = String(updates.title).trim();
+            if (updates.description != null) next.description = String(updates.description).trim();
+            if (data.type === 'position-papers' && updates.posPaperAward != null) {
+                const allowed = ['none', 'committee', 'overall'];
+                const v = updates.posPaperAward;
+                next.posPaperAward = allowed.includes(v) ? v : 'none';
+            }
+            if (data.externalLink && updates.linkUrl != null) {
+                const urlString = String(updates.linkUrl).trim();
+                try {
+                    const u = new URL(urlString);
+                    if (u.protocol !== 'https:') throw new Error('https');
+                } catch {
+                    return { success: false, error: 'URL must be a valid HTTPS link.' };
+                }
+                next.fileUrl = urlString;
+                next.fileName = /\.pdf(\?|$)/i.test(urlString) ? 'document.pdf' : 'Link';
+            }
+            if (file) {
+                if (!storage) return { success: false, error: 'Storage not available.' };
+                if (data.externalLink) {
+                    return { success: false, error: 'This entry is a link. Edit the URL field instead of uploading a file.' };
+                }
+                if (data.fileName) {
+                    const oldPath = `archive/${itemId}/${encodeURIComponent(data.fileName)}`;
+                    try {
+                        await storage.ref(oldPath).delete();
+                    } catch (e) {
+                        console.warn('Old file delete (non-fatal):', e && e.message);
+                    }
+                }
+                const newPath = `archive/${itemId}/${encodeURIComponent(file.name)}`;
+                await storage.ref(newPath).put(file);
+                const fileUrl = await storage.ref(newPath).getDownloadURL();
+                next.fileUrl = fileUrl;
+                next.fileName = file.name;
+                next.externalLink = false;
+            }
+            next.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+            await docRef.update(next);
+            return { success: true };
+        } catch (error) {
+            console.error('❌ Update archive error:', error);
+            return { success: false, error: error.message };
+        }
     }
 };

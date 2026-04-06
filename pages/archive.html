@@ -176,13 +176,14 @@
     <div id="archiveUploadModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Upload to Archive</h2>
+                <h2 id="archiveModalTitle">Upload to Archive</h2>
                 <button type="button" class="close-btn" id="archiveUploadModalClose" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="archiveUploadForm" class="archive-upload-form">
-                <div class="form-group">
+            <form id="archiveUploadForm" class="archive-upload-form" novalidate>
+                <input type="hidden" id="archiveEditId" value="">
+                <div class="form-group" id="archiveTypeGroup">
                     <label for="archiveType">Category *</label>
                     <select id="archiveType" required>
                         <option value="">— Select —</option>
@@ -219,11 +220,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="archiveFile">File *</label>
-                    <input type="file" id="archiveFile" required accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.md">
-                    <p class="text-secondary" style="font-size: 0.85rem; margin-top: 0.25rem;">PDF, Word, PowerPoint, or text. Max 10 MB.</p>
+                    <label for="archiveFile" id="archiveFileLabelWrap"><span id="archiveFileLabelText">File *</span></label>
+                    <input type="file" id="archiveFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.md">
+                    <p class="text-secondary" id="archiveFileHint" style="font-size: 0.85rem; margin-top: 0.25rem;">PDF, Word, PowerPoint, or text. Max 10 MB.</p>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="archiveOwnWorkGroup">
                     <label class="radio-row" for="archiveOwnWork" style="cursor: pointer;">
                         <input type="checkbox" id="archiveOwnWork" required>
                         <span>I confirm this is my own work, or I have permission from the author to share it, and I may upload it here.</span>
@@ -232,7 +233,7 @@
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="archiveUploadCancel">Cancel</button>
                     <button type="submit" class="btn btn-primary" id="archiveUploadSubmit">
-                        <i class="fas fa-upload"></i> Upload
+                        <i class="fas fa-upload" id="archiveUploadSubmitIcon"></i> <span id="archiveUploadSubmitText">Upload</span>
                     </button>
                 </div>
             </form>

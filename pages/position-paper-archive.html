@@ -170,13 +170,14 @@
     <div id="posPaperUploadModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Add position paper</h2>
+                <h2 id="posPaperModalTitle">Add position paper</h2>
                 <button type="button" class="close-btn" id="posPaperUploadModalClose" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <form id="posPaperUploadForm" class="pos-paper-upload-form" novalidate>
-                <div class="form-group">
+                <input type="hidden" id="posPaperEditId" value="">
+                <div class="form-group" id="posPaperSourceGroup">
                     <span class="label" id="posPaperSourceLegend">Add as *</span>
                     <div class="radio-stack" role="group" aria-labelledby="posPaperSourceLegend">
                         <label class="radio-row">
@@ -216,16 +217,16 @@
                     <p class="text-secondary" style="font-size: 0.82rem;">Pick the tag that matches how the paper was recognised, or “No award tag” if it did not win.</p>
                 </div>
                 <div class="form-group" id="posPaperFileGroup">
-                    <label for="posPaperFile">File *</label>
+                    <label for="posPaperFile" id="posPaperFileLabelWrap"><span id="posPaperFileLabelText">File *</span></label>
                     <input type="file" id="posPaperFile" accept=".pdf,.doc,.docx,.txt,.md">
-                    <p class="text-secondary" style="font-size: 0.82rem;">PDF or Word preferred. Max 10 MB.</p>
+                    <p class="text-secondary" id="posPaperFileHint" style="font-size: 0.82rem;">PDF or Word preferred. Max 10 MB.</p>
                 </div>
                 <div class="form-group" id="posPaperLinkGroup" style="display: none;">
-                    <label for="posPaperLinkUrl">HTTPS link *</label>
+                    <label for="posPaperLinkUrl" id="posPaperLinkLabelWrap"><span id="posPaperLinkLabelText">HTTPS link *</span></label>
                     <input type="url" id="posPaperLinkUrl" inputmode="url" autocomplete="off" placeholder="https://docs.google.com/document/d/… or https://…/file.pdf">
-                    <p class="text-secondary" style="font-size: 0.82rem;">Share the Doc or PDF so anyone with the link can view. HTTPS only.</p>
+                    <p class="text-secondary" id="posPaperLinkHint" style="font-size: 0.82rem;">Share the Doc or PDF so anyone with the link can view. HTTPS only.</p>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="posPaperOwnWorkGroup">
                     <label class="radio-row" for="posPaperOwnWork" style="cursor: pointer;">
                         <input type="checkbox" id="posPaperOwnWork" required>
                         <span>I confirm this is my own work, or I have permission from the author to share it, and I may add it here.</span>
@@ -234,7 +235,7 @@
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="posPaperUploadCancel">Cancel</button>
                     <button type="submit" class="btn btn-primary" id="posPaperUploadSubmit">
-                        <i class="fas fa-upload"></i> Upload
+                        <i class="fas fa-upload" id="posPaperUploadSubmitIcon"></i> <span id="posPaperUploadSubmitText">Add</span>
                     </button>
                 </div>
             </form>

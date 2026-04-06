@@ -1,14 +1,24 @@
 /**
  * Position Paper Archive: community uploads (Firestore `archive`, type position-papers).
- * Listings omit submitter name. PDFs and Google Docs embed when possible; links supported.
+ * Owners can edit or delete their own submissions (authorId match).
  */
 (function () {
     let archiveItems = [];
     let currentFilter = 'all';
+    let editingItem = null;
     const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
     function posPapersOnly() {
         return archiveItems.filter(item => item.type === 'position-papers');
+    }
+
+    function getCurrentUid() {
+        const u = window.__munCurrentUser !== undefined ? window.__munCurrentUser : JSON.parse(localStorage.getItem('munCurrentUser') || 'null');
+        return u && (u.uid || u.id) ? String(u.uid || u.id) : '';
+    }
+
+    function findItemById(id) {
+        return archiveItems.find(x => x.id === id);
     }
 
     function escapeHtml(s) {
@@ -38,9 +48,6 @@
         return '';
     }
 
-    /**
-     * Returns { kind: 'iframe', src } or { kind: 'open', href }.
-     */
     function getPreviewForItem(item) {
         const url = (item.fileUrl || '').trim();
         if (!url) return { kind: 'open', href: '' };
@@ -89,6 +96,106 @@
         `;
     }
 
+    function setAwardRadio(value) {
+        const v = value || 'none';
+        document.querySelectorAll('input[name="posPaperAward"]').forEach(r => {
+            r.checked = r.value === v;
+        });
+    }
+
+    function setModalModeAdd() {
+        editingItem = null;
+        const eid = document.getElementById('posPaperEditId');
+        if (eid) eid.value = '';
+        const titleEl = document.getElementById('posPaperModalTitle');
+        if (titleEl) titleEl.textContent = 'Add position paper';
+        const sg = document.getElementById('posPaperSourceGroup');
+        if (sg) sg.style.display = 'block';
+        const ow = document.getElementById('posPaperOwnWorkGroup');
+        if (ow) ow.style.display = 'block';
+        const owc = document.getElementById('posPaperOwnWork');
+        if (owc) owc.required = true;
+        const ft = document.getElementById('posPaperFileLabelText');
+        if (ft) ft.textContent = 'File *';
+        const fh = document.getElementById('posPaperFileHint');
+        if (fh) fh.textContent = 'PDF or Word preferred. Max 10 MB.';
+        const st = document.getElementById('posPaperUploadSubmitText');
+        if (st) st.textContent = 'Add';
+        const si = document.getElementById('posPaperUploadSubmitIcon');
+        if (si) si.className = 'fas fa-upload';
+    }
+
+    function openEditModal(item) {
+        editingItem = item;
+        const eid = document.getElementById('posPaperEditId');
+        if (eid) eid.value = item.id;
+        const titleEl = document.getElementById('posPaperModalTitle');
+        if (titleEl) titleEl.textContent = 'Edit position paper';
+        const sg = document.getElementById('posPaperSourceGroup');
+        if (sg) sg.style.display = 'none';
+        const owg = document.getElementById('posPaperOwnWorkGroup');
+        if (owg) owg.style.display = 'none';
+        const owc = document.getElementById('posPaperOwnWork');
+        if (owc) {
+            owc.required = false;
+            owc.checked = false;
+        }
+        document.getElementById('posPaperTitle').value = item.title || '';
+        document.getElementById('posPaperDescription').value = item.description || '';
+        setAwardRadio(item.posPaperAward || 'none');
+
+        const fileG = document.getElementById('posPaperFileGroup');
+        const linkG = document.getElementById('posPaperLinkGroup');
+        const linkIn = document.getElementById('posPaperLinkUrl');
+        const fileIn = document.getElementById('posPaperFile');
+
+        if (item.externalLink) {
+            if (fileG) fileG.style.display = 'none';
+            if (linkG) linkG.style.display = 'block';
+            if (linkIn) linkIn.value = item.fileUrl || '';
+            if (fileIn) fileIn.value = '';
+        } else {
+            if (fileG) fileG.style.display = 'block';
+            if (linkG) linkG.style.display = 'none';
+            if (linkIn) linkIn.value = '';
+            if (fileIn) fileIn.value = '';
+            const ft = document.getElementById('posPaperFileLabelText');
+            if (ft) ft.textContent = 'Replace file (optional)';
+            const fh = document.getElementById('posPaperFileHint');
+            if (fh) fh.textContent = 'Leave empty to keep the current file. PDF or Word. Max 10 MB.';
+        }
+
+        const st = document.getElementById('posPaperUploadSubmitText');
+        if (st) st.textContent = 'Save changes';
+        const si = document.getElementById('posPaperUploadSubmitIcon');
+        if (si) si.className = 'fas fa-save';
+
+        const modal = document.getElementById('posPaperUploadModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            modal.classList.add('show');
+        }
+    }
+
+    async function confirmDeleteItem(id) {
+        if (!confirm('Delete this submission permanently? This cannot be undone.')) return;
+        const uid = getCurrentUid();
+        if (!uid) {
+            alert('You must be signed in.');
+            return;
+        }
+        if (typeof FirebaseArchive.deleteArchiveItem !== 'function') {
+            alert('Delete is not available.');
+            return;
+        }
+        const result = await FirebaseArchive.deleteArchiveItem(id, uid);
+        if (result.success) {
+            await loadArchive();
+        } else {
+            alert(result.error || 'Could not delete.');
+        }
+    }
+
     function renderList() {
         const listEl = document.getElementById('posPaperArchiveList');
         const emptyEl = document.getElementById('posPaperArchiveEmpty');
@@ -120,11 +227,20 @@
 
         if (emptyEl) emptyEl.style.display = 'none';
 
+        const uid = getCurrentUid();
+
         filtered.forEach(item => {
             const card = document.createElement('div');
             card.className = 'pos-paper-archive-card content-section';
             card.style.cssText = 'padding: 1rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-glass);';
             const badges = getAwardBadgeHtml(item.posPaperAward);
+            const isOwner = uid && item.authorId && String(item.authorId) === uid;
+            const actionsHtml = isOwner
+                ? `<div class="pos-paper-card-actions" style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+                    <button type="button" class="btn btn-secondary btn-sm pos-paper-edit-btn" data-item-id="${escapeAttr(item.id)}"><i class="fas fa-edit"></i> Edit</button>
+                    <button type="button" class="btn btn-secondary btn-sm pos-paper-delete-btn" data-item-id="${escapeAttr(item.id)}"><i class="fas fa-trash-alt"></i> Delete</button>
+                </div>`
+                : '';
             card.innerHTML = `
                 <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
                     <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--accent-blue); opacity: 0.2; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
@@ -137,6 +253,7 @@
                         </div>
                         ${item.description ? `<p style="margin: 0.5rem 0 0 0; font-size: 0.85rem; color: var(--text-secondary);">${escapeHtml(item.description)}</p>` : ''}
                         ${buildPreviewHtml(item)}
+                        ${actionsHtml}
                     </div>
                 </div>
             `;
@@ -190,6 +307,7 @@
     }
 
     function openUploadModal() {
+        setModalModeAdd();
         const modal = document.getElementById('posPaperUploadModal');
         if (modal) {
             modal.style.display = 'flex';
@@ -210,6 +328,7 @@
         if (noneRadio) noneRadio.checked = true;
         const fileSource = document.querySelector('input[name="posPaperSource"][value="file"]');
         if (fileSource) fileSource.checked = true;
+        setModalModeAdd();
         syncPosPaperSourceUi();
     }
 
@@ -225,7 +344,77 @@
         const fileEl = document.getElementById('posPaperFile');
         const linkEl = document.getElementById('posPaperLinkUrl');
         const submitBtn = document.getElementById('posPaperUploadSubmit');
+        const editIdEl = document.getElementById('posPaperEditId');
+        const editId = editIdEl && editIdEl.value ? editIdEl.value.trim() : '';
+
         if (!titleEl || !submitBtn) return;
+
+        const user = window.__munCurrentUser !== undefined ? window.__munCurrentUser : JSON.parse(localStorage.getItem('munCurrentUser') || 'null');
+        const uid = user ? String(user.id || user.uid || '') : '';
+
+        if (editId && editingItem) {
+            if (!uid) {
+                alert('You must be signed in.');
+                return;
+            }
+            if (!titleEl.value.trim()) {
+                alert('Please enter a title.');
+                return;
+            }
+            if (typeof FirebaseArchive.updateArchiveItem !== 'function') {
+                alert('Editing is not available.');
+                return;
+            }
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Saving…';
+            try {
+                let result;
+                if (editingItem.externalLink) {
+                    const linkUrl = (linkEl && linkEl.value) ? linkEl.value.trim() : '';
+                    if (!linkUrl) {
+                        alert('Please enter the HTTPS link.');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-save" id="posPaperUploadSubmitIcon"></i> <span id="posPaperUploadSubmitText">Save changes</span>';
+                        return;
+                    }
+                    result = await FirebaseArchive.updateArchiveItem(editId, uid, {
+                        title: titleEl.value.trim(),
+                        description: (descEl && descEl.value) ? descEl.value.trim() : '',
+                        posPaperAward: getSelectedAward(),
+                        linkUrl: linkUrl
+                    }, {});
+                } else {
+                    const file = fileEl && fileEl.files[0];
+                    if (file && file.size > MAX_FILE_SIZE) {
+                        alert('File must be 10 MB or smaller.');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-save" id="posPaperUploadSubmitIcon"></i> <span id="posPaperUploadSubmitText">Save changes</span>';
+                        return;
+                    }
+                    result = await FirebaseArchive.updateArchiveItem(editId, uid, {
+                        title: titleEl.value.trim(),
+                        description: (descEl && descEl.value) ? descEl.value.trim() : '',
+                        posPaperAward: getSelectedAward()
+                    }, { file: file || undefined });
+                }
+                if (result.success) {
+                    closeUploadModal();
+                    await loadArchive();
+                    alert('Saved.');
+                } else {
+                    alert(result.error || 'Could not save.');
+                }
+            } catch (err) {
+                alert(err.message || 'Could not save.');
+            } finally {
+                submitBtn.disabled = false;
+                const si = document.getElementById('posPaperUploadSubmitIcon');
+                const st = document.getElementById('posPaperUploadSubmitText');
+                if (si) si.className = 'fas fa-save';
+                if (st) st.textContent = 'Save changes';
+            }
+            return;
+        }
 
         const ownWorkEl = document.getElementById('posPaperOwnWork');
         if (!ownWorkEl || !ownWorkEl.checked) {
@@ -233,7 +422,6 @@
             return;
         }
 
-        const user = window.__munCurrentUser !== undefined ? window.__munCurrentUser : JSON.parse(localStorage.getItem('munCurrentUser') || 'null');
         const basePayload = {
             type: 'position-papers',
             title: titleEl.value.trim(),
@@ -241,7 +429,7 @@
             posPaperAward: getSelectedAward(),
             confirmOwnWork: true,
             authorName: '',
-            authorId: user ? (user.id || user.uid || '') : ''
+            authorId: uid
         };
 
         if (!basePayload.title) {
@@ -260,13 +448,13 @@
                 if (!linkUrl) {
                     alert('Please paste a Google Doc or PDF link.');
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-upload"></i> Upload';
+                    submitBtn.innerHTML = '<i class="fas fa-upload" id="posPaperUploadSubmitIcon"></i> <span id="posPaperUploadSubmitText">Add</span>';
                     return;
                 }
                 if (typeof FirebaseArchive.addArchiveLink !== 'function') {
                     alert('Link uploads are not available.');
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-upload"></i> Upload';
+                    submitBtn.innerHTML = '<i class="fas fa-upload" id="posPaperUploadSubmitIcon"></i> <span id="posPaperUploadSubmitText">Add</span>';
                     return;
                 }
                 let hint = 'Link';
@@ -280,13 +468,13 @@
                 if (!file) {
                     alert('Please select a file.');
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-upload"></i> Upload';
+                    submitBtn.innerHTML = '<i class="fas fa-upload" id="posPaperUploadSubmitIcon"></i> <span id="posPaperUploadSubmitText">Add</span>';
                     return;
                 }
                 if (file.size > MAX_FILE_SIZE) {
                     alert('File must be 10 MB or smaller.');
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-upload"></i> Upload';
+                    submitBtn.innerHTML = '<i class="fas fa-upload" id="posPaperUploadSubmitIcon"></i> <span id="posPaperUploadSubmitText">Add</span>';
                     return;
                 }
                 result = await FirebaseArchive.addArchiveItem(file, basePayload);
@@ -303,7 +491,22 @@
             alert(err.message || 'Could not add item.');
         } finally {
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fas fa-upload"></i> Upload';
+            submitBtn.innerHTML = '<i class="fas fa-upload" id="posPaperUploadSubmitIcon"></i> <span id="posPaperUploadSubmitText">Add</span>';
+        }
+    }
+
+    function onListClick(e) {
+        const delBtn = e.target.closest('.pos-paper-delete-btn');
+        if (delBtn) {
+            const id = delBtn.getAttribute('data-item-id');
+            if (id) confirmDeleteItem(id);
+            return;
+        }
+        const editBtn = e.target.closest('.pos-paper-edit-btn');
+        if (editBtn) {
+            const id = editBtn.getAttribute('data-item-id');
+            const item = id ? findItemById(id) : null;
+            if (item) openEditModal(item);
         }
     }
 
@@ -311,6 +514,9 @@
         loadArchive();
         setupFilters();
         showUploadButton();
+
+        const listEl = document.getElementById('posPaperArchiveList');
+        if (listEl) listEl.addEventListener('click', onListClick);
 
         document.querySelectorAll('input[name="posPaperSource"]').forEach(r => {
             r.addEventListener('change', syncPosPaperSourceUi);
@@ -324,7 +530,10 @@
         });
         document.getElementById('posPaperUploadForm') && document.getElementById('posPaperUploadForm').addEventListener('submit', handleUpload);
 
-        window.addEventListener('munAuthStateReady', showUploadButton);
+        window.addEventListener('munAuthStateReady', function () {
+            showUploadButton();
+            renderList();
+        });
     }
 
     if (document.readyState === 'loading') {
