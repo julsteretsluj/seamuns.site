@@ -8440,6 +8440,50 @@ i.fas, i.far, i.fab {
     font-size: 0.85rem;
 }
 
+/* Hosted PDF templates (e.g. chair report) — inline preview + download */
+.template-pdf-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 0.75rem 0 1rem 0;
+}
+.template-pdf-preview-wrap {
+    width: 100%;
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+}
+.template-pdf-preview-frame {
+    display: block;
+    width: 100%;
+    height: min(720px, 75vh);
+    border: 0;
+    background: #fff;
+}
+.template-pdf-preview-wrap--compact .template-pdf-preview-frame {
+    height: min(480px, 55vh);
+}
+[data-theme="dark"] .template-pdf-preview-wrap {
+    background: #1a1a1a;
+}
+[data-theme="dark"] .template-pdf-preview-frame {
+    background: #1e1e1e;
+}
+.template-pdf-fallback {
+    margin: 0;
+    padding: 1rem 1.25rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    background: var(--bg-glass);
+    border-top: 1px solid var(--border-color);
+}
+
 /* Position paper upload modal — spacing and native-looking radios */
 #posPaperUploadModal .modal-content {
     max-width: min(520px, 96vw);

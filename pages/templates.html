@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://*.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://www.gstatic.com https://*.firebaseio.com https://*.cloudfunctions.net https://*.firebaseapp.com wss://*.firebaseio.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' https: data: blob:;">
     <title>Templates - SEAMUNs</title>
     <link rel="icon" type="image/png" href="../assets/logo.png">
-    <link rel="stylesheet" href="../css/styles.css?v=3">
+    <link rel="stylesheet" href="../css/styles.css?v=4">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 
@@ -159,13 +159,22 @@
                 <h2>📥 Templates</h2>
                 <p>Use these as a starting point; always follow your conference’s required format.</p>
 
-                <h3>🪑 Chair report (SEAMUN I 2027)</h3>
-                <p>Official PDF template for chairs preparing a chair report (background guide style). Download, fill in your committee and topics, and follow your conference’s submission process.</p>
-                <p style="margin-top: 0.75rem;">
-                    <a href="../assets/seamun-i-2027-chair-report-template.pdf" class="btn btn-primary" download="SEAMUN-I-2027-Chair-Report-Template.pdf" style="display: inline-flex; align-items: center; gap: 0.5rem;">
-                        <i class="fas fa-file-pdf"></i> Download chair report template (PDF)
-                    </a>
-                </p>
+                <div id="chair-report-template">
+                    <h3>🪑 Chair report (SEAMUN I 2027)</h3>
+                    <p>Official PDF template for chairs preparing a chair report (background guide style). Preview below, then download a copy to fill in your committee and topics. Always follow your conference’s submission process.</p>
+                    <div class="template-pdf-toolbar">
+                        <a href="../assets/seamun-i-2027-chair-report-template.pdf" class="btn btn-primary" download="SEAMUN-I-2027-Chair-Report-Template.pdf" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-download"></i> Download PDF
+                        </a>
+                        <a href="../assets/seamun-i-2027-chair-report-template.pdf" class="btn btn-secondary" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-external-link-alt"></i> Open in new tab
+                        </a>
+                    </div>
+                    <div class="template-pdf-preview-wrap">
+                        <iframe class="template-pdf-preview-frame" title="SEAMUN I 2027 chair report template (preview)" src="../assets/seamun-i-2027-chair-report-template.pdf#view=FitH"></iframe>
+                    </div>
+                    <p class="text-secondary" style="font-size: 0.88rem; margin-top: 0.65rem; max-width: 960px; margin-left: auto; margin-right: auto;">If the preview is blank, your browser may block embedded PDFs—use <strong>Open in new tab</strong> or <strong>Download PDF</strong>. On phones, downloading often works best.</p>
+                </div>
 
                 <h3>📝 Position paper (short form)</h3>
                 <pre style="background: var(--bg-glass,#f5f5f5); padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.9em;">Country: [Full country name]
