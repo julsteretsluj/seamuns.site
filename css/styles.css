@@ -8375,3 +8375,26 @@ i.fas, i.far, i.fab {
 [data-theme="dark"] .pos-paper-badge--committee {
     color: #90caf9;
 }
+
+.pos-paper-embed-wrap {
+    margin-top: 0.75rem;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    background: rgba(0, 0, 0, 0.04);
+}
+.pos-paper-embed-frame {
+    display: block;
+    width: 100%;
+    height: min(480px, 70vh);
+    border: 0;
+    background: #fff;
+}
+[data-theme="dark"] .pos-paper-embed-frame {
+    background: #1e1e1e;
+}
+.pos-paper-embed-open {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.85rem;
+}

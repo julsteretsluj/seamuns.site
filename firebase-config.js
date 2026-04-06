@@ -408,6 +408,9 @@ const FirebaseArchive = {
         try {
             if (!db) return { success: false, error: 'Firestore not available' };
             if (!storage) return { success: false, error: 'Storage not available. Enable Firebase Storage and add firebase-storage-compat.js to the page.' };
+            if (metadata.confirmOwnWork !== true) {
+                return { success: false, error: 'You must confirm that this is your own work (or that you have the right to share it).' };
+            }
             const docRef = db.collection('archive').doc();
             const id = docRef.id;
             const ext = (file.name.match(/\.[^.]+$/) || [])[0] || '';
@@ -421,8 +424,9 @@ const FirebaseArchive = {
                 description: metadata.description || '',
                 fileName: file.name,
                 fileUrl,
-                authorName: metadata.authorName || '',
+                authorName: '',
                 authorId: metadata.authorId || '',
+                confirmedOwnWork: true,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
             if (metadata.type === 'position-papers') {
@@ -434,6 +438,48 @@ const FirebaseArchive = {
             return { success: true, id };
         } catch (error) {
             console.error('❌ Add archive error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+    async addArchiveLink(metadata) {
+        try {
+            if (!db) return { success: false, error: 'Firestore not available' };
+            if (metadata.confirmOwnWork !== true) {
+                return { success: false, error: 'You must confirm that this is your own work (or that you have the right to share it).' };
+            }
+            const urlString = (metadata.linkUrl || '').trim();
+            if (!urlString) return { success: false, error: 'Enter a link.' };
+            let parsed;
+            try {
+                parsed = new URL(urlString);
+            } catch {
+                return { success: false, error: 'Invalid URL.' };
+            }
+            if (parsed.protocol !== 'https:') {
+                return { success: false, error: 'URL must use HTTPS.' };
+            }
+            const docRef = db.collection('archive').doc();
+            const doc = {
+                type: metadata.type,
+                title: metadata.title,
+                description: metadata.description || '',
+                fileUrl: urlString,
+                fileName: metadata.fileNameHint || 'Link',
+                externalLink: true,
+                authorName: '',
+                authorId: metadata.authorId || '',
+                confirmedOwnWork: true,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            if (metadata.type === 'position-papers') {
+                const allowed = ['none', 'committee', 'overall'];
+                const v = metadata.posPaperAward;
+                doc.posPaperAward = allowed.includes(v) ? v : 'none';
+            }
+            await docRef.set(doc);
+            return { success: true, id: docRef.id };
+        } catch (error) {
+            console.error('❌ Add archive link error:', error);
             return { success: false, error: error.message };
         }
     }

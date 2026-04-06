@@ -142,8 +142,8 @@
         <div class="container">
             <section class="content-section">
                 <h2><i class="fas fa-folder-open"></i> Position Paper Archive</h2>
-                <p>Upload your own past position papers so others can read real examples for inspiration. You can tag whether your paper won <strong>Best Position Paper (committee)</strong>, <strong>Best Position Paper (overall)</strong>, or leave it untagged.</p>
-                <p class="text-secondary" style="font-size: 0.9rem;">Tags are self-reported by the uploader. SEAMUNs does not verify awards. Only upload work you have the right to share.</p>
+                <p>Add your own past position papers so others can read real examples for inspiration—upload a PDF or Word file, or paste a <strong>Google Doc</strong> or <strong>PDF</strong> link. You can tag Best Position Paper (committee), Best Position Paper (overall), or none.</p>
+                <p class="text-secondary" style="font-size: 0.9rem;">Tags are self-reported. SEAMUNs does not verify awards. Previews are embedded when possible; names of submitters are not shown on listings.</p>
                 <p style="margin-top: 0.75rem;"><a href="position-papers.html">← Back to Position Papers guide</a> · <a href="archive.html">General archive (all categories)</a></p>
 
                 <div style="margin-top: 1.5rem; display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;">
@@ -159,7 +159,7 @@
                     </button>
                 </div>
 
-                <div id="posPaperArchiveList" class="content-section" style="margin-top: 1rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
+                <div id="posPaperArchiveList" class="content-section pos-paper-archive-grid" style="margin-top: 1rem; display: grid; grid-template-columns: 1fr; gap: 1.25rem; max-width: 960px;">
                     <p id="posPaperArchiveEmpty" class="text-secondary" style="grid-column: 1 / -1; display: none;">No position papers yet.</p>
                     <p id="posPaperArchiveLoading" class="text-secondary" style="grid-column: 1 / -1;">Loading…</p>
                 </div>
@@ -175,7 +175,18 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="posPaperUploadForm">
+            <form id="posPaperUploadForm" novalidate>
+                <div class="form-group">
+                    <span class="label" style="display: block; margin-bottom: 0.5rem;">Add as *</span>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; margin-bottom: 0.35rem;">
+                        <input type="radio" name="posPaperSource" value="file" checked>
+                        PDF or Word file (stored on our server)
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                        <input type="radio" name="posPaperSource" value="link">
+                        Google Doc or PDF link (paste URL)
+                    </label>
+                </div>
                 <div class="form-group">
                     <label for="posPaperTitle">Title *</label>
                     <input type="text" id="posPaperTitle" required placeholder="e.g. WHO — France — vaccine equity">
@@ -200,10 +211,21 @@
                     </label>
                     <p class="text-secondary" style="font-size: 0.85rem; margin-top: 0.35rem;">Choose the tag that matches how this paper was recognised. Use “No award tag” for strong examples that did not win an award.</p>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="posPaperFileGroup">
                     <label for="posPaperFile">File *</label>
-                    <input type="file" id="posPaperFile" required accept=".pdf,.doc,.docx,.txt,.md">
+                    <input type="file" id="posPaperFile" accept=".pdf,.doc,.docx,.txt,.md">
                     <p class="text-secondary" style="font-size: 0.85rem; margin-top: 0.25rem;">PDF or Word preferred. Max 10 MB.</p>
+                </div>
+                <div class="form-group" id="posPaperLinkGroup" style="display: none;">
+                    <label for="posPaperLinkUrl">HTTPS link *</label>
+                    <input type="url" id="posPaperLinkUrl" inputmode="url" autocomplete="off" placeholder="https://docs.google.com/document/d/… or https://…/file.pdf">
+                    <p class="text-secondary" style="font-size: 0.85rem; margin-top: 0.25rem;">The Doc or PDF must be shared so anyone with the link can view. Use HTTPS only.</p>
+                </div>
+                <div class="form-group">
+                    <label for="posPaperOwnWork" style="display: flex; align-items: flex-start; gap: 0.5rem; font-weight: normal; cursor: pointer;">
+                        <input type="checkbox" id="posPaperOwnWork" required style="margin-top: 0.25rem; flex-shrink: 0;">
+                        <span>I confirm this is my own work, or I have permission from the author to share it, and I may upload it here.</span>
+                    </label>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="posPaperUploadCancel">Cancel</button>

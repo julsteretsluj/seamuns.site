@@ -79,9 +79,9 @@
                         <p style="margin: 0; font-size: 0.8rem; color: var(--text-secondary);">${getTypeLabel(item.type)}</p>
                         ${item.type === 'position-papers' && getPosPaperAwardBadgeHtml(item.posPaperAward) ? `<div style="margin-top: 0.35rem; display: flex; flex-wrap: wrap; gap: 0.35rem;">${getPosPaperAwardBadgeHtml(item.posPaperAward)}</div>` : ''}
                         ${item.description ? `<p style="margin: 0.5rem 0 0 0; font-size: 0.85rem; color: var(--text-secondary);">${escapeHtml(item.description)}</p>` : ''}
-                        <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; color: var(--text-tertiary);">${escapeHtml(item.authorName || 'Anonymous')} · ${dateStr}</p>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; color: var(--text-tertiary);">${dateStr}</p>
                         <a href="${escapeHtml(item.fileUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" style="margin-top: 0.75rem; display: inline-flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-download"></i> Download
+                            <i class="fas ${item.externalLink ? 'fa-external-link-alt' : 'fa-download'}"></i> ${item.externalLink ? 'Open link' : 'Download'}
                         </a>
                     </div>
                 </div>
@@ -161,6 +161,12 @@
             return;
         }
 
+        const ownWorkEl = document.getElementById('archiveOwnWork');
+        if (!ownWorkEl || !ownWorkEl.checked) {
+            alert('Please tick the box to confirm this is your own work (or that you have permission to share it).');
+            return;
+        }
+
         const user = window.__munCurrentUser !== undefined ? window.__munCurrentUser : JSON.parse(localStorage.getItem('munCurrentUser') || 'null');
         submitBtn.disabled = true;
         submitBtn.textContent = 'Uploading…';
@@ -169,7 +175,8 @@
             type: typeEl.value,
             title: titleEl.value.trim(),
             description: (descEl && descEl.value) ? descEl.value.trim() : '',
-            authorName: user ? (user.name || user.email || '') : '',
+            confirmOwnWork: true,
+            authorName: '',
             authorId: user ? (user.id || user.uid || '') : ''
         };
         if (typeEl.value === 'position-papers') {
