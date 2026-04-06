@@ -181,7 +181,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="archiveUploadForm">
+            <form id="archiveUploadForm" class="archive-upload-form">
                 <div class="form-group">
                     <label for="archiveType">Category *</label>
                     <select id="archiveType" required>
@@ -202,19 +202,21 @@
                     <textarea id="archiveDescription" rows="2" placeholder="Brief description or context"></textarea>
                 </div>
                 <div class="form-group" id="archivePosPaperAwardWrap" style="display: none;">
-                    <span class="label" style="display: block; margin-bottom: 0.5rem;">Position paper award tag</span>
-                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; margin-bottom: 0.35rem;">
-                        <input type="radio" name="archivePosPaperAward" value="none" checked>
-                        No award tag
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; margin-bottom: 0.35rem;">
-                        <input type="radio" name="archivePosPaperAward" value="committee">
-                        Best Position Paper (committee)
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
-                        <input type="radio" name="archivePosPaperAward" value="overall">
-                        Best Position Paper (overall)
-                    </label>
+                    <span class="label" id="archiveAwardLegend">Position paper award tag</span>
+                    <div class="radio-stack" role="radiogroup" aria-labelledby="archiveAwardLegend">
+                        <label class="radio-row">
+                            <input type="radio" name="archivePosPaperAward" value="none" checked>
+                            <span>No award tag</span>
+                        </label>
+                        <label class="radio-row">
+                            <input type="radio" name="archivePosPaperAward" value="committee">
+                            <span>Best Position Paper (committee)</span>
+                        </label>
+                        <label class="radio-row">
+                            <input type="radio" name="archivePosPaperAward" value="overall">
+                            <span>Best Position Paper (overall)</span>
+                        </label>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="archiveFile">File *</label>
@@ -222,8 +224,8 @@
                     <p class="text-secondary" style="font-size: 0.85rem; margin-top: 0.25rem;">PDF, Word, PowerPoint, or text. Max 10 MB.</p>
                 </div>
                 <div class="form-group">
-                    <label for="archiveOwnWork" style="display: flex; align-items: flex-start; gap: 0.5rem; font-weight: normal; cursor: pointer;">
-                        <input type="checkbox" id="archiveOwnWork" required style="margin-top: 0.25rem; flex-shrink: 0;">
+                    <label class="radio-row" for="archiveOwnWork" style="cursor: pointer;">
+                        <input type="checkbox" id="archiveOwnWork" required>
                         <span>I confirm this is my own work, or I have permission from the author to share it, and I may upload it here.</span>
                     </label>
                 </div>

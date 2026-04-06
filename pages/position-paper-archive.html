@@ -170,61 +170,65 @@
     <div id="posPaperUploadModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Upload position paper</h2>
+                <h2>Add position paper</h2>
                 <button type="button" class="close-btn" id="posPaperUploadModalClose" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="posPaperUploadForm" novalidate>
+            <form id="posPaperUploadForm" class="pos-paper-upload-form" novalidate>
                 <div class="form-group">
-                    <span class="label" style="display: block; margin-bottom: 0.5rem;">Add as *</span>
-                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; margin-bottom: 0.35rem;">
-                        <input type="radio" name="posPaperSource" value="file" checked>
-                        PDF or Word file (stored on our server)
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
-                        <input type="radio" name="posPaperSource" value="link">
-                        Google Doc or PDF link (paste URL)
-                    </label>
+                    <span class="label" id="posPaperSourceLegend">Add as *</span>
+                    <div class="radio-stack" role="group" aria-labelledby="posPaperSourceLegend">
+                        <label class="radio-row">
+                            <input type="radio" name="posPaperSource" value="file" checked>
+                            <span>PDF or Word file <span class="text-secondary" style="font-size: 0.88em;">(stored on our server)</span></span>
+                        </label>
+                        <label class="radio-row">
+                            <input type="radio" name="posPaperSource" value="link">
+                            <span>Google Doc or PDF link</span>
+                        </label>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="posPaperTitle">Title *</label>
-                    <input type="text" id="posPaperTitle" required placeholder="e.g. WHO — France — vaccine equity">
+                    <input type="text" id="posPaperTitle" required placeholder="e.g. WHO — France — vaccine equity" autocomplete="off">
                 </div>
                 <div class="form-group">
-                    <label for="posPaperDescription">Description (optional)</label>
-                    <textarea id="posPaperDescription" rows="2" placeholder="Committee, conference, or topic"></textarea>
+                    <label for="posPaperDescription">Description <span class="text-secondary" style="font-weight: 400;">(optional)</span></label>
+                    <textarea id="posPaperDescription" rows="3" placeholder="Committee, conference, or topic"></textarea>
                 </div>
                 <div class="form-group">
-                    <span class="label" style="display: block; margin-bottom: 0.5rem;">Award tag *</span>
-                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; margin-bottom: 0.35rem;">
-                        <input type="radio" name="posPaperAward" value="none" checked>
-                        No award tag
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal; margin-bottom: 0.35rem;">
-                        <input type="radio" name="posPaperAward" value="committee">
-                        Best Position Paper (committee)
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
-                        <input type="radio" name="posPaperAward" value="overall">
-                        Best Position Paper (overall)
-                    </label>
-                    <p class="text-secondary" style="font-size: 0.85rem; margin-top: 0.35rem;">Choose the tag that matches how this paper was recognised. Use “No award tag” for strong examples that did not win an award.</p>
+                    <span class="label" id="posPaperAwardLegend">Award tag *</span>
+                    <div class="radio-stack" role="radiogroup" aria-labelledby="posPaperAwardLegend">
+                        <label class="radio-row">
+                            <input type="radio" name="posPaperAward" value="none" checked>
+                            <span>No award tag</span>
+                        </label>
+                        <label class="radio-row">
+                            <input type="radio" name="posPaperAward" value="committee">
+                            <span>Best Position Paper (committee)</span>
+                        </label>
+                        <label class="radio-row">
+                            <input type="radio" name="posPaperAward" value="overall">
+                            <span>Best Position Paper (overall)</span>
+                        </label>
+                    </div>
+                    <p class="text-secondary" style="font-size: 0.82rem;">Pick the tag that matches how the paper was recognised, or “No award tag” if it did not win.</p>
                 </div>
                 <div class="form-group" id="posPaperFileGroup">
                     <label for="posPaperFile">File *</label>
                     <input type="file" id="posPaperFile" accept=".pdf,.doc,.docx,.txt,.md">
-                    <p class="text-secondary" style="font-size: 0.85rem; margin-top: 0.25rem;">PDF or Word preferred. Max 10 MB.</p>
+                    <p class="text-secondary" style="font-size: 0.82rem;">PDF or Word preferred. Max 10 MB.</p>
                 </div>
                 <div class="form-group" id="posPaperLinkGroup" style="display: none;">
                     <label for="posPaperLinkUrl">HTTPS link *</label>
                     <input type="url" id="posPaperLinkUrl" inputmode="url" autocomplete="off" placeholder="https://docs.google.com/document/d/… or https://…/file.pdf">
-                    <p class="text-secondary" style="font-size: 0.85rem; margin-top: 0.25rem;">The Doc or PDF must be shared so anyone with the link can view. Use HTTPS only.</p>
+                    <p class="text-secondary" style="font-size: 0.82rem;">Share the Doc or PDF so anyone with the link can view. HTTPS only.</p>
                 </div>
                 <div class="form-group">
-                    <label for="posPaperOwnWork" style="display: flex; align-items: flex-start; gap: 0.5rem; font-weight: normal; cursor: pointer;">
-                        <input type="checkbox" id="posPaperOwnWork" required style="margin-top: 0.25rem; flex-shrink: 0;">
-                        <span>I confirm this is my own work, or I have permission from the author to share it, and I may upload it here.</span>
+                    <label class="radio-row" for="posPaperOwnWork" style="cursor: pointer;">
+                        <input type="checkbox" id="posPaperOwnWork" required>
+                        <span>I confirm this is my own work, or I have permission from the author to share it, and I may add it here.</span>
                     </label>
                 </div>
                 <div class="form-actions">
