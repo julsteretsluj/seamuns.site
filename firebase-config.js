@@ -393,11 +393,27 @@ const FirebaseDB = {
 
 // Archive: shared Firestore collection + Storage so all users see the same uploads
 const FirebaseArchive = {
+    /** Milliseconds for sorting; missing createdAt must not exclude docs (orderBy would). */
+    _archiveCreatedAtMs(data) {
+        const v = data && data.createdAt;
+        if (!v) return null;
+        if (typeof v.toMillis === 'function') return v.toMillis();
+        if (typeof v.seconds === 'number') {
+            return v.seconds * 1000 + (v.nanoseconds || 0) / 1e6;
+        }
+        return null;
+    },
     async getArchiveItems() {
         try {
             if (!db) return { success: false, error: 'Firestore not available', data: [] };
-            const snapshot = await db.collection('archive').orderBy('createdAt', 'desc').get();
+            const snapshot = await db.collection('archive').get();
             const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            const missing = -8640000000000000; /* ~ -270k years; sort after real dates when desc */
+            items.sort((a, b) => {
+                const tb = FirebaseArchive._archiveCreatedAtMs(b) ?? missing;
+                const ta = FirebaseArchive._archiveCreatedAtMs(a) ?? missing;
+                return tb - ta;
+            });
             return { success: true, data: items };
         } catch (error) {
             console.error('❌ Get archive error:', error);
