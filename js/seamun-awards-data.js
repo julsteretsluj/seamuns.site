@@ -32,6 +32,20 @@
         return '<div class="award-rubric-table-wrap"><table class="award-rubric-table"><thead><tr>' + headCells + '</tr></thead><tbody>' + body + '</tbody></table></div>';
     }
 
+    var SEAMUN_AWARD_ICONS = {
+        'Best Overall Delegate (Trophy)': '👑',
+        'Best Committee Delegate': '🥇',
+        'Overall Honourable Mention': '🌟',
+        'Committee Honourable Mention': '🎗️',
+        'Best Overall Position Paper': '📜',
+        'Best Committee Position Paper': '📋',
+        'Best Chair': '⚖️',
+        'Honourable Chair Mention': '🪶',
+        'Best Committee': '🏛️',
+        'Best Resolution': '✅',
+        'Best Chair Report': '📚'
+    };
+
     function getSeamunAwardInfo(awardName) {
         var award = SEAMUN_AWARDS_DATA.awards[awardName];
         if (!award) return null;
@@ -43,7 +57,7 @@
             rubricHtml += buildRubricTableHtml(rub);
         });
         return {
-            icon: award.level === 'Conference-wide' ? '🏆' : '🎖️',
+            icon: SEAMUN_AWARD_ICONS[awardName] || award.icon || '🏅',
             color: award.level === 'Conference-wide' ? '#FFD700' : '#3498DB',
             level: award.level,
             description: award.description,

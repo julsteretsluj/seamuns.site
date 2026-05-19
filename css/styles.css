@@ -8980,6 +8980,9 @@ i.fas, i.far, i.fab {
     margin-bottom: 8px;
     flex-wrap: wrap;
 }
+.award-card__header .award-level-badge {
+    align-self: center;
+}
 .award-card__icon {
     font-size: 1.5em;
     line-height: 1;
@@ -8994,15 +8997,22 @@ i.fas, i.far, i.fab {
 }
 .award-card--seamun .award-card__header {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
+    text-align: center;
     gap: 0.5rem;
     margin-bottom: 0.65rem;
+}
+.award-card--seamun .award-level-badge {
+    align-self: center;
+    margin-inline: auto;
 }
 .award-card--seamun .award-card__title-row {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.55rem;
     min-width: 0;
+    width: 100%;
 }
 .award-card--seamun .award-card__icon {
     font-size: 1.35rem;
@@ -9776,10 +9786,20 @@ form.archive-upload-form .form-actions {
     color: var(--text-color, #1a1a1a);
 }
 
+.schedule-event__purpose {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--text-muted, #64748b);
+    margin-top: 0.1rem;
+}
+
 .schedule-event__meta {
     font-size: 0.8rem;
     color: var(--text-muted, #64748b);
     line-height: 1.35;
+    margin-top: 0.15rem;
 }
 
 /* Event type colors */

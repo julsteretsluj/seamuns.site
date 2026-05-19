@@ -33,23 +33,28 @@
     function splitTitleMeta(ev) {
         var raw = ev.raw;
         var title = raw;
+        var purpose = '';
         var meta = '';
-        var dur = raw.match(/^(.+?)\s*\((\d+\s*min(?:ute)?s?(?:\s*each)?)\)\s*(?:[—\-–]\s*(.*))?$/i);
-        if (dur) {
-            title = dur[1].trim();
-            meta = dur[2];
-            if (dur[3]) meta += ' · ' + dur[3].trim();
-        } else {
-            var parts = raw.split(/\s*[—\-–]\s*/);
-            if (parts.length >= 2) {
-                title = parts[0].trim();
-                meta = parts.slice(1).join(' — ');
-            }
+
+        var locParts = raw.split(/\s*[—\-–]\s*/);
+        if (locParts.length >= 2) {
+            raw = locParts[0].trim();
+            meta = locParts.slice(1).join(' — ');
         }
+
+        var purposeMatch = raw.match(/^(.+?)\s*(\([^)]+\))\s*$/);
+        if (purposeMatch) {
+            title = purposeMatch[1].trim();
+            purpose = purposeMatch[2].trim();
+        } else {
+            title = raw.trim();
+        }
+
         return {
             start: ev.start,
             end: ev.end || '',
             title: title,
+            purpose: purpose,
             meta: meta,
             kind: classifyEvent(title)
         };
@@ -71,7 +76,7 @@
         m = text.match(spaceRe);
         if (m) return splitTitleMeta({ start: m[1], end: '', raw: m[2] });
 
-        return { start: '', end: '', title: text, meta: '', kind: classifyEvent(text) };
+        return { start: '', end: '', title: text, purpose: '', meta: '', kind: classifyEvent(text) };
     }
 
     function parseBulletParagraph(p) {
@@ -191,6 +196,9 @@
     function renderEvent(ev, isLast) {
         var icon = KIND_ICONS[ev.kind] || KIND_ICONS.misc;
         var timeHtml = formatTimeRange(ev);
+        var purposeHtml = ev.purpose
+            ? '<span class="schedule-event__purpose">' + escapeHtml(ev.purpose) + '</span>'
+            : '';
         var metaHtml = ev.meta
             ? '<span class="schedule-event__meta">' + escapeHtml(ev.meta) + '</span>'
             : '';
@@ -209,6 +217,7 @@
                     '<i class="fas ' + icon + ' schedule-event__icon" aria-hidden="true"></i>' +
                     '<div class="schedule-event__body">' +
                         '<span class="schedule-event__title">' + escapeHtml(ev.title) + '</span>' +
+                        purposeHtml +
                         metaHtml +
                     '</div>' +
                 '</div>' +

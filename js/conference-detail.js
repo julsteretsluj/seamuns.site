@@ -667,27 +667,21 @@ function buildAwardCardHtml(awardName, conf) {
         '</div>';
 }
 
-// Award descriptions with unique icons for all award types
+// Award descriptions with a distinct emoji per award name where possible
 function getAwardDescription(award) {
     const descriptions = {
-        // Best Delegate variations
+        // Delegate — top honours
         'Best Delegate': {
             icon: '👑',
             color: '#FFD700',
             description: 'The highest individual honor recognizing exceptional diplomacy, leadership, and mastery of procedure.',
             criteria: 'Outstanding performance across all aspects - research, speaking, negotiation, and leadership.'
         },
-        'Best Delegate (per committee)': {
-            icon: '🥇',
+        'Best Overall Delegate (Trophy)': {
+            icon: '👑',
             color: '#FFD700',
-            description: 'The highest individual honor within a specific committee, recognizing exceptional diplomacy, leadership, and mastery of procedure.',
-            criteria: 'Outstanding performance across all aspects - research, speaking, negotiation, and leadership within the committee.'
-        },
-        'Committee Best Delegate': {
-            icon: '💎',
-            color: '#3498DB',
-            description: 'The highest individual honor within a specific committee, recognizing exceptional performance.',
-            criteria: 'Outstanding research, effective speaking, strong negotiation, and leadership within the committee.'
+            description: 'The highest individual honor across the entire conference.',
+            criteria: 'Top performance across all sessions with on-the-floor evidence.'
         },
         'Overall Best Delegate': {
             icon: '🏆',
@@ -695,18 +689,48 @@ function getAwardDescription(award) {
             description: 'The highest individual honor across the entire conference, recognizing exceptional diplomacy, leadership, and mastery of procedure.',
             criteria: 'Outstanding performance across all aspects - research, speaking, negotiation, and leadership. Selected from all committees.'
         },
-        // Outstanding/Honorable variations
+        'Best Delegate (per committee)': {
+            icon: '🥇',
+            color: '#FFD700',
+            description: 'The highest individual honor within a specific committee, recognizing exceptional diplomacy, leadership, and mastery of procedure.',
+            criteria: 'Outstanding performance across all aspects - research, speaking, negotiation, and leadership within the committee.'
+        },
+        'Best Committee Delegate': {
+            icon: '💎',
+            color: '#3498DB',
+            description: 'Top-performing representative within a committee who drove debate forward and brokered key compromises.',
+            criteria: 'Determined by committee chairs using the delegate rubric and written Statement of Confirmation.'
+        },
+        'Committee Best Delegate': {
+            icon: '🦅',
+            color: '#3498DB',
+            description: 'The highest individual honor within a specific committee, recognizing exceptional performance.',
+            criteria: 'Outstanding research, effective speaking, strong negotiation, and leadership within the committee.'
+        },
         'Outstanding Delegate': {
-            icon: '🏅',
+            icon: '🌠',
             color: '#E74C3C',
             description: 'Recognizes excellent performance and significant contributions to committee.',
             criteria: 'Strong research, effective speaking, and meaningful participation in resolution-building.'
         },
+        // Honourable / honorable mentions
         'Honorable Mention': {
             icon: '🎖️',
             color: '#E67E22',
             description: 'Recognition for delegates who performed well and made notable contributions.',
             criteria: 'Good research, active participation, and collaborative approach.'
+        },
+        'Honourable Mention': {
+            icon: '🏅',
+            color: '#E67E22',
+            description: 'Recognition for delegates who performed well and made notable contributions.',
+            criteria: 'Good research, active participation, and collaborative approach.'
+        },
+        'Overall Honourable Mention': {
+            icon: '🌟',
+            color: '#E67E22',
+            description: 'Recognises strong conference-wide performance below Best Delegate.',
+            criteria: 'Significant initiative, meaningful resolution contributions, and consistent participation.'
         },
         'Honorable Delegate': {
             icon: '🥉',
@@ -720,25 +744,43 @@ function getAwardDescription(award) {
             description: 'Recognition for delegates who performed well and made notable contributions within their committee.',
             criteria: 'Good research, active participation, collaborative approach, and meaningful contributions.'
         },
-        'Honorable Mention (per committee)': {
+        'Honorable Mention (2 per committee)': {
             icon: '🎗️',
+            color: '#C0C0C0',
+            description: 'Recognition for up to two delegates per committee who performed well and made notable contributions.',
+            criteria: 'Good research, active participation, collaborative approach, and meaningful contributions.'
+        },
+        'Honorable Mention (per committee)': {
+            icon: '🎀',
             color: '#E67E22',
             description: 'Recognition for delegates who performed well and made notable contributions within their committee.',
             criteria: 'Good research, active participation, collaborative approach, and meaningful contributions.'
         },
-        'Honorable Mention Delegate (per committee)': {
-            icon: '🎀',
-            color: '#C0C0C0',
-            description: 'Recognition for delegates who performed well and made notable contributions within their committee.',
-            criteria: 'Good research, active participation, collaborative approach, and meaningful contributions.'
-        },
-        'Committee Honorable Mention': {
+        'Honourable Mention (per committee)': {
             icon: '🎫',
             color: '#E67E22',
             description: 'Recognition for delegates who performed well and made notable contributions within their committee.',
             criteria: 'Good research, active participation, collaborative approach, and meaningful contributions.'
         },
-        // Position Paper variations
+        'Honorable Mention Delegate (per committee)': {
+            icon: '🎯',
+            color: '#C0C0C0',
+            description: 'Recognition for delegates who performed well and made notable contributions within their committee.',
+            criteria: 'Good research, active participation, collaborative approach, and meaningful contributions.'
+        },
+        'Committee Honorable Mention': {
+            icon: '⭐',
+            color: '#E67E22',
+            description: 'Recognition for delegates who performed well and made notable contributions within their committee.',
+            criteria: 'Good research, active participation, collaborative approach, and meaningful contributions.'
+        },
+        'Committee Honourable Mention': {
+            icon: '💫',
+            color: '#E67E22',
+            description: 'Recognises delegates who showed significant initiative and meaningful contributions within their committee.',
+            criteria: 'Strong rubric scores with evidence of collaboration, leadership, and diplomacy on the floor.'
+        },
+        // Position papers
         'Best Position Paper': {
             icon: '✍️',
             color: '#4169E1',
@@ -752,10 +794,16 @@ function getAwardDescription(award) {
             criteria: 'Superior research, clear writing, comprehensive topic understanding, and policy recommendations.'
         },
         'Best Overall Position Paper': {
-            icon: '📄',
+            icon: '📜',
             color: '#4169E1',
             description: 'Awarded for the most exceptional pre-conference research and writing across all committees.',
             criteria: 'Superior research, clear writing, comprehensive topic understanding, and outstanding policy recommendations.'
+        },
+        'Best Committee Position Paper': {
+            icon: '📋',
+            color: '#27AE60',
+            description: 'Best pre-conference research within a committee.',
+            criteria: 'Same position paper rubric as conference-wide; committee-level winner from top scores.'
         },
         'Committee Best Position Paper': {
             icon: '📑',
@@ -763,7 +811,7 @@ function getAwardDescription(award) {
             description: 'Awarded for exceptional pre-conference research and writing within a specific committee.',
             criteria: 'Superior research, clear writing, comprehensive topic understanding, and policy recommendations.'
         },
-        // Chair variations
+        // Chairs
         'Best Chair': {
             icon: '⚖️',
             color: '#9B59B6',
@@ -776,11 +824,23 @@ function getAwardDescription(award) {
             description: 'Recognition for outstanding committee leadership and facilitation.',
             criteria: 'Excellent moderation, fair judgment, engaging committee atmosphere, and procedural expertise.'
         },
+        'Best Chairs (committee award)': {
+            icon: '🛡️',
+            color: '#9B59B6',
+            description: 'Recognition for the dais team that led their committee with excellence.',
+            criteria: 'Strong moderation, fair judgment, and positive delegate experience.'
+        },
         'Honorable Chair': {
             icon: '🎓',
             color: '#9B59B6',
             description: 'Recognition for exceptional committee leadership and facilitation.',
             criteria: 'Good moderation, fair judgment, and engaging committee atmosphere.'
+        },
+        'Honourable Chair Mention': {
+            icon: '🪶',
+            color: '#9B59B6',
+            description: 'Outstanding support and execution of duties within the dais.',
+            criteria: 'Strong chair rubric scores and positive delegate feedback.'
         },
         'Honorable Mention for Chairs': {
             icon: '🎩',
@@ -788,20 +848,50 @@ function getAwardDescription(award) {
             description: 'Recognition for exceptional committee leadership and facilitation.',
             criteria: 'Good moderation, fair judgment, and engaging committee atmosphere.'
         },
+        'Honourable Mention for Chairs': {
+            icon: '🔱',
+            color: '#9B59B6',
+            description: 'Recognition for exceptional committee leadership and facilitation.',
+            criteria: 'Good moderation, fair judgment, and engaging committee atmosphere.'
+        },
         'Overall Best Chair': {
-            icon: '⭐',
+            icon: '👨‍⚖️',
             color: '#9B59B6',
             description: 'The highest honor for committee leadership, recognizing the most outstanding chair across all committees.',
             criteria: 'Exceptional moderation, fair judgment, engaging committee atmosphere, procedural expertise, and crisis management.'
         },
-        // Committee variations
+        'Best Chair Report': {
+            icon: '📚',
+            color: '#8E44AD',
+            description: 'Recognises the chair or dais team that produced the most comprehensive and academically sound study guide.',
+            criteria: 'Study guide quality rubric plus section rubric (Introduction, Topics, Timeline, Key Stances, Solutions).'
+        },
+        // Committee & resolution
         'Best Committee': {
             icon: '🏛️',
             color: '#FF6B6B',
             description: 'Recognition for the committee that demonstrated the highest level of engagement, collaboration, and quality debate.',
             criteria: 'Active participation, strong resolutions, collaborative spirit, and overall committee excellence.'
         },
-        // Delegation variations
+        'Best Resolution': {
+            icon: '✅',
+            color: '#2ECC71',
+            description: 'Awarded for exceptional balance between efficiency and diplomacy in a passed resolution.',
+            criteria: 'Technical precision, formatting, actionability, and feasibility.'
+        },
+        'Best Resolution (GA)': {
+            icon: '📃',
+            color: '#2ECC71',
+            description: 'Awarded for the strongest resolution passed in General Assembly.',
+            criteria: 'Quality of clauses, feasibility, and collaborative drafting.'
+        },
+        'Best Speech (GA)': {
+            icon: '🎤',
+            color: '#E91E63',
+            description: 'Awarded for an outstanding speech delivered in General Assembly.',
+            criteria: 'Clarity, persuasion, diplomacy, and relevance to the agenda.'
+        },
+        // Delegation
         'Best Delegation': {
             icon: '🏴',
             color: '#FFD700',
@@ -809,12 +899,12 @@ function getAwardDescription(award) {
             criteria: 'Overall excellence across all committees and delegates.'
         },
         'Outstanding Delegation': {
-            icon: '🌟',
+            icon: '🤝',
             color: '#C0C0C0',
             description: 'Recognition for delegations that performed very well across multiple committees.',
             criteria: 'Strong collective performance with multiple individual awards.'
         },
-        // Other variations
+        // Other
         'Verbal Commendation': {
             icon: '💬',
             color: '#87CEEB',
@@ -842,18 +932,55 @@ function getAwardDescription(award) {
         return descriptions['Best Delegate'];
     }
     
-    // Honorable variations
-    if (awardLower.includes('honorable delegate') && awardLower.includes('2 per committee')) {
+    // Honorable / honourable variations
+    if ((awardLower.includes('honorable') || awardLower.includes('honourable')) && awardLower.includes('chair report')) {
+        return descriptions['Best Chair Report'];
+    }
+    if ((awardLower.includes('honorable') || awardLower.includes('honourable')) && awardLower.includes('chair')) {
+        if (awardLower.includes('mention')) return descriptions['Honourable Chair Mention'] || descriptions['Honorable Chair'];
+        return descriptions['Honorable Chair'];
+    }
+    if ((awardLower.includes('honorable') || awardLower.includes('honourable')) && awardLower.includes('2 per committee')) {
+        return descriptions['Honorable Mention (2 per committee)'] || descriptions['Honorable Delegate (2 per committee)'];
+    }
+    if ((awardLower.includes('honorable') || awardLower.includes('honourable')) && awardLower.includes('delegate') && awardLower.includes('2')) {
         return descriptions['Honorable Delegate (2 per committee)'];
     }
-    if (awardLower.includes('honorable') && awardLower.includes('per committee')) {
-        return descriptions['Honorable Mention (per committee)'];
+    if ((awardLower.includes('honorable') || awardLower.includes('honourable')) && awardLower.includes('overall')) {
+        return descriptions['Overall Honourable Mention'];
+    }
+    if ((awardLower.includes('honorable') || awardLower.includes('honourable')) && awardLower.includes('committee') && awardLower.includes('mention')) {
+        return descriptions['Committee Honourable Mention'] || descriptions['Committee Honorable Mention'];
+    }
+    if ((awardLower.includes('honorable') || awardLower.includes('honourable')) && awardLower.includes('per committee')) {
+        return awardLower.includes('honourable')
+            ? descriptions['Honourable Mention (per committee)']
+            : descriptions['Honorable Mention (per committee)'];
+    }
+    if (awardLower.includes('honourable mention')) {
+        return descriptions['Honourable Mention'];
     }
     if (awardLower.includes('honorable mention')) {
         return descriptions['Honorable Mention'];
     }
-    if (awardLower.includes('honorable delegate')) {
+    if (awardLower.includes('honorable delegate') || awardLower.includes('honourable delegate')) {
         return descriptions['Honorable Delegate'];
+    }
+
+    if (awardLower.includes('best resolution')) {
+        return descriptions['Best Resolution (GA)'] || descriptions['Best Resolution'];
+    }
+    if (awardLower.includes('best speech')) {
+        return descriptions['Best Speech (GA)'];
+    }
+    if (awardLower.includes('chair report')) {
+        return descriptions['Best Chair Report'];
+    }
+    if (awardLower.includes('committee delegate')) {
+        return descriptions['Best Committee Delegate'];
+    }
+    if (awardLower.includes('trophy')) {
+        return descriptions['Best Overall Delegate (Trophy)'];
     }
     
     // Position Paper variations
@@ -891,9 +1018,13 @@ function getAwardDescription(award) {
         return descriptions['Outstanding Delegation'];
     }
     
-    // Default fallback
+    // Default fallback — pick a distinct emoji from award name so unknown awards still vary
+    const fallbackIcons = ['🎊', '🎉', '🎁', '💡', '🧠', '🔥', '⚡', '🌈', '🦄', '🎪', '🎭', '🎨', '🎬', '📢', '🗳️', '🌍', '🌏', '🌎', '🕊️', '🔔', '📌', '🧭', '🪙', '🏅'];
+    let hash = 0;
+    for (let i = 0; i < award.length; i++) hash = ((hash << 5) - hash) + award.charCodeAt(i);
+    const icon = fallbackIcons[Math.abs(hash) % fallbackIcons.length];
     return {
-        icon: '🎊',
+        icon,
         color: '#87CEEB',
         description: 'Recognition for exceptional performance at the conference.',
         criteria: 'Various criteria based on research, diplomacy, and participation.'
