@@ -60,7 +60,7 @@
             matches.push({ amount: parseFloat(m[1].replace(/,/g, '')), index: m.index, len: m[0].length });
         }
         matches.forEach(function (match, i) {
-            if (!match.amount || isNaN(match.amount)) return;
+            if (isNaN(match.amount) || match.amount < 0) return;
             var labelStart = i === 0 ? 0 : matches[i - 1].index + matches[i - 1].len;
             var label = text.slice(labelStart, match.index)
                 .replace(/[·;]/g, ' ')
@@ -87,14 +87,68 @@
         return items;
     }
 
-    function extractFeesFromConference(conf) {
-        var parts = [];
-        if (conf && conf.pricePerDelegate) parts.push(conf.pricePerDelegate);
-        if (conf && conf.extraNotes) {
-            var feeBlock = conf.extraNotes.match(/<p><strong>Fees:<\/strong>[^<]*<\/p>/i);
-            if (feeBlock) parts.push(feeBlock[0].replace(/<[^>]+>/g, ' '));
+    var FEE_ROLE_LABELS = { delegate: 'Delegate', chair: 'Chair', advisor: 'Advisor' };
+    var FEE_ROLE_ORDER = ['delegate', 'chair', 'advisor'];
+
+    function feeRoleKey(item) {
+        var label = (item.label || '').toLowerCase();
+        if (/advisor/.test(label)) return 'advisor';
+        if (/chair/.test(label)) return 'chair';
+        if (/delegate|participant|all delegate|school delegate|independent/.test(label)) {
+            return 'delegate';
         }
-        return parseThbFees(parts.join(' · '));
+        return label + '@' + item.amountThb;
+    }
+
+    function dedupeFees(items) {
+        var byRole = {};
+        items.forEach(function (item) {
+            var key = feeRoleKey(item);
+            if (!byRole[key] || FEE_ROLE_LABELS[key]) {
+                byRole[key] = {
+                    label: FEE_ROLE_LABELS[key] || item.label,
+                    amountThb: item.amountThb
+                };
+            }
+        });
+        var result = [];
+        FEE_ROLE_ORDER.forEach(function (role) {
+            if (byRole[role]) result.push(byRole[role]);
+        });
+        Object.keys(byRole).forEach(function (key) {
+            if (FEE_ROLE_ORDER.indexOf(key) < 0) result.push(byRole[key]);
+        });
+        return result;
+    }
+
+    function conferenceHasAdvisors(conf) {
+        if (!conf) return false;
+        var chunks = [
+            conf.extraNotes,
+            conf.pricePerDelegate,
+            conf.advisorSignupLink,
+            conf.size
+        ];
+        var text = chunks.filter(Boolean).join(' ');
+        return /advisor/i.test(text) ||
+            !!(conf.advisorAccount && String(conf.advisorAccount).trim());
+    }
+
+    function extractFeesFromConference(conf) {
+        var fees = [];
+        if (conf && conf.pricePerDelegate) {
+            fees = parseThbFees(conf.pricePerDelegate);
+        }
+        if (!fees.length && conf && conf.extraNotes) {
+            var feeBlock = conf.extraNotes.match(/<p><strong>Fees:<\/strong>[^<]*<\/p>/i);
+            if (feeBlock) fees = parseThbFees(feeBlock[0].replace(/<[^>]+>/g, ' '));
+        }
+        fees = dedupeFees(fees);
+        if (conferenceHasAdvisors(conf) && !fees.some(function (f) { return feeRoleKey(f) === 'advisor'; })) {
+            fees.push({ label: 'Advisor', amountThb: 0 });
+            fees = dedupeFees(fees);
+        }
+        return fees;
     }
 
     function getCachedRates() {
@@ -129,15 +183,17 @@
                 return r.json();
             })
             .then(function (data) {
-                if (data.result !== 'success' || !data.conversion_rates) {
+                var rates = data.rates || data.conversion_rates;
+                if (data.result !== 'success' || !rates || typeof rates !== 'object') {
                     throw new Error('Invalid rate data');
                 }
+                if (rates.THB == null) rates.THB = 1;
                 var payload = {
-                    rates: data.conversion_rates,
+                    rates: rates,
                     fetchedAt: Date.now(),
                     meta: { timeLastUpdate: data.time_last_update_utc }
                 };
-                setCachedRates(data.conversion_rates, payload.meta);
+                setCachedRates(rates, payload.meta);
                 return payload;
             });
     }
@@ -235,6 +291,7 @@
             .then(function (payload) {
                 var codes = sortedCurrencyCodes(payload.rates);
                 select.innerHTML = buildSelectOptions(codes);
+                select.disabled = false;
                 var saved = null;
                 try { saved = localStorage.getItem('munPreferredCurrency'); } catch (e) { /* */ }
                 if (saved && codes.indexOf(saved) >= 0) select.value = saved;
@@ -255,7 +312,7 @@
                 select.onchange = update;
                 update();
             })
-            .catch(function () {
+            .catch(function (err) {
                 if (statusEl) {
                     statusEl.textContent = 'Could not load live rates. Showing THB only.';
                 }
@@ -263,6 +320,9 @@
                 select.value = 'THB';
                 select.disabled = true;
                 renderResults(fees, 'THB', { THB: 1 }, resultsEl);
+                if (typeof console !== 'undefined' && console.warn) {
+                    console.warn('CurrencyConverter: rate fetch failed', err);
+                }
             });
     }
 
