@@ -1835,6 +1835,10 @@ function populateConferenceDetail(conf) {
             }
         }
 
+        if (typeof CurrencyConverter !== 'undefined' && CurrencyConverter.mount) {
+            CurrencyConverter.mount({ conference: conf });
+        }
+
         // Important Dates
         const registrationDeadlineEl = document.getElementById('registrationDeadline');
         if (registrationDeadlineEl) {

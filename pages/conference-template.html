@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://*.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://www.gstatic.com https://*.firebaseio.com https://*.cloudfunctions.net https://*.firebaseapp.com wss://*.firebaseio.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' https: data: blob:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://*.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com; connect-src 'self' https://open.er-api.com https://*.googleapis.com https://*.gstatic.com https://www.gstatic.com https://*.firebaseio.com https://*.cloudfunctions.net https://*.firebaseapp.com wss://*.firebaseio.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' https: data: blob:;">
     <title>Conference Details - SEAMUNs</title>
     <link rel="icon" type="image/png" href="../assets/logo.png">
     <link rel="apple-touch-icon" href="../assets/logo.png">
@@ -176,7 +176,17 @@
                 <div class="conference-detail-key-bar">
                     <span class="conference-detail-key-bar-item"><i class="fas fa-calendar-alt"></i> <span class="conference-detail-key-label">DATE</span> <span id="dates"></span></span>
                     <span class="conference-detail-key-bar-item"><i class="fas fa-map-marker-alt"></i> <span class="conference-detail-key-label">LOCATION</span> <span id="location"></span></span>
-                    <span class="conference-detail-key-bar-item"><i class="fas fa-tag"></i> <span class="conference-detail-key-label">FEE</span> <span id="pricePerDelegate"></span></span>
+                    <span class="conference-detail-key-bar-item conference-detail-key-bar-item--fee"><i class="fas fa-tag"></i> <span class="conference-detail-key-label">FEE</span> <span id="pricePerDelegate"></span></span>
+                </div>
+                <div class="currency-converter-wrap" id="currencyConverterWrap" hidden>
+                    <div class="currency-converter-header">
+                        <label for="currencySelect" class="currency-converter-label-title">
+                            <i class="fas fa-money-bill-wave" aria-hidden="true"></i> Convert fees
+                        </label>
+                        <select id="currencySelect" class="currency-converter-select" aria-label="Choose display currency"></select>
+                    </div>
+                    <div id="currencyConverterResults" class="currency-converter-results" aria-live="polite"></div>
+                    <p id="currencyConverterStatus" class="currency-converter-status"></p>
                 </div>
                 <div class="conference-detail-tags">
                     <span class="conference-detail-tag" id="delegateCountTag"></span>
@@ -316,6 +326,7 @@
 
     <script src="../firebase-config.js"></script>
     <script src="../js/script.js"></script>
+    <script src="../js/currency-converter.js"></script>
     <script src="../js/conference-detail.js"></script>
 </body>
 </html>
