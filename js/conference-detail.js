@@ -647,12 +647,20 @@ function buildAwardCardHtml(awardName, conf) {
         ? '<p class="award-doc-link"><a href="awards-seamun-2027.html">Full awards guide &amp; document</a></p>'
         : '';
 
+    var seamunHeader = desc.rubricHtml
+        ? '<div class="award-card__header">' + levelBadge +
+            '<div class="award-card__title-row">' +
+            '<span class="award-card__icon" aria-hidden="true">' + desc.icon + '</span>' +
+            '<strong class="award-card__name">' + escapeHtml(awardName) + '</strong>' +
+            '</div></div>'
+        : '<div class="award-card__header">' +
+            '<span class="award-card__icon" aria-hidden="true">' + desc.icon + '</span>' +
+            '<strong class="award-card__name">' + escapeHtml(awardName) + '</strong>' +
+            levelBadge +
+            '</div>';
+
     return '<div class="award-card' + (desc.rubricHtml ? ' award-card--seamun' : '') + '" style="border-left: 4px solid ' + desc.color + ';">' +
-        '<div class="award-card__header">' +
-        '<span class="award-card__icon" aria-hidden="true">' + desc.icon + '</span>' +
-        '<strong class="award-card__name">' + escapeHtml(awardName) + '</strong>' +
-        levelBadge +
-        '</div>' +
+        seamunHeader +
         '<p class="award-card__desc">' + escapeHtml(desc.description) + '</p>' +
         '<p class="award-card__criteria"><strong>Criteria:</strong> ' + escapeHtml(desc.criteria) + '</p>' +
         pointsNote + processNote + rubricBlock + docLink +
@@ -2055,7 +2063,11 @@ function populateConferenceDetail(conf) {
         const scheduleEl = document.getElementById('schedule');
         if (scheduleEl) {
             if (conf.schedule) {
-                scheduleEl.innerHTML = linkifyInstagramInHtml(conf.schedule);
+                const visualSchedule = typeof renderScheduleVisual === 'function'
+                    ? renderScheduleVisual(conf.schedule, linkifyInstagramInHtml)
+                    : '';
+                scheduleEl.innerHTML = visualSchedule || linkifyInstagramInHtml(conf.schedule);
+                if (visualSchedule) scheduleEl.classList.add('schedule-visual-host');
             } else {
                 hideDetailSectionFor(scheduleEl);
             }

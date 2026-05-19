@@ -7,7 +7,7 @@
     <title>Awards & Rubrics — SEAMUN I 2027 - SEAMUNs</title>
     <link rel="icon" type="image/png" href="../assets/logo.png">
     <link rel="apple-touch-icon" href="../assets/logo.png">
-    <link rel="stylesheet" href="../css/styles.css?v=6">
+    <link rel="stylesheet" href="../css/styles.css?v=9">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -84,7 +84,10 @@
                 return '<article class="award-card award-card--seamun" style="border-left: 4px solid ' + info.color + ';">' +
                     '<div class="award-card__header">' +
                     '<span class="award-level-badge">' + info.level + '</span>' +
-                    '<h4 class="award-card__title"><span aria-hidden="true">' + info.icon + '</span> ' + item.name + '</h4>' +
+                    '<div class="award-card__title-row">' +
+                    '<span class="award-card__icon" aria-hidden="true">' + info.icon + '</span>' +
+                    '<h4 class="award-card__name">' + item.name + '</h4>' +
+                    '</div>' +
                     '</div>' +
                     '<p class="award-card__desc">' + info.description + '</p>' +
                     '<p class="award-card__criteria"><strong>Criteria:</strong> ' + info.criteria + '</p>' +
