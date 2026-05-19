@@ -14,7 +14,7 @@ The repo should be on GitHub (e.g. `julsteretsluj/seamuns.site`). Commit and pus
 4. Vercel should detect settings from `vercel.json`:
    - **Framework Preset:** Other
    - **Build Command:** `npm run build`
-   - **Output Directory:** leave **empty** (site root; `index.html` is at the repo root)
+   - **Output Directory:** `public` (created by `npm run build` from the repo root)
    - **Install Command:** can stay as in `vercel.json` or blank
 
 5. Click **Deploy** once without env vars if you only want to test the static site (login will be disabled).
@@ -78,7 +78,7 @@ Set the same environment variables in the Vercel dashboard (CLI `vercel env add`
 
 | Issue | Fix |
 |-------|-----|
-| 404 on pages | Ensure **Output Directory** is empty, not `public` or `dist`. |
+| 404 on pages | Ensure **Output Directory** is `public` and the build log shows `prepare-vercel: wrote public/`. |
 | Login missing | Redeploy after setting env vars; check build logs for `wrote env.js`. |
 | Google sign-in error | Add Vercel domain to Firebase authorized domains. |
 | Firestore permission errors | Publish rules from `firestore.rules.example` in Firebase Console. |

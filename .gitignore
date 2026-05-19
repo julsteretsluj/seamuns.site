@@ -5,6 +5,7 @@ env.local.js
 api/database.php
 node_modules/
 .vercel/
+public/
 *.log
 .DS_Store
 
