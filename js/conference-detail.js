@@ -1278,6 +1278,46 @@ function getConferenceIdFromURL() {
     return urlParams.get('id');
 }
 
+const COMMITTEE_DIFFICULTY_ORDER = { beginner: 0, intermediate: 1, advanced: 2 };
+
+function getCommitteeAbbrevForSort(c) {
+    const name = typeof getCommitteeDisplayName === 'function' ? getCommitteeDisplayName(c) : '';
+    if (name) return name.split(' (')[0].trim();
+    if (typeof c === 'string') return c.split(' - ')[0].split(' (')[0].trim();
+    return '';
+}
+
+function committeeAlphabeticalKey(abbrev) {
+    return (abbrev || '').replace(/\s+/g, '').toLowerCase();
+}
+
+function getCommitteeDifficultySortRank(abbrev, conf) {
+    const ov = conf && conf.committeeOverrides;
+    const level = ov && abbrev && ov[abbrev] && ov[abbrev].difficulty;
+    return COMMITTEE_DIFFICULTY_ORDER[level] ?? 1;
+}
+
+/** Sort committees beginner → intermediate → advanced, then A–Z within each tier. */
+function sortCommitteesByDifficulty(conf) {
+    if (!conf || !conf.committees || !Array.isArray(conf.committees) || !conf.committeeOverrides) return;
+    conf.committees.sort(function (a, b) {
+        const aa = getCommitteeAbbrevForSort(a);
+        const bb = getCommitteeAbbrevForSort(b);
+        const da = getCommitteeDifficultySortRank(aa, conf);
+        const db = getCommitteeDifficultySortRank(bb, conf);
+        if (da !== db) return da - db;
+        return committeeAlphabeticalKey(aa).localeCompare(committeeAlphabeticalKey(bb), undefined, { sensitivity: 'base' });
+    });
+    if (conf.committeeSizes && Array.isArray(conf.committeeSizes)) {
+        conf.committeeSizes.sort(function (a, b) {
+            const da = getCommitteeDifficultySortRank(a.abbrev, conf);
+            const db = getCommitteeDifficultySortRank(b.abbrev, conf);
+            if (da !== db) return da - db;
+            return committeeAlphabeticalKey(a.abbrev).localeCompare(committeeAlphabeticalKey(b.abbrev), undefined, { sensitivity: 'base' });
+        });
+    }
+}
+
 // Get conference by id from window.MUN_CONFERENCES_DATA (canonical) merged with localStorage attendance.
 // Never prefer a stale localStorage copy alone — it omits newer fields like committeeOverrides.
 function getConferenceForDetailPage(conferenceId) {
@@ -1307,9 +1347,14 @@ function getConferenceForDetailPage(conferenceId) {
             if (idx >= 0) list[idx] = copy; else list.push(copy);
             localStorage.setItem('munConferences', JSON.stringify(list));
         } catch (e) { /* ignore */ }
+        sortCommitteesByDifficulty(copy);
         return copy;
     }
-    if (fromStorage) return JSON.parse(JSON.stringify(fromStorage));
+    if (fromStorage) {
+        var stored = JSON.parse(JSON.stringify(fromStorage));
+        sortCommitteesByDifficulty(stored);
+        return stored;
+    }
     return null;
 }
 
@@ -1464,7 +1509,11 @@ function hideDetailSectionFor(element) {
 }
 
 // Build HTML for one committee (used on conference detail and on standalone committee page). Exposed globally for committee.html.
-function buildCommitteeItemHTML(conf, c, index) {
+// options.view: 'list' (conference page — topics + link) | 'full' (committee detail page — all fields)
+// options.committeeHref: when set with view 'list', card navigates to the committee page
+function buildCommitteeItemHTML(conf, c, index, options) {
+    options = options || {};
+    var isListView = options.view === 'list';
     let committeeName, committeeTopic, chairInfo;
     if (typeof c !== 'string' && (typeof c !== 'object' || c === null)) {
         committeeName = String(c != null ? c : '');
@@ -1603,20 +1652,70 @@ function buildCommitteeItemHTML(conf, c, index) {
     }
     var chairHtml = '';
     if (chairInfo && chairInfo.trim()) {
-        chairHtml = '<div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color);"><div style="color: var(--accent-green); font-size: 0.9em; margin-bottom: 8px;"><strong><i class="fas fa-user-tie"></i> ' + (chairInfo.startsWith('Chairs:') || chairInfo.startsWith('Chair:') ? chairInfo : 'Chairs: ' + chairInfo) + '</strong></div>' + formatChairInfoWithCopyButtons(chairInfo) + '</div>';
+        if (isListView) {
+            chairHtml = '<div class="committee-item-chairs"><strong><i class="fas fa-user-tie"></i> ' + (chairInfo.startsWith('Chairs:') || chairInfo.startsWith('Chair:') ? chairInfo : 'Chairs: ' + chairInfo) + '</strong></div>';
+        } else {
+            chairHtml = '<div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color);"><div style="color: var(--accent-green); font-size: 0.9em; margin-bottom: 8px;"><strong><i class="fas fa-user-tie"></i> ' + (chairInfo.startsWith('Chairs:') || chairInfo.startsWith('Chair:') ? chairInfo : 'Chairs: ' + chairInfo) + '</strong></div>' + formatChairInfoWithCopyButtons(chairInfo) + '</div>';
+        }
     }
-    return '<div class="committee-item" id="committee-item-' + index + '" style="background: var(--bg-glass); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 16px;">' +
-        '<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;"><span style="font-size: 1.5em;">' + desc.icon + '</span><div style="flex: 1;">' +
-        '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;"><strong style="font-size: 1.1em; color: var(--text-primary);">' + displayName + '</strong>' +
-        (desc.type ? '<span style="font-size: 0.7em; padding: 2px 6px; border-radius: 10px; font-weight: bold; text-transform: uppercase; ' + (desc.type === 'traditional' ? 'background: #e3f2fd; color: #1976d2; border: 1px solid #bbdefb;' : 'background: #f3e5f5; color: #7b1fa2; border: 1px solid #ce93d8;') + '">' + (desc.type === 'traditional' ? '🏛️ Traditional' : '⭐ Specialized') + '</span>' : '') +
-        (tagInfo ? '<span style="font-size: 0.7em; padding: 2px 6px; border-radius: 10px; font-weight: bold; background: #e8f5e9; color: #2e7d32; border: 1px solid #81c784;">' + tagInfo.tag + '</span><i class="fas fa-circle-question" style="color: var(--text-secondary); font-size: 0.85em; cursor: help;" title="' + (tagInfo.tooltip || '').replace(/"/g, '&quot;') + '" aria-label="' + (tagInfo.tooltip || '').replace(/"/g, '&quot;') + '"></i>' : '') +
-        '</div><div style="font-size: 0.9em; color: var(--text-secondary);">(' + desc.name + ')</div></div></div>' +
-        topicsHtml +
-        '<p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.95em;">' + desc.description + '</p><p style="margin: 4px 0 0 0; color: var(--text-secondary); font-size: 0.9em;"><strong>Focus:</strong> ' + desc.focus + '</p>' +
-        (desc.note ? '<p style="margin: 4px 0 0 0; color: var(--accent-blue); font-size: 0.9em; font-style: italic;"><strong>Note:</strong> ' + desc.note + '</p>' : '') +
+    var committeeDifficulty = desc.difficulty || (committeeOv && committeeOv.difficulty) || null;
+    var committeeDifficultyBadge = '';
+    if (committeeDifficulty && difficultyEmojis[committeeDifficulty]) {
+        committeeDifficultyBadge = '<span class="difficulty-tag difficulty-tag--' + committeeDifficulty + '">' + difficultyEmojis[committeeDifficulty] + ' ' + committeeDifficulty + '</span>';
+    }
+    var headerBadges = '';
+    if (!isListView) {
+        if (desc.type) {
+            headerBadges += '<span style="font-size: 0.7em; padding: 2px 6px; border-radius: 10px; font-weight: bold; text-transform: uppercase; ' + (desc.type === 'traditional' ? 'background: #e3f2fd; color: #1976d2; border: 1px solid #bbdefb;' : 'background: #f3e5f5; color: #7b1fa2; border: 1px solid #ce93d8;') + '">' + (desc.type === 'traditional' ? '🏛️ Traditional' : '⭐ Specialized') + '</span>';
+        }
+        if (tagInfo) {
+            headerBadges += '<span style="font-size: 0.7em; padding: 2px 6px; border-radius: 10px; font-weight: bold; background: #e8f5e9; color: #2e7d32; border: 1px solid #81c784;">' + tagInfo.tag + '</span><i class="fas fa-circle-question" style="color: var(--text-secondary); font-size: 0.85em; cursor: help;" title="' + (tagInfo.tooltip || '').replace(/"/g, '&quot;') + '" aria-label="' + (tagInfo.tooltip || '').replace(/"/g, '&quot;') + '"></i>';
+        }
+    } else if (tagInfo) {
+        headerBadges += '<span class="committee-item-tag">' + tagInfo.tag + '</span>';
+    }
+    if (isListView && committeeDifficultyBadge) {
+        headerBadges += committeeDifficultyBadge;
+    }
+    var subtitleHtml = (!isListView && desc.name) ? '<div style="font-size: 0.9em; color: var(--text-secondary);">(' + desc.name + ')</div>' : '';
+    var bodyHtml = topicsHtml +
+        (isListView ? '' : '<p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.95em;">' + desc.description + '</p><p style="margin: 4px 0 0 0; color: var(--text-secondary); font-size: 0.9em;"><strong>Focus:</strong> ' + desc.focus + '</p>') +
+        (isListView ? '' : (desc.note ? '<p style="margin: 4px 0 0 0; color: var(--accent-blue); font-size: 0.9em; font-style: italic;"><strong>Note:</strong> ' + desc.note + '</p>' : '')) +
         (sizeInfo ? '<p style="margin: 8px 0 0 0; color: var(--text-secondary); font-size: 0.9em;"><strong>Size:</strong> ' + sizeInfo.chairs + ' ' + (sizeInfo.chairLabel || 'Chairs') + ', ' + sizeInfo.delegates + ' Delegates, Total: ' + sizeInfo.total + '</p>' : '') +
-        gradeRangeHtml + chairHtml + '</div>';
+        gradeRangeHtml + chairHtml;
+    var inner = '<div class="committee-item' + (isListView ? ' committee-item--preview' : '') + '" id="committee-item-' + index + '">' +
+        '<div class="committee-item-header"><span class="committee-item-icon" aria-hidden="true">' + desc.icon + '</span><div class="committee-item-heading">' +
+        '<div class="committee-item-title-row"><strong class="committee-item-title">' + displayName + '</strong>' + headerBadges + '</div>' +
+        subtitleHtml +
+        '</div>' + (isListView ? '<span class="committee-item-open-hint" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>' : '') +
+        '</div>' +
+        bodyHtml + '</div>';
+    if (isListView && options.committeeHref) {
+        return '<div class="committee-item-card" data-committee-href="' + escapeHtml(options.committeeHref) + '" role="link" tabindex="0" aria-label="View ' + escapeHtml(getCommitteeAbbrevForSort(c) || displayName) + ' details">' + inner + '</div>';
+    }
+    return inner;
 }
+
+function bindCommitteeCardNavigation(container) {
+    if (!container) return;
+    container.querySelectorAll('.committee-item-card[data-committee-href]').forEach(function (card) {
+        function go() {
+            var href = card.getAttribute('data-committee-href');
+            if (href) window.location.href = href;
+        }
+        card.addEventListener('click', function (e) {
+            if (e.target.closest('button, a, input, [data-no-navigate]')) return;
+            go();
+        });
+        card.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                go();
+            }
+        });
+    });
+}
+
 function getCommitteeDisplayName(c) {
     if (typeof c === 'object' && c !== null) {
         var raw = c.committee_name || c.name || '';
@@ -1629,6 +1728,8 @@ if (typeof window !== 'undefined') {
     window.buildCommitteeItemHTML = buildCommitteeItemHTML;
     window.getCommitteeDisplayName = getCommitteeDisplayName;
     window.getConferenceForDetailPage = getConferenceForDetailPage;
+    window.sortCommitteesByDifficulty = sortCommitteesByDifficulty;
+    window.bindCommitteeCardNavigation = bindCommitteeCardNavigation;
 }
 
 // Returns true if the given deadline string is in the past (end of that day, local time).
@@ -1823,17 +1924,19 @@ function populateConferenceDetail(conf) {
             }
         }
 
-        // Committees with descriptions
+        // Committees: clickable topic cards (no separate name-only tabs)
         if (conf.committees && Array.isArray(conf.committees) && conf.committees.length > 0) {
         const conferenceIdParam = encodeURIComponent(conf.id);
-        const committeeCardsHtml = conf.committees.map((c, i) => {
-            const name = getCommitteeDisplayName(c);
-            return `<a href="committee.html?id=${conferenceIdParam}&committee=${i}" class="committee-card">${escapeHtml(name)}</a>`;
+        const committeeItems = conf.committees.map(function (c, index) {
+            return buildCommitteeItemHTML(conf, c, index, {
+                view: 'list',
+                committeeHref: 'committee.html?id=' + conferenceIdParam + '&committee=' + index
+            });
         }).join('');
-        const committeeItems = conf.committees.map((c, index) => buildCommitteeItemHTML(conf, c, index)).join('');
         const committeesEl = document.getElementById('committees');
         if (committeesEl) {
-            committeesEl.innerHTML = '<div class="committee-cards-grid">' + committeeCardsHtml + '</div><div class="committee-items-list">' + committeeItems + '</div>';
+            committeesEl.innerHTML = '<div class="committee-items-list">' + committeeItems + '</div>';
+            bindCommitteeCardNavigation(committeesEl);
         }
     } else {
         const committeesEl = document.getElementById('committees');

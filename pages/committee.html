@@ -96,7 +96,7 @@
             document.title = displayName + ' — ' + (conf.name || 'Conference') + ' - SEAMUNs';
 
             if (typeof buildCommitteeItemHTML !== 'undefined' && container) {
-                container.innerHTML = buildCommitteeItemHTML(conf, committee, committeeIndex);
+                container.innerHTML = buildCommitteeItemHTML(conf, committee, committeeIndex, { view: 'full' });
                 if (typeof window.dispatchEvent === 'function') {
                     window.dispatchEvent(new CustomEvent('mun-dynamic-content-ready'));
                 }

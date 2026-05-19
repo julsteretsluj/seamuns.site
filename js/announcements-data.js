@@ -47,7 +47,7 @@ window.SEAMUNS_ANNOUNCEMENTS = [
         date: '2026-04-06',
         icon: 'fas fa-star',
         title: 'SEAMUN I 2027 — on the conference tracker',
-        body: '<strong>SEAMUN</strong> — Thailand (venue TBD), <strong>23–24 January 2027</strong>. Fifteen committees (UN bodies, crisis, FWC, F1, etc.). Policies with a Purpose; fees and capacity on the listing. Use the site for RoP, templates, and FWC/SMT forms linked from announcements.',
+        body: '<strong>SEAMUN</strong> — Bangkok (venue TBA), <strong>16–17 January 2027</strong>. Fifteen committees (UN bodies, crisis, FWC, F1, etc.). Policies with a Purpose; fees, schedule, awards, and Secretariat on the listing. Use the site for RoP, templates, and the chair application form linked from announcements.',
         linkText: 'Upcoming & previous MUNs →',
         linkHref: '../index.html'
     },
@@ -141,21 +141,12 @@ window.SEAMUNS_ANNOUNCEMENTS = [
         external: true
     },
     {
-        date: '2026-02-04',
-        icon: 'fas fa-wand-magic-sparkles',
-        title: 'FWC — Topic & Allocations Preference Form',
-        body: 'Share your preferred universe and allocations for the <strong>Fantasy World Committee (FWC)</strong> at SEAMUN I 2027. Your responses help the Secretariat balance the committee.',
-        linkText: 'Open FWC form →',
-        linkHref: 'https://forms.gle/UjSBFFS6Y2oAcogPA',
-        external: true
-    },
-    {
-        date: '2026-02-04',
-        icon: 'fas fa-clipboard-list',
-        title: 'SMT Application Form',
-        body: 'Apply to join the Secretariat (SMT) for SEAMUN. Use the form to submit your application.',
-        linkText: 'Open SMT application →',
-        linkHref: 'https://forms.gle/dKEGKJmLbT86YHqU9',
+        date: '2026-05-19',
+        icon: 'fas fa-gavel',
+        title: 'Chair Application Form — SEAMUN I 2027',
+        body: 'Apply to chair a committee at <strong>SEAMUN I 2027</strong>. Review chair expectations and the chair report template on the conference listing before you apply.',
+        linkText: 'Open chair application →',
+        linkHref: 'https://forms.gle/8UmzMFZP1gEhw9bs9',
         external: true
     },
     {

@@ -573,6 +573,19 @@ html, html * {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+a.committee-card--linked {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+a.committee-card--linked:hover {
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+}
+
 .committee-header h5 {
     margin: 0 0 12px 0;
     color: var(--accent-color);
@@ -3623,71 +3636,117 @@ body::before {
     border-top: 1px solid var(--border-color);
 }
 
-/* Committee cards: black cards with name only, link to committee section */
-.committee-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 12px;
-    margin-bottom: 24px;
-}
-
-.committee-cards-grid .committee-card {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 72px;
-    padding: 14px 16px;
-    background: #0d2847;
-    color: #ffffff !important;
-    font-weight: 700;
-    font-size: 0.95rem;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    -webkit-font-smoothing: antialiased;
-}
-
-.committee-cards-grid .committee-card:hover {
-    background: #001f3f;
-    color: #ffffff !important;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 31, 63, 0.35);
-}
-
-.committee-cards-grid .committee-card:focus {
-    outline: 2px solid rgba(255, 255, 255, 0.6);
-    outline-offset: 2px;
-    color: #ffffff !important;
-}
-
-[data-theme="dark"] .committee-cards-grid .committee-card {
-    background: #001a33;
-    border-color: rgba(255, 255, 255, 0.15);
-    color: #ffffff !important;
-}
-
-[data-theme="dark"] .committee-cards-grid .committee-card:hover {
-    background: #002244;
-    color: #ffffff !important;
-}
-
-/* Committee items list: two columns below the cards */
+/* Conference committees: clickable cards with topics */
 .conference-detail-grid #committees .committee-items-list {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
 }
 
-.conference-detail-grid #committees .committee-item {
+.conference-detail-grid #committees .committee-item-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.conference-detail-grid #committees .committee-item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 31, 63, 0.12);
+}
+
+.conference-detail-grid #committees .committee-item-card:focus {
+    outline: 2px solid var(--accent-color, #1976d2);
+    outline-offset: 2px;
+}
+
+.conference-detail-grid #committees .committee-item--preview,
+.committee-page-main .committee-item {
+    background: var(--bg-glass);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
     margin-bottom: 0;
 }
 
+.conference-detail-grid #committees .committee-item-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.conference-detail-grid #committees .committee-item-icon {
+    font-size: 1.5em;
+    line-height: 1;
+}
+
+.conference-detail-grid #committees .committee-item-heading {
+    flex: 1;
+    min-width: 0;
+}
+
+.conference-detail-grid #committees .committee-item-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+}
+
+.conference-detail-grid #committees .committee-item-title {
+    font-size: 1.1em;
+    color: var(--text-primary);
+}
+
+.conference-detail-grid #committees .committee-item-open-hint {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+.conference-detail-grid #committees .committee-item-card:hover .committee-item-open-hint {
+    color: var(--accent-color, #1976d2);
+}
+
+.conference-detail-grid #committees .committee-item-tag {
+    font-size: 0.7em;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: bold;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #81c784;
+}
+
+.conference-detail-grid #committees .committee-item-chairs {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+    color: var(--accent-green);
+    font-size: 0.9em;
+}
+
+.committee-page-main .committee-item-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.committee-page-main .committee-item-icon {
+    font-size: 1.5em;
+}
+
+.committee-page-main .committee-item-title {
+    font-size: 1.1em;
+    color: var(--text-primary);
+}
+
 @media (max-width: 768px) {
-    .committee-cards-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    }
     .conference-detail-grid #committees .committee-items-list {
         grid-template-columns: 1fr;
     }

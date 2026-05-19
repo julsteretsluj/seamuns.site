@@ -1,0 +1,8 @@
+{
+  "name": "seamuns",
+  "private": true,
+  "description": "SEAMUNs — MUN conference tracker (static site)",
+  "scripts": {
+    "build": "node scripts/generate-env.js"
+  }
+}

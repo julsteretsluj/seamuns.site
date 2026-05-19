@@ -1840,24 +1840,23 @@ class MUNTracker {
                 <div class="detail-item">
                     <h4>Committees</h4>
                     <div class="committees-list">
-                        ${conference.committees.map(committee => {
+                        ${conference.committees.map((committee, index) => {
                             let committeeName, committeeTopic, chairInfo;
                             
-                            // Handle both object format (from database) and string format (legacy)
                             if (typeof committee === 'object' && committee !== null) {
                                 committeeName = committee.committee_name || committee.name || '';
                                 committeeTopic = committee.topic || '';
                                 chairInfo = committee.chairs_info || committee.chair_info || committee.chairInfo || '';
                             } else {
-                                // Legacy string format
                                 const parts = committee.split(' - ');
                                 committeeName = parts[0];
                                 committeeTopic = parts.slice(1).join(' - ');
                                 chairInfo = '';
                             }
                             
+                            const committeeHref = 'pages/committee.html?id=' + encodeURIComponent(conference.id) + '&committee=' + index;
                             return `
-                                <div class="committee-card">
+                                <a href="${committeeHref}" class="committee-card committee-card--linked">
                                     <div class="committee-header">
                                         <h5>${committeeName}</h5>
                                     </div>
@@ -1866,11 +1865,10 @@ class MUNTracker {
                                         ${chairInfo ? `
                                             <div style="margin-top: 8px;">
                                                 <p style="color: var(--accent-green); margin-bottom: 4px;"><strong><i class="fas fa-user-tie"></i> Chairs:</strong> ${chairInfo}</p>
-                                                ${this.formatChairInfoWithCopyButtonsForScript(chairInfo)}
                                             </div>
                                         ` : ''}
                                     </div>
-                                </div>
+                                </a>
                             `;
                         }).join('')}
                         </div>
