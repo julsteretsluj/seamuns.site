@@ -624,6 +624,41 @@ function getTopicDifficulty(topic, committeeType = 'traditional', committeeBaseD
     return level;
 }
 
+function buildAwardCardHtml(awardName, conf) {
+    var desc = null;
+    if (conf && conf.id === 8 && typeof SEAMUN_AWARDS !== 'undefined') {
+        desc = SEAMUN_AWARDS.getAwardInfo(awardName);
+    }
+    if (!desc) desc = getAwardDescription(awardName);
+
+    var levelBadge = desc.level
+        ? '<span class="award-level-badge">' + escapeHtml(desc.level) + '</span>'
+        : '';
+    var pointsNote = desc.maxPoints
+        ? '<p class="award-points-note"><strong>Scoring:</strong> up to ' + desc.maxPoints + ' points on the official rubric.</p>'
+        : '';
+    var processNote = desc.process
+        ? '<p class="award-process-note"><strong>Process:</strong> ' + escapeHtml(desc.process) + '</p>'
+        : '';
+    var rubricBlock = desc.rubricHtml
+        ? '<details class="award-rubric-details"><summary>View scoring rubric (SEAMUN I 2027)</summary>' + desc.rubricHtml + '</details>'
+        : '';
+    var docLink = (conf && conf.id === 8)
+        ? '<p class="award-doc-link"><a href="awards-seamun-2027.html">Full awards guide &amp; document</a></p>'
+        : '';
+
+    return '<div class="award-card' + (desc.rubricHtml ? ' award-card--seamun' : '') + '" style="border-left: 4px solid ' + desc.color + ';">' +
+        '<div class="award-card__header">' +
+        '<span class="award-card__icon" aria-hidden="true">' + desc.icon + '</span>' +
+        '<strong class="award-card__name">' + escapeHtml(awardName) + '</strong>' +
+        levelBadge +
+        '</div>' +
+        '<p class="award-card__desc">' + escapeHtml(desc.description) + '</p>' +
+        '<p class="award-card__criteria"><strong>Criteria:</strong> ' + escapeHtml(desc.criteria) + '</p>' +
+        pointsNote + processNote + rubricBlock + docLink +
+        '</div>';
+}
+
 // Award descriptions with unique icons for all award types
 function getAwardDescription(award) {
     const descriptions = {
@@ -1962,6 +1997,13 @@ function populateConferenceDetail(conf) {
         // Chairs & Pages
         const chairsPagesEl = document.getElementById('chairsPages');
         if (chairsPagesEl) {
+            if (conf.id === 8) {
+                const chairsSection = chairsPagesEl.closest('.detail-section');
+                const chairsTitle = chairsSection && chairsSection.querySelector('.detail-section-title');
+                if (chairsTitle) {
+                    chairsTitle.innerHTML = '<i class="fas fa-gavel"></i> Chairs <i class="fas fa-circle-question help-icon" title="How to apply as chair (SEAMUN I 2027 uses digital note passing—no pages)" aria-label="Learn more about chairs"></i>';
+                }
+            }
             if (conf.chairsPages) {
                 chairsPagesEl.innerHTML = linkifyInstagramInHtml(conf.chairsPages);
             } else {
@@ -1981,19 +2023,14 @@ function populateConferenceDetail(conf) {
 
         // Awards with descriptions (card-based)
         if (conf.availableAwards && conf.availableAwards.length > 0) {
-        const awardItems = conf.availableAwards.map(a => {
-            const desc = getAwardDescription(a);
-            return `
-                <div class="award-card" style="border-left: 4px solid ${desc.color};">
-                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                        <span style="font-size: 1.5em;">${desc.icon}</span>
-                        <strong style="font-size: 1.1em; color: var(--text-primary);">${a}</strong>
-                    </div>
-                    <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.95em;">${desc.description}</p>
-                    <p style="margin: 4px 0 0 0; color: var(--text-secondary); font-size: 0.9em;"><strong>Criteria:</strong> ${desc.criteria}</p>
-                </div>
-            `;
-        }).join('');
+        const awardsIntroEl = document.getElementById('awardsSectionIntro');
+        if (awardsIntroEl && conf.id === 8) {
+            awardsIntroEl.innerHTML = '<p class="seamun-notice"><strong>SEAMUN I 2027 only.</strong> Awards use the official SEAMUN rubrics (1–8 scoring). <a href="awards-seamun-2027.html">View full awards document &amp; rubrics</a> · <a href="../assets/seamun-i-2027-awards.pdf" download="SEAMUN-I-2027-Awards.pdf">Download PDF</a></p>';
+        } else if (awardsIntroEl) {
+            awardsIntroEl.innerHTML = '';
+        }
+
+        const awardItems = conf.availableAwards.map(a => buildAwardCardHtml(a, conf)).join('');
         const availableAwardsEl = document.getElementById('availableAwards');
         if (availableAwardsEl) {
             availableAwardsEl.innerHTML = `<div class="awards-cards-grid">${awardItems}</div>`;

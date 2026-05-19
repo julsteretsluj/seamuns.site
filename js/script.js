@@ -3203,3 +3203,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // Ensure page still loads even if initialization fails
     }
 });
+
+(function loadMobileNav() {
+    if (window.__navMobileLoaded) return;
+    window.__navMobileLoaded = true;
+    var script = document.createElement('script');
+    var base = 'js/';
+    if (document.currentScript && document.currentScript.src) {
+        base = document.currentScript.src.replace(/\/[^/]*$/, '/');
+    } else if (window.location.pathname.indexOf('/pages/') !== -1) {
+        base = '../js/';
+    }
+    script.src = base + 'nav-mobile.js';
+    script.async = false;
+    document.head.appendChild(script);
+})();
