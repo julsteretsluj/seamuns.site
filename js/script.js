@@ -3216,5 +3216,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     script.src = base + 'nav-mobile.js';
     script.async = false;
+    script.onload = function () {
+        if (typeof window.initMobileNavigation === 'function') {
+            window.initMobileNavigation();
+        }
+    };
     document.head.appendChild(script);
 })();
