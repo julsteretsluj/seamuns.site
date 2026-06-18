@@ -671,7 +671,7 @@ window.MUN_CONFERENCES_DATA = [
     website: "",
     registrationDeadline: "TBD",
     positionPaperDeadline: "2026-05-30",
-    status: "upcoming",
+    status: "previous",
     size: "TBD",
     generalEmail: "",
     munAccount: "@ntmun.official",
