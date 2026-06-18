@@ -89,6 +89,7 @@ html {
     --accent-red: #c62828;
     --accent-color: var(--accent-blue);
     --accent-hover: var(--accent-purple);
+    --header-top-padding: 5.5rem;
 }
 
 /* Dark Mode - White & Navy (dark navy background) */
@@ -1023,7 +1024,7 @@ body::before {
     backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid var(--border-color);
     border-radius: 24px;
-    padding: 44px 0;
+    padding: var(--header-top-padding) 0 44px;
     text-align: center;
     margin-bottom: 24px;
     position: sticky;
@@ -5742,10 +5743,6 @@ form.profile-edit-form select:focus {
         padding: 0 16px;
     }
     
-    .header {
-        padding: 32px 0;
-    }
-    
     .header h1 {
         font-size: 32px;
     }
@@ -6657,7 +6654,7 @@ form.profile-edit-form select:focus {
     
     /* Header & Navigation */
     .header {
-        padding: 10px 0;
+        padding: var(--header-top-padding) 0 10px;
         margin-bottom: 80px; /* Add space for fixed auth buttons */
     }
     
@@ -6911,7 +6908,7 @@ form.profile-edit-form select:focus {
     
     /* Header - Extra Compact */
     .header {
-        padding: 8px 0;
+        padding: var(--header-top-padding) 0 8px;
         margin-bottom: 70px;
     }
     
@@ -9429,6 +9426,7 @@ form.archive-upload-form .form-actions {
         --section-pad-y: 22px;
         --section-pad-x: 18px;
         --card-radius: 16px;
+        --header-top-padding: 6.25rem;
     }
 
     .container {
@@ -9438,7 +9436,7 @@ form.archive-upload-form .form-actions {
 
     .header {
         margin-bottom: 72px;
-        padding: 12px 0;
+        padding: var(--header-top-padding) 0 12px;
     }
 
     .header h1 {
@@ -9597,6 +9595,7 @@ form.archive-upload-form .form-actions {
         --section-pad-y: 16px;
         --section-pad-x: 14px;
         --card-radius: 14px;
+        --header-top-padding: 7rem;
     }
 
     .header {
@@ -9957,10 +9956,4 @@ form.archive-upload-form .form-actions {
 
 .committee-page-main {
     padding-top: 1.5rem;
-}
-
-@media (max-width: 1024px) {
-    .committee-page-main {
-        padding-top: 5.5rem;
-    }
 }
