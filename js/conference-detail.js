@@ -2286,6 +2286,19 @@ function populateConferenceDetail(conf) {
         // Independent Delegates
         const independentDelsWelcomeEl = document.getElementById('independentDelsWelcome');
         if (independentDelsWelcomeEl) {
+            if (conf.independentDelsSectionTitle) {
+                const independentCol = independentDelsWelcomeEl.closest('.detail-section-col');
+                const independentTitle = independentCol ? independentCol.querySelector('.detail-section-col-title') : null;
+                if (independentTitle) {
+                    const helpIcon = independentTitle.querySelector('.help-icon');
+                    independentTitle.textContent = '';
+                    const leadIcon = document.createElement('i');
+                    leadIcon.className = 'fas fa-user-plus';
+                    independentTitle.appendChild(leadIcon);
+                    independentTitle.appendChild(document.createTextNode(' ' + conf.independentDelsSectionTitle + ' '));
+                    if (helpIcon) independentTitle.appendChild(helpIcon);
+                }
+            }
             if (typeof conf.independentDelsWelcome === 'string') {
                 independentDelsWelcomeEl.textContent = conf.independentDelsWelcome;
             } else if (typeof conf.independentDelsWelcome === 'boolean') {
