@@ -331,7 +331,7 @@ def main():
         '<a href="https://www.instagram.com/seamun.th.conference/" target="_blank" rel="noopener noreferrer">@seamun.th.conference</a></p>'
         '<p><strong>Resources:</strong> <a href="rop-2027.html">Rules of Procedure (RoP)</a> · '
         '<a href="chair-guide.html">Chair Guide</a> · '
-        '<a href="https://forms.gle/8UmzMFZP1gEhw9bs9" target="_blank" rel="noopener noreferrer">Chair application form</a>.</p>'
+        '<a href="https://forms.gle/yGK1r1WL76sLeESZ9" target="_blank" rel="noopener noreferrer">Chair application form</a>.</p>'
     )
 
     updates = {

@@ -146,7 +146,7 @@ window.SEAMUNS_ANNOUNCEMENTS = [
         title: 'Chair Application Form — SEAMUN I 2027',
         body: 'Apply to chair a committee at <strong>SEAMUN I 2027</strong>. Review chair expectations and the chair report template on the conference listing before you apply.',
         linkText: 'Open chair application →',
-        linkHref: 'https://forms.gle/8UmzMFZP1gEhw9bs9',
+        linkHref: 'https://forms.gle/yGK1r1WL76sLeESZ9',
         external: true
     },
     {
