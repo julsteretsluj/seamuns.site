@@ -39,7 +39,7 @@ window.SEAMUNS_ANNOUNCEMENTS = [
         date: '2026-04-06',
         icon: 'fas fa-book',
         title: 'Rules of Procedure (RoP) 2027',
-        body: 'Dedicated <strong>SEAMUN I 2027</strong> RoP page with extracted rules, committee notes, optional <strong>DOCX</strong> download, and difficulty/override hints aligned with the committee list.',
+        body: 'Dedicated <strong>SEAMUN I 2027</strong> RoP page with the official PDF preview, download, and links from the conference detail page.',
         linkText: 'RoP 2027 →',
         linkHref: 'rop-2027.html'
     },

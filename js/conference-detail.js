@@ -1682,6 +1682,71 @@ function hideDetailSectionFor(element) {
     if (section) section.style.display = 'none';
 }
 
+function committeeAllocMatchKey(name) {
+    return (name || '').split(' (')[0].trim().replace(/\s+/g, '').toLowerCase();
+}
+
+function parseCommitteeAllocationEntry(entry) {
+    if (!entry || typeof entry !== 'string') return null;
+    var m = entry.match(/^(.+?)\s*\(\d+\s+([^)]+)\):\s*(.+)$/i);
+    if (!m) return null;
+    return {
+        committee: m[1].trim(),
+        countLabel: m[2].trim(),
+        items: m[3].split(',').map(function (s) { return s.trim(); }).filter(function (s) { return s; })
+    };
+}
+
+function conferenceHasPerCommitteeAllocations(allocations) {
+    if (!allocations || !allocations.length) return false;
+    return allocations.some(function (a) { return parseCommitteeAllocationEntry(a) !== null; });
+}
+
+function findCommitteeAllocation(conf, committeeName, displayName, sizeInfo) {
+    if (!conf || !conf.allocations || !conf.allocations.length) return null;
+    var candidates = [];
+    if (sizeInfo && sizeInfo.abbrev) candidates.push(sizeInfo.abbrev);
+    if (displayName) candidates.push(displayName);
+    if (committeeName && candidates.indexOf(committeeName) === -1) candidates.push(committeeName);
+    var keys = candidates.map(committeeAllocMatchKey).filter(function (k) { return k; });
+    if (!keys.length) return null;
+
+    for (var i = 0; i < conf.allocations.length; i++) {
+        var parsed = parseCommitteeAllocationEntry(conf.allocations[i]);
+        if (!parsed) continue;
+        var entryKey = committeeAllocMatchKey(parsed.committee);
+        var matched = keys.some(function (k) {
+            return k === entryKey || entryKey.indexOf(k) === 0 || k.indexOf(entryKey) === 0;
+        });
+        if (matched) return parsed;
+    }
+    return null;
+}
+
+function buildCommitteeAllocationHTML(conf, committeeName, displayName, sizeInfo) {
+    var parsed = findCommitteeAllocation(conf, committeeName, displayName, sizeInfo);
+    if (parsed && parsed.items.length) {
+        var label = sizeInfo && sizeInfo.participantLabel ? sizeInfo.participantLabel : (parsed.countLabel.indexOf('journalist') !== -1 ? 'Journalists' : 'Allocations');
+        var itemsHtml = parsed.items.map(function (item) {
+            return '<li>' + escapeHtml(item) + '</li>';
+        }).join('');
+        return '<div class="committee-allocations" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color);">' +
+            '<div style="color: var(--accent-blue); font-size: 0.95em; margin-bottom: 8px;"><strong><i class="fas fa-globe" aria-hidden="true"></i> ' + escapeHtml(label) + ' (' + parsed.items.length + ')</strong></div>' +
+            '<ul class="committee-allocation-list">' + itemsHtml + '</ul></div>';
+    }
+    if (!conferenceHasPerCommitteeAllocations(conf.allocations)) {
+        var flat = conf.allocations.filter(function (a) { return a && String(a).trim(); });
+        if (!flat.length) return '';
+        var flatHtml = flat.map(function (item) {
+            return '<li>' + escapeHtml(String(item)) + '</li>';
+        }).join('');
+        return '<div class="committee-allocations" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color);">' +
+            '<div style="color: var(--accent-blue); font-size: 0.95em; margin-bottom: 8px;"><strong><i class="fas fa-globe" aria-hidden="true"></i> Allocations</strong></div>' +
+            '<ul class="committee-allocation-list">' + flatHtml + '</ul></div>';
+    }
+    return '';
+}
+
 // Build HTML for one committee (used on conference detail and on standalone committee page). Exposed globally for committee.html.
 // options.view: 'list' (conference page — topics + link) | 'full' (committee detail page — all fields)
 // options.committeeHref: when set with view 'list', card navigates to the committee page
@@ -1852,11 +1917,12 @@ function buildCommitteeItemHTML(conf, c, index, options) {
         headerBadges += committeeDifficultyBadge;
     }
     var subtitleHtml = (!isListView && desc.name) ? '<div style="font-size: 0.9em; color: var(--text-secondary);">(' + desc.name + ')</div>' : '';
+    var allocationHtml = !isListView ? buildCommitteeAllocationHTML(conf, committeeName, displayName, sizeInfo) : '';
     var bodyHtml = topicsHtml +
         (isListView ? '' : '<p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.95em;">' + desc.description + '</p><p style="margin: 4px 0 0 0; color: var(--text-secondary); font-size: 0.9em;"><strong>Focus:</strong> ' + desc.focus + '</p>') +
         (isListView ? '' : (desc.note ? '<p style="margin: 4px 0 0 0; color: var(--accent-blue); font-size: 0.9em; font-style: italic;"><strong>Note:</strong> ' + desc.note + '</p>' : '')) +
-        (sizeInfo ? '<p style="margin: 8px 0 0 0; color: var(--text-secondary); font-size: 0.9em;"><strong>Size:</strong> ' + sizeInfo.chairs + ' ' + (sizeInfo.chairLabel || 'Chairs') + ', ' + sizeInfo.delegates + ' Delegates, Total: ' + sizeInfo.total + '</p>' : '') +
-        gradeRangeHtml + chairHtml;
+        (sizeInfo ? '<p style="margin: 8px 0 0 0; color: var(--text-secondary); font-size: 0.9em;"><strong>Size:</strong> ' + sizeInfo.chairs + ' ' + (sizeInfo.chairLabel || 'Chairs') + ', ' + sizeInfo.delegates + ' ' + (sizeInfo.participantLabel || 'Delegates') + ', Total: ' + sizeInfo.total + '</p>' : '') +
+        gradeRangeHtml + chairHtml + allocationHtml;
     var inner = '<div class="committee-item' + (isListView ? ' committee-item--preview' : '') + '" id="committee-item-' + index + '">' +
         '<div class="committee-item-header"><span class="committee-item-icon" aria-hidden="true">' + desc.icon + '</span><div class="committee-item-heading">' +
         '<div class="committee-item-title-row"><strong class="committee-item-title">' + displayName + '</strong>' + headerBadges + '</div>' +
@@ -2365,7 +2431,8 @@ function populateConferenceDetail(conf) {
 // Setup attendance button
 function setupAttendanceButton(conference) {
     const attendanceBtn = document.getElementById('attendanceBtn');
-    
+    if (!attendanceBtn) return;
+
     // Check if user is logged in
     const currentUser = localStorage.getItem('munCurrentUser');
     

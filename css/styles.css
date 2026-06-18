@@ -9928,3 +9928,39 @@ form.archive-upload-form .form-actions {
         font-size: 0.88rem;
     }
 }
+
+/* Committee page — country/position allocations */
+.committee-allocation-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.committee-allocation-list li {
+    padding: 0.45rem 0.65rem;
+    background: var(--bg-glass);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.88rem;
+    line-height: 1.35;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.committee-page-main .committee-allocation-list li:hover {
+    background: rgba(135, 206, 235, 0.1);
+    transform: none;
+}
+
+.committee-page-main {
+    padding-top: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+    .committee-page-main {
+        padding-top: 5.5rem;
+    }
+}

@@ -102,7 +102,9 @@
     }
 
     function isDayHeaderText(text) {
-        return /^(day\s*\d+|april|march|january|february|june|november|december|\d)/i.test((text || '').trim());
+        var t = (text || '').trim();
+        if (/^\d{1,2}\s*[–\-—]\s*\d{1,2}/.test(t)) return false;
+        return /^(day\s*\d+)/i.test(t) || /^(january|february|march|april|may|june|july|august|september|october|november|december)\b/i.test(t);
     }
 
     function parseDetailsGroup(detailsEl) {
@@ -151,7 +153,13 @@
                         sections.push({ type: 'day', title: dayParsed.title, events: dayParsed.events });
                     }
                 } else if (strong && isDayHeaderText(strong.textContent) && !hasBullets) {
-                    pendingDayTitle = node.textContent.trim();
+                    var restAfterStrong = node.textContent.replace(strong.textContent, '').trim();
+                    if (restAfterStrong.length > 20) {
+                        overview.push(node.textContent.trim());
+                        pendingDayTitle = null;
+                    } else {
+                        pendingDayTitle = node.textContent.trim();
+                    }
                 } else {
                     overview.push(node.textContent.trim());
                     pendingDayTitle = null;

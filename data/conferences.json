@@ -465,16 +465,16 @@
     "id": 8,
     "name": "SEAMUN I 2027",
     "organization": "SEAMUN",
-    "location": "Bangkok, Thailand",
+    "location": "D-PREP Secondary Campus, Samut Prakan, Thailand",
     "countryCode": "TH",
     "startDate": "2027-01-16",
     "endDate": "2027-01-17",
-    "description": "SEAMUN I 2027 — Policies with a Purpose. First student-led multinational independent MUN conference in the region (South East Asian Model United Nations Conference Thailand 2027). Two days in Bangkok with 15 committees across UN bodies, EU Parliament, Press Corps, F1, and crisis formats (UNSC, FWC, HSC). Non-profit conference; all profits donated to TRCS. Target: 370 delegates, 33 chairs, 12 SMT, and 20+ advisors from across South East Asia.",
+    "description": "SEAMUN I 2027 — Policies with a Purpose. A student-led, non-profit Model UN conference focused on global healthcare and sustainability. Two days at D-PREP International School Secondary Campus (Samut Prakan) with 10 committees across UN bodies, Press Corps, and crisis formats (UNSC, FWC). 200 delegate positions and 20 chairs; 100% of surplus donated to TRCS.",
     "website": "https://seamun.com",
     "registrationDeadline": "",
     "positionPaperDeadline": "",
     "status": "upcoming",
-    "size": "435+ (370 delegates, 33 chairs, 12 SMT, 20+ advisors)",
+    "size": "220+ (200 delegates, 20 chairs, up to 60 staff)",
     "generalEmail": "information@seamun.com",
     "munAccount": "@seamun.th.conference",
     "advisorAccount": "",
@@ -496,56 +496,25 @@
         "abbrev": "ECOSOC",
         "chairLabel": "Chairs",
         "chairs": 2,
-        "delegates": 22,
-        "total": 24,
-        "gradeRange": "7–12 (Year 8–13)"
-      },
-      {
-        "abbrev": "F1",
-        "chairLabel": "Chairs",
-        "chairs": "TBD",
-        "delegates": "TBD",
-        "total": "TBD",
+        "delegates": 20,
+        "total": 22,
         "gradeRange": "7–12 (Year 8–13)"
       },
       {
         "abbrev": "Press Corps",
-        "chairLabel": "Editor in Chief, Editor",
+        "chairLabel": "Editors",
         "chairs": 2,
-        "delegates": 14,
-        "total": 16,
-        "gradeRange": "7–12 (Year 8–13)"
-      },
-      {
-        "abbrev": "UNICEF",
-        "chairLabel": "Chairs",
-        "chairs": "TBD",
-        "delegates": "TBD",
-        "total": "TBD",
-        "gradeRange": "9–12 (Year 10–13)"
-      },
-      {
-        "abbrev": "EP",
-        "chairLabel": "Chairs",
-        "chairs": "TBD",
-        "delegates": "TBD",
-        "total": "TBD",
-        "gradeRange": "7–12 (Year 8–13)"
-      },
-      {
-        "abbrev": "UNESCO",
-        "chairLabel": "Chairs",
-        "chairs": "TBD",
-        "delegates": "TBD",
-        "total": "TBD",
-        "gradeRange": "7–12 (Year 8–13)"
+        "delegates": 15,
+        "total": 17,
+        "gradeRange": "7–12 (Year 8–13)",
+        "participantLabel": "Journalists"
       },
       {
         "abbrev": "UNHRC",
         "chairLabel": "Chairs",
         "chairs": 2,
-        "delegates": 23,
-        "total": 25,
+        "delegates": 30,
+        "total": 32,
         "gradeRange": "9–12 (Year 10–13)",
         "gradeNote": "mature topics"
       },
@@ -553,25 +522,25 @@
         "abbrev": "UNODC",
         "chairLabel": "Chairs",
         "chairs": 2,
-        "delegates": 22,
-        "total": 24,
+        "delegates": 20,
+        "total": 22,
         "gradeRange": "9–12 (Year 10–13)",
         "gradeNote": "mature topics"
       },
       {
         "abbrev": "UNSC",
         "chairLabel": "Chairs",
-        "chairs": 3,
+        "chairs": 2,
         "delegates": 15,
-        "total": 18,
+        "total": 17,
         "gradeRange": "7–12 (Year 8–13)"
       },
       {
         "abbrev": "UN Women",
         "chairLabel": "Chairs",
         "chairs": 2,
-        "delegates": 22,
-        "total": 24,
+        "delegates": 20,
+        "total": 22,
         "gradeRange": "9–12 (Year 10–13)",
         "gradeNote": "mature topics"
       },
@@ -579,8 +548,8 @@
         "abbrev": "DISEC",
         "chairLabel": "Chairs",
         "chairs": 2,
-        "delegates": 23,
-        "total": 25,
+        "delegates": 20,
+        "total": 22,
         "gradeRange": "7–12 (Year 8–13)"
       },
       {
@@ -592,27 +561,19 @@
         "gradeRange": "9–12 (Year 10–13)"
       },
       {
-        "abbrev": "HSC",
-        "chairLabel": "Chairs",
-        "chairs": "TBD",
-        "delegates": "TBD",
-        "total": "TBD",
-        "gradeRange": "7–12 (Year 8–13)"
-      },
-      {
         "abbrev": "Interpol",
         "chairLabel": "Chairs",
         "chairs": 2,
-        "delegates": 22,
-        "total": 24,
+        "delegates": 20,
+        "total": 22,
         "gradeRange": "9–12 (Year 10–13)"
       },
       {
         "abbrev": "WHO",
         "chairLabel": "Chairs",
         "chairs": 2,
-        "delegates": 22,
-        "total": 24,
+        "delegates": 30,
+        "total": 32,
         "gradeRange": "9–12 (Year 10–13)",
         "gradeNote": "mature topics"
       }
@@ -621,20 +582,8 @@
       "ECOSOC": {
         "difficulty": "beginner"
       },
-      "F1": {
-        "difficulty": "beginner"
-      },
       "Press Corps": {
         "difficulty": "beginner"
-      },
-      "UNICEF": {
-        "difficulty": "beginner"
-      },
-      "EP": {
-        "difficulty": "intermediate"
-      },
-      "UNESCO": {
-        "difficulty": "intermediate"
       },
       "UNHRC": {
         "difficulty": "intermediate"
@@ -654,9 +603,6 @@
       "FWC": {
         "difficulty": "advanced"
       },
-      "HSC": {
-        "difficulty": "advanced"
-      },
       "Interpol": {
         "difficulty": "advanced"
       },
@@ -665,55 +611,49 @@
       }
     },
     "committees": [
-      "ECOSOC (Economic and Societal Council) - The Question of Implementing a Globally Coordinated Universal Basic Income (UBI) Programme as a Strategy for Poverty Eradication and Economic Stability | The Question of Exploring International Mechanisms for Reallocating Military Expenditures Towards the Development and Strengthening of Global Public Health Systems",
-      "F1 (Formula One Committee) - The Question of Implementing Durability and Longevity Standards for Critical Car Components to Optimize Component Lifecycles and Minimizing Material and Energy Waste | The Question of Analyzing the Socio-Economic and Infrastructure Impacts of Hosting a New Grand Prix, with a Focus on Mitigating Urban Congestion and Logistics in Highly Populated Cities with a Focus on the Possible F1 Grand Prix of 2028 in Bangkok",
-      "Press Corps - The Question of Determining Journalistic Ethics in Reporting on Public Health and Global Affairs.",
-      "UNICEF (ESL) - The Question of Strengthening Maternal, Neo-Natal, and Post-Partum Healthcare Systems to Significantly Reduce Preventable Maternal and Infant Mortality and Morbidity | The Question of Recommending Policy Frameworks to Encourage Employer-Supported Flexible Work Arrangements and Parental Leave to Facilitate Early Childhood Development and Strengthen Parent-Child Bonding",
-      "EP (European Union) - The Question of Addressing the Socio-Economic Impact of Inflation and the Rising Cost of Living on Vulnerable Populations across Europe | The Question of Standardization in Policies Across Europe to Prevent Poverty Driven Cycles of Crime",
-      "UNESCO (UNESCO) - The Question of Developing and Standardizing Inclusive Education Policies and Necessary Accommodations to Ensure Full and Equitable Access to Learning for Neurodivergent Students | The Question of Establishing Guidelines for the Mandatory and Comprehensive Integration of Historical Failures, Atrocities, and Human Rights Violations into National Education Curricula to Promote Reconciliation and Prevent Future Recurrence",
-      "UNHRC (ESL) - The Question of Promoting the Standardised Regulation of the Death Penalty and Respect for the Right to Life | The Question of the Obligation to Prevent Cruel, Inhuman, or Degrading Treatments Arising from Deficiencies in the Prison Administrations and Justice Systems",
-      "UNODC (United Nations Office on Drugs and Crime) - The Question of Policy Analysis of Alternatives to Conviction and Punishment for Drug Possession for Personal Use | The Question of Addressing the Inter-generational Impact of Substance Abuse and Addiction",
-      "UNSC (CRISIS) - The Question of Developing and Standardising Best Practices for Peacekeeping Operations to Ensure Scalable and Sustainable Global Implementation",
-      "UN Women (United Nations Entity for Gender Equality and the Empowerment of Women) - The Question of Affirming and Guaranteeing Women's Reproductive Autonomy by Establishing International Legal Standards on Access to Safe and Legal Abortion | The Question of Examining the Recognition of Universal Childcare as a Fundamental Human Right and Its Role in Addressing Declining Birth Rates.",
-      "DISEC (Disarmament and International Security Committee) - The Question of Strengthening International Protocols and Logistics for Securing the Cross-Border Transport of Lethal Weapons and Related Materials | The Question of Developing Mechanisms to Prevent the Diversion of Legally Traded Conventional Arms to Illicit Markets and Non-State Actors",
-      "FWC (CRISIS) - STRANGER THINGS — The Question of Preventing Harm Caused by Psychic/Psychokinetic Child Experimentation and Ensuring the Protection and Rehabilitation of Gifted Minors | The Question of Addressing the Weaponization of the Human Mind and Establishing International Protocols for the Containment and Non-Proliferation of Psychic Technologies",
-      "HSC (CRISIS) - SARS Outbreak (2002-2004) | The Black Death (1346-1353)",
-      "Interpol (International Police and Criminal Investigation Organization) - The Question of Combating Transnational Organized Crime in Underground Medical Markets and Unregulated Surgical Practices | The Question of Strengthening Cross-Border Security Frameworks to Mitigate the Nexus of Narcotic Trafficking with a Focus on the Schengen Area and the Golden Triangle",
-      "WHO (World Health Organization) - The Question of Examining the Ethical and Regulatory Landscape for the Clinical Use of Psychedelic Drugs in the Treatment of Trauma-Based Mental Health Conditions | The Question of Examining Measures for Combating, Addressing, and Recovering from Pandemics or Severe Outbreaks"
+      "ECOSOC (Economic and Social Council) - The Question of Implementing Universal Basic Incomes (UBIs) as a Strategy for Eradicating Poverty and Maintaining Economic Stability | The Question of Establishing Frameworks for Reallocating Global Military Expenditure to Public Health Infrastructure",
+      "Press Corps - The Question of Determining Journalistic Ethics in Reporting on Public Health and Global Affairs",
+      "UNHRC (United Nations Human Rights Council) (ESL) - The Question of the Standardization of the Regulation and Application of the Death Penalty | The Question of the Obligation to Prevent Cruel, Inhuman, or Degrading Treatment within Judicial Systems as a result of Financial Deficencies",
+      "UNODC (United Nations Office on Drugs and Crime) - The Question of Policy Analysis of Alternatives to Conviction and Punishment for Drug Posession for Personal Use | The Question of Addressing the Inter-generational Impact of Substance Abuse and Addiction",
+      "UNSC (CRISIS) - The Question of Standardizing Peacekeeping Operations for Effective Global Implementation and Medical Support",
+      "UN Women (United Nations Entity for Gender Equality and the Empowerment of Women) - The Question of Affirming and Guarenteeing Women's Reproductive Autonomy by Establishing International Legal Standards on Access to Safe and Legal Abortion | The Question of Examining the Recognition of Universal Childcare as a Fundemental Human Right and its Role in Addressing Declining Birth Rates",
+      "DISEC (Disarmament and International Security Committee) - The Question of Strengthening International Protocols and Logistics for Securing the Cross-Border Transport of Lethal Weapons | The Question of Developing Mechanisms to Prevent the Diversion of Legally Traded Conventional Arms to Illicit Markets and Non-State Actors",
+      "FWC (CRISIS) — Fantasy World Committee - The Question of Preventing Harm Caused by Psychic/Psychokinetic Child Experimentation and Ensuring the Protection and Rehabilitation of Gifted Minors | The Question of Addressing the Weaponization of the Human Mind and Establishing International Protocols for the Containment and Non-Proliferation of Psychic Technologies",
+      "Interpol (International Criminal Police Organization) - The Question of Combating Transnational Organized Crime in Underground Medical Markets and Unregulated Surgical Practices | The Question of Strengthening Cross-Border Security Frameworks to Mitigate the Nexus of Narcotic Trafficking with a Focus on the Schengen Area and the Golden Triangle",
+      "WHO (World Health Organization) - The Question of Examining the Ethical and Regulatory Landscape for the Clinical Use of Psychadelic Drugs in the Treatment of Trauma-Based Mental Health Conditions | The Question of Examining Measures for Combating, Addressing, and Recovering from Pandemics or Severe Outbreaks"
     ],
     "uniqueTopics": [
-      "Universal Basic Income (UBI)",
-      "Reallocating Military Expenditures to Public Health",
-      "Durability and Longevity Standards for Critical Car Components",
-      "Socio-Economic & Infrastructure Impacts of Hosting a New Grand Prix",
-      "Journalistic Ethics in Public Health and Global Affairs",
-      "Maternal, Neo-Natal, and Post-Partum Healthcare Systems",
-      "Flexible Work Arrangements and Parental Leave",
-      "Addressing Inflation and Rising Cost of Living (Europe)",
-      "Preventing Poverty-Driven Cycles of Crime (Europe)",
-      "Inclusive Education for Neurodivergent Students",
-      "Integrating Historical Failures into Education Curricula",
-      "Death Penalty Regulation and Right to Life",
-      "Preventing Cruel, Inhuman, or Degrading Prison Treatments",
-      "Alternatives to Conviction and Punishment for Drug Possession",
-      "Inter-generational Impact of Substance Abuse",
-      "Peacekeeping Operations Best Practices",
-      "Women's Reproductive Autonomy and Safe/Legal Abortion Access",
-      "Universal Childcare as a Fundamental Human Right",
-      "Cross-Border Transport of Lethal Weapons",
-      "Diversion of Conventional Arms to Illicit Markets",
-      "Psychic/Psychokinetic Child Experimentation (Stranger Things)",
-      "Containment and Non-Proliferation of Psychic Technologies",
-      "SARS Outbreak (2002-2004)",
-      "The Black Death (1346-1353)",
-      "Organized Crime in Underground Medical Markets",
-      "Cross-Border Security for Narcotic Trafficking (Schengen/Golden Triangle)",
-      "Psychedelic Drugs in Trauma-Based Mental Health",
-      "Combating and Recovering from Pandemics or Severe Outbreaks"
+      "Implementing Universal Basic Incomes (UBIs) as a Strategy for Eradicating Poverty and Maintaining Economic Stability",
+      "Establishing Frameworks for Reallocating Global Military Expenditure to Public Health Infrastructure",
+      "Determining Journalistic Ethics in Reporting on Public Health and Global Affairs",
+      "the Standardization of the Regulation and Application of the Death Penalty",
+      "the Obligation to Prevent Cruel, Inhuman, or Degrading Treatment within Judicial Systems as a result of Financial Deficencies",
+      "Policy Analysis of Alternatives to Conviction and Punishment for Drug Posession for Personal Use",
+      "Addressing the Inter-generational Impact of Substance Abuse and Addiction",
+      "Standardizing Peacekeeping Operations for Effective Global Implementation and Medical Support",
+      "Affirming and Guarenteeing Women's Reproductive Autonomy by Establishing International Legal Standards on Access to Safe and Legal Abortion",
+      "Examining the Recognition of Universal Childcare as a Fundemental Human Right and its Role in Addressing Declining Birth Rates",
+      "Strengthening International Protocols and Logistics for Securing the Cross-Border Transport of Lethal Weapons",
+      "Developing Mechanisms to Prevent the Diversion of Legally Traded Conventional Arms to Illicit Markets and Non-State Actors",
+      "Preventing Harm Caused by Psychic/Psychokinetic Child Experimentation and Ensuring the Protection and Rehabilitation of Gifted Minors",
+      "Addressing the Weaponization of the Human Mind and Establishing International Protocols for the Containment and Non-Proliferation of Psychic Technologies",
+      "Combating Transnational Organized Crime in Underground Medical Markets and Unregulated Surgical Practices",
+      "Strengthening Cross-Border Security Frameworks to Mitigate the Nexus of Narcotic Trafficking with a Focus on the Schengen Area and the Golden Triangle",
+      "Examining the Ethical and Regulatory Landscape for the Clinical Use of Psychadelic Drugs in the Treatment of Trauma-Based Mental Health Conditions",
+      "Examining Measures for Combating, Addressing, and Recovering from Pandemics or Severe Outbreaks"
     ],
     "chairsPages": "<p style=\"margin: 0 0 1rem 0; padding: 10px 14px; background: rgba(30, 136, 229, 0.1); border-left: 4px solid var(--accent-color); border-radius: 6px; font-size: 0.92em;\"><strong>SEAMUN I 2027 — no pages:</strong> This conference does not recruit committee pages. Delegates pass notes digitally through <strong>InterMUN</strong>; there is no paper note-passing or page staff.</p>\n<p>Chairs are expected to be diplomatic, professional, impartial, engaging, calm, creative, empathetic, passionate, decisive, welcoming, punctual, encouraging, and accountable — with additional expectations for ESL and crisis committees (realistic crises, no celebrities).</p>\n<p><strong>Chair report:</strong> High-quality study guide required. Download the <a href=\"../assets/seamun-i-2027-chair-report-template.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">official chair report template (PDF)</a>.</p>\n<p><strong>Chair decisions (SEAMUN I 2027 only):</strong> The chair decisions mechanism applies only to this conference—not other MUNs on SEAMUNs. <a href=\"../assets/seamun-i-2027-chair-decisions.pdf\" download=\"SEAMUN-I-2027-Chair-Decisions.pdf\">Download PDF</a> · <a href=\"../assets/seamun-i-2027-chair-decisions.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Open in new tab</a> · <a href=\"chair-guide.html#chair-decisions\">View on Chair Guide</a></p>\n<div class=\"template-pdf-preview-wrap template-pdf-preview-wrap--compact\" style=\"margin:12px 0\"><iframe class=\"template-pdf-preview-frame\" title=\"SEAMUN I 2027 Chair Decisions preview\" src=\"../assets/seamun-i-2027-chair-decisions.pdf#view=FitH\"></iframe></div>\n<p><strong>Applications:</strong> <a href=\"https://forms.gle/8UmzMFZP1gEhw9bs9\" target=\"_blank\" rel=\"noopener noreferrer\">Chair application form</a> (also in the <strong>Forms</strong> section).</p>",
     "allocations": [
-      "TBD"
+      "ECOSOC (20 delegates): Australia, Brazil, Canada, China, Ethiopia, Finland, France, Germany, India, Israel, Italy, Japan, Nigeria, Russia, Saudi Arabia, South Africa, South Korea, Switzerland, United Kingdom, United States",
+      "Press Corps (15 journalists): Al Jazeera, BBC News, CNN, Fox News, Reuters, Russia Today, The Associated Press (AP), The Guardian, The Lancet, The New York Times, The Onion, The Straits Times, Wall Street Journal, Wikileak, Xinhua News Agency",
+      "UNHRC (30 delegates): Argentina, Australia, Brazil, Canada, Chile, China, Egypt, El Salvador, France, Germany, India, Indonesia, Iran, Italy, Japan, Mexico, Nigeria, Norway, Pakistan, Philippines, Saudi Arabia, Singapore, South Africa, South Korea, Switzerland, Thailand, Turkey, United Kingdom, United States, Vietnam",
+      "UNODC (20 delegates): Afghanistan, Brazil, Canada, China, Colombia, India, Indonesia, Italy, Japan, Mexico, Netherlands, Nigeria, Philippines, Portugal, Russia, Singapore, South Africa, Switzerland, Thailand, United States",
+      "UNSC (15 delegates): Bahrain, China, Colombia, Democratic Republic of the Congo, Denmark, France, Greece, Latvia, Liberia, Pakistan, Panama, Russia, Somalia, United Kingdom, United States",
+      "UN Women (20 delegates): Argentina, Canada, China, Egypt, France, Hungary, Iceland, India, Iran, Japan, Kenya, Malta, Nigeria, Poland, Saudi Arabia, Singapore, South Korea, Sweden, Thailand, United States",
+      "DISEC (20 delegates): Brazil, China, Colombia, France, Germany, India, Israel, Mexico, Myanmar, Nigeria, Pakistan, Russia, Saudi Arabia, Singapore, South Africa, Switzerland, Thailand, Turkey, United Kingdom, United States",
+      "FWC (10 delegates): Agent Connie Frazier, Colonel KGB, Dr. Martin Brenner, Dr. Sam Owens, Eleven (011/Jane Ives), Henry Creel (001/Vecna), Jim Hopper, Joyce Byers, Kali Prasad (008), Lt. Colonel Jack Sullivan",
+      "Interpol (20 delegates): Brazil, China, Colombia, France, Germany, India, Italy, Laos, Mexico, Myanmar, Netherlands, Philippines, Russia, South Africa, Spain, Thailand, Turkey, United Kingdom, United States, Vietnam",
+      "WHO (30 delegates): Argentina, Australia, Brazil, Canada, China, Egypt, Ethiopia, France, Germany, India, Indonesia, Israel, Italy, Jamaica, Japan, Mexico, Netherlands, Nigeria, Norway, Russia, Saudi Arabia, Singapore, South Africa, South Korea, Switzerland, Thailand, Turkey, United Kingdom, United States, Vietnam"
     ],
     "forms": [
       {
@@ -736,9 +676,9 @@
       "Best Chair Report"
     ],
     "previousWinners": [],
-    "schedule": "<p><strong>16–17 January 2027</strong> — two-day conference in Bangkok. Committees run on staggered lunch groups (see your committee).</p>\n<details style=\"margin: 0.75rem 0;\"><summary><strong>Group 1</strong> — ECOSOC, UNICEF, F1, Press Corps</summary>\n<p><strong>Day 1:</strong> 07:30 Arrival &amp; registration · 08:30 Opening ceremony · 09:15 Break &amp; photo ops · 09:45 Icebreakers · 10:00 Committee session 1 (motion-focused) · 11:00 Lunch · 12:00 Committee session 2 (resolution writing) · 14:30 Break &amp; resolutions due · 15:00 Committee session 3 (voting procedures) · 16:30 Feedback &amp; delegate departure · 17:00 Chair + SMT departure</p>\n<p><strong>Day 2:</strong> 07:30 Arrival · 08:30 Registration &amp; photo ops · 09:00 Committee session 1 (motion-focused) · 10:00 Break · 10:30 Committee session 2 (motions &amp; resolution writing) · 12:30 Lunch · 13:30 Committee session 3 (resolution writing) · 14:30 Break &amp; resolutions due · 15:00 Committee session 4 (voting procedures) · 16:00 Feedback &amp; break · 16:30 Closing ceremony · 17:30 Photo ops &amp; departure · 18:00 SMT departure</p>\n</details>\n<details style=\"margin: 0.75rem 0;\"><summary><strong>Group 2</strong> — WHO, INTERPOL, HSC, UNSC</summary>\n<p><strong>Day 1:</strong> 07:30 Arrival &amp; registration · 08:30 Opening ceremony · 09:15 Break &amp; photo ops · 09:45 Icebreakers · 10:00 Committee session 1 (motion-focused, 1.5 hr) · 11:30 Lunch · 12:30 Committee session 2 (resolution writing) · 14:30 Break &amp; resolutions due · 15:00 Committee session 3 (voting procedures) · 16:30 Feedback &amp; delegate departure · 17:00 Chair + SMT departure</p>\n<p><strong>Day 2:</strong> 07:30 Arrival · 08:30 Registration &amp; photo ops · 09:00 Committee session 1 (motion-focused) · 10:00 Break · 10:30 Committee session 2 (motions &amp; resolution writing) · 12:15 Lunch · 13:15 Committee session 3 (resolution writing) · 14:30 Break &amp; resolutions due · 15:00 Committee session 4 (voting procedures) · 16:00 Feedback &amp; break · 16:30 Closing ceremony · 17:30 Photo ops &amp; departure · 18:00 SMT departure</p>\n</details>\n<details style=\"margin: 0.75rem 0;\"><summary><strong>Group 3</strong> — UNODC, UN Women, DISEC, FWC</summary>\n<p><strong>Day 1:</strong> 07:30 Arrival &amp; registration · 08:30 Opening ceremony · 09:15 Break &amp; photo ops · 09:45 Icebreakers · 10:00 Committee session 1 (motion-focused, 2 hr) · 12:00 Lunch · 13:00 Committee session 2 (resolution writing) · 14:30 Break &amp; resolutions due · 15:00 Committee session 3 (voting procedures) · 16:30 Feedback &amp; delegate departure · 17:00 Chair + SMT departure</p>\n<p><strong>Day 2:</strong> 07:30 Arrival · 08:30 Registration &amp; photo ops · 09:00 Committee session 1 (motion-focused) · 10:00 Break · 10:30 Committee session 2 (motions &amp; resolution writing, 2 hr 15) · 12:00 Lunch · 13:00 Committee session 3 (resolution writing) · 14:30 Break &amp; resolutions due · 15:00 Committee session 4 (voting procedures) · 16:00 Feedback &amp; break · 16:30 Closing ceremony · 17:30 Photo ops &amp; departure · 18:00 SMT departure</p>\n</details>\n<details style=\"margin: 0.75rem 0;\"><summary><strong>Group 4</strong> — EU Parliament, UNESCO, UNHRC</summary>\n<p><strong>Day 1:</strong> 07:30 Arrival &amp; registration · 08:30 Opening ceremony · 09:15 Break &amp; photo ops · 09:45 Icebreakers · 10:00 Committee session 1 (motion-focused, 2 hr) · 12:30 Lunch · 13:30 Committee session 2 (resolution writing) · 14:30 Break &amp; resolutions due · 15:00 Committee session 3 (voting procedures) · 16:30 Feedback &amp; delegate departure · 17:00 Chair + SMT departure</p>\n<p><strong>Day 2:</strong> 07:30 Arrival · 08:30 Registration &amp; photo ops · 09:00 Committee session 1 (motion-focused) · 10:00 Break · 10:30 Committee session 2 (motions &amp; resolution writing, 2 hr 15) · 11:45 Lunch · 12:45 Committee session 3 (resolution writing) · 14:30 Break &amp; resolutions due · 15:00 Committee session 4 (voting procedures) · 16:00 Feedback &amp; break · 16:30 Closing ceremony · 17:30 Photo ops &amp; departure · 18:00 SMT departure</p>\n</details>",
-    "venueGuide": "<p>Venue to be announced in Bangkok. Room assignments and arrival instructions will be shared with delegates closer to the conference.</p>\n<p><strong>Accessibility:</strong> Wheelchair accessible and sensory-friendly. A dedicated sensory room with fidget and regulation tools will be available; access is subject to your accommodation application form submission.</p>",
-    "extraNotes": "<p style=\"margin: 0 0 1rem 0; padding: 10px 14px; background: rgba(255, 193, 7, 0.15); border-left: 4px solid var(--accent-orange, #ff9800); border-radius: 6px; font-size: 0.95em;\"><strong>Planning phase:</strong> Some logistics are still being finalised. Core academic information below is from the official invite package, RoP, and conference documents.</p>\n<p><strong>SEAMUN I 2027 — Policies with a Purpose.</strong> South East Asian Model United Nations Conference Thailand 2027 — the first student-led, multinational independent MUN conference in the region. Hosted in <strong>Bangkok</strong> (venue TBA).</p>\n<p><strong>Mission:</strong> Integrate the MUN circuit in a prestigious and inclusive manner. As a non-profit initiative, SEAMUN promotes professionalism, creativity, and collaboration through a sustainable, high-tech, and unbiased conference. All profits are donated to <strong>TRCS</strong>.</p>\n<p><strong>Grades:</strong> Open to ages 12–18 (Grades 7–12 / Years 8–13), with committee-specific grade ranges. Case-by-case exceptions may be considered.</p>\n<p><strong>Fees:</strong> Delegate 2,500 THB (school and independent) · Chair 800 THB.</p>\n<p><strong>Capacity (target):</strong> 370 delegates, 33 chairs, 12 SMT, and 20+ advisors (435+ total). The conference aims to welcome participants from across South East Asia.</p>\n<p><strong>Advisors:</strong> If more than two delegates or chairs from one institution are attending, they must have an advisor accompanying them.</p>\n<p><strong>Academic:</strong> 15 committees with committee-specific RoP where noted. Three crisis committees: <strong>UNSC</strong>, <strong>FWC (Stranger Things)</strong>, and <strong>HSC</strong>. Position papers are <strong>required for awards eligibility</strong>. Pre-lobbying on substantive topics is prohibited. AI may be used for pre-conference research only — not to generate speeches, papers, or in-committee content (chairs/SMT exempt for admin). Resolutions require 2 main submitters, 2 co-submitters, and at least 15% signatories.</p>\n<p><strong>Dress code:</strong> Western business formal (suits, blazers, dress shirts, formal footwear). No denim, sneakers, or t-shirts during sessions.</p>\n<p><strong>Contact:</strong> General — <a href=\"mailto:information@seamun.com\">information@seamun.com</a> · Secretary-General Jules — <a href=\"mailto:juleskittoastrop@gmail.com\">juleskittoastrop@gmail.com</a>. Instagram: <a href=\"https://www.instagram.com/seamun.th.conference/\" target=\"_blank\" rel=\"noopener noreferrer\">@seamun.th.conference</a> · TikTok: @seamun.th · Line: seamun.th.conference</p>\n<p><strong>Resources:</strong> <a href=\"rop-2027.html\">Rules of Procedure (RoP)</a> · <a href=\"chair-guide.html\">Chair Guide</a> · <a href=\"https://forms.gle/8UmzMFZP1gEhw9bs9\" target=\"_blank\" rel=\"noopener noreferrer\">Chair application form</a>.</p>\n<p><strong>InterMUN:</strong> All conference resources will be available on <strong>InterMUN</strong>, and committee actions will be conducted through the platform—including <strong>digital note passing</strong> (there are no committee pages; paper notes are not used). InterMUN is a platform developed by the Secretary-General to make MUNs easier; RoP is built in to help prevent human errors that may occur during procedure. It also aims to serve as a private mechanism for scoring, note-taking, note passing, and oversight.</p>\n<p><strong>Accessibility:</strong> SEAMUN is <strong>wheelchair accessible</strong> and <strong>sensory-friendly</strong>. We will provide a <strong>dedicated sensory room</strong> with fidget and regulation tools for delegates who need a calmer space. Access to the sensory room is subject to approval based on your <strong>accommodation application form</strong> submission.</p>"
+    "schedule": "<p><strong>16–17 January 2027</strong> — two-day conference at <a href=\"https://dprep.ac.th/secondary-campus/\" target=\"_blank\" rel=\"noopener noreferrer\">D-PREP International School Secondary Campus</a> (Bang Phli, Samut Prakan). Committees run on staggered lunch groups (see your committee).</p>\n<details style=\"margin: 0.75rem 0;\"><summary><strong>Group 1</strong> — UNHRC, DISEC, Press Corps</summary>\n<p><strong>Day 1:</strong> 7:30 Arrival & Registration · 8:30 Opening Ceremony · 9:15 Break & Photo Ops · 9:45 Icebreakers · 10:00 Committee Session 1 (motion-focused) · 11:00 Lunch (Eat) · 11:30 Lunch (Socialise) · 12:00 Committee Session 2 (resolution writing) · 14:30 Break & Photo Ops — Resolutions Due · 15:00 Committee Session 3 (voting procedures) · 16:30 Feedback Sessions & Delegate Departure · 17:00 Chair + SMT Departure</p>\n<p><strong>Day 2:</strong> 7:30 Arrival · 8:30 Registration & Photo Ops · 9:00 Committee Session 1 (motion-focused) · 10:00 Break · 10:30 Committee Session 2 (motion-focused) · 12:00 Lunch (Socialise) · 12:30 Lunch (Eat) · 13:00 Committee Session 3 (resolution writing) · 14:30 Break — Resolutions Due · 15:00 Committee Session 4 (voting procedures) · 16:00 Feedback & Break · 16:30 Closing Ceremony · 17:30 Photo Ops & Chair + Delegate Departure · 18:00 SMT Departure</p>\n</details>\n<details style=\"margin: 0.75rem 0;\"><summary><strong>Group 2</strong> — WHO, UN Women, UNSC</summary>\n<p><strong>Day 1:</strong> 7:30 Arrival & Registration · 8:30 Opening Ceremony · 9:15 Break & Photo Ops · 9:45 Icebreakers · 10:00 Committee Session 1 (motion-focused) · 11:00 Lunch (Socialise) · 11:30 Lunch (Eat) · 12:30 Committee Session 2 (resolution writing) · 14:30 Break & Photo Ops — Resolutions Due · 15:00 Committee Session 3 (voting procedures) · 16:30 Feedback Sessions & Delegate Departure · 17:00 Chair + SMT Departure</p>\n<p><strong>Day 2:</strong> 7:30 Arrival · 8:30 Registration & Photo Ops · 9:00 Committee Session 1 (motion-focused) · 10:00 Break · 10:30 Committee Session 2 (motion-focused) · 11:30 Lunch (Eat) · 12:00 Lunch (Socialise) · 12:30 Committee Session 3 (resolution writing) · 14:30 Break — Resolutions Due · 15:00 Committee Session 4 (voting procedures) · 16:00 Feedback & Break · 16:30 Closing Ceremony · 17:30 Photo Ops & Chair + Delegate Departure · 18:00 SMT Departure</p>\n</details>\n<details style=\"margin: 0.75rem 0;\"><summary><strong>Group 3</strong> — ECOSOC, UNODC, Interpol, FWC</summary>\n<p><strong>Day 1:</strong> 7:30 Arrival & Registration · 8:30 Opening Ceremony · 9:15 Break & Photo Ops · 9:45 Icebreakers · 10:00 Committee Session 1 (motion-focused) · 11:30 Lunch (Socialise) · 12:00 Lunch (Eat) · 13:00 Committee Session 2 (resolution writing) · 14:30 Break & Photo Ops — Resolutions Due · 15:00 Committee Session 3 (voting procedures) · 16:30 Feedback Sessions & Delegate Departure · 17:00 Chair + SMT Departure</p>\n<p><strong>Day 2:</strong> 7:30 Arrival · 8:30 Registration & Photo Ops · 9:00 Committee Session 1 (motion-focused) · 10:00 Break · 10:30 Committee Session 2 (motion-focused) · 11:30 Lunch (Socialise) · 12:00 Lunch (Eat) · 12:30 Committee Session 3 (resolution writing) · 14:30 Break — Resolutions Due · 15:00 Committee Session 4 (voting procedures) · 16:00 Feedback & Break · 16:30 Closing Ceremony · 17:30 Photo Ops & Chair + Delegate Departure · 18:00 SMT Departure</p>\n</details>",
+    "venueGuide": "<p>Hosted at <strong><a href=\"https://dprep.ac.th/secondary-campus/\" target=\"_blank\" rel=\"noopener noreferrer\">D-PREP International School Secondary Campus</a></strong> — 97/9 Moo 1, Bang Phli Yai, Bang Phli, Samut Prakan 10540 (Bang Phli, Samut Prakan).</p><p>Room assignments and arrival instructions will be shared with delegates closer to the conference. See <a href=\"https://seamun.com/contact\" target=\"_blank\" rel=\"noopener noreferrer\">seamun.com/contact</a> for venue details.</p><p><strong>Accessibility:</strong> Wheelchair accessible and sensory-friendly. A dedicated sensory room with fidget and regulation tools will be available; access is subject to your accommodation application form submission.</p>",
+    "extraNotes": "<p><strong>SEAMUN I 2027 — Policies with a Purpose.</strong> Student-led, non-profit Model UN conference at <strong><a href=\"https://dprep.ac.th/secondary-campus/\" target=\"_blank\" rel=\"noopener noreferrer\">D-PREP International School Secondary Campus</a></strong> (Bang Phli, Samut Prakan). Official site: <a href=\"https://seamun.com\" target=\"_blank\" rel=\"noopener noreferrer\">seamun.com</a>.</p><p><strong>Mission:</strong> Integrate the MUN circuit in a prestigious and inclusive manner. As a non-profit initiative, SEAMUN promotes professionalism, creativity, and collaboration through a sustainable, high-tech, and unbiased conference. All surplus is donated to <strong>TRCS</strong> (Thai Red Cross Society).</p><p><strong>Grades:</strong> Open to ages 12–18 (Grades 7–12 / Years 8–13), with committee-specific grade ranges.</p><p><strong>Fees:</strong> Delegate 2,500 THB · Chair 800 THB · Advisors &amp; media/photographers: free.</p><p><strong>Capacity:</strong> 200 delegates, 20 chairs, up to 60 staff (including student staff).</p><p><strong>Academic:</strong> 10 committees. Crisis committees: <strong>UNSC</strong> and <strong>FWC (Fantasy World)</strong>. Position papers are <strong>required for awards eligibility</strong>. Digital note passing via the conference platform.</p><p><strong>Contact:</strong> <a href=\"mailto:information@seamun.com\">information@seamun.com</a> · <a href=\"https://www.instagram.com/seamun.th.conference/\" target=\"_blank\" rel=\"noopener noreferrer\">@seamun.th.conference</a></p><p><strong>Resources:</strong> <a href=\"rop-2027.html\">Rules of Procedure (RoP)</a> · <a href=\"chair-guide.html\">Chair Guide</a> · <a href=\"https://forms.gle/8UmzMFZP1gEhw9bs9\" target=\"_blank\" rel=\"noopener noreferrer\">Chair application form</a>.</p>"
   },
   {
     "id": 11,

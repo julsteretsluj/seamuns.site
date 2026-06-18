@@ -1,4 +1,23 @@
 // MUN Conference Tracker Application
+(function applyThemeBeforePaint() {
+    if (window.__munThemeInit) return;
+    window.__munThemeInit = true;
+    try {
+        var savedTheme = localStorage.getItem('munTheme');
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+        }
+        var savedColor = localStorage.getItem('munColorTheme');
+        if (savedColor) {
+            document.documentElement.setAttribute('data-color', savedColor);
+        } else {
+            document.documentElement.removeAttribute('data-color');
+        }
+    } catch (e) { /* ignore */ }
+})();
+
 function getConferenceDetailPath() {
     return (typeof window !== 'undefined' && window.location && window.location.pathname.indexOf('pages') !== -1) ? '' : 'pages/';
 }
@@ -3136,6 +3155,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Theme is already applied, but ensure UI elements are updated
         updateThemeUI();
 
+        if (typeof ensureSiteChrome === 'function') {
+            var chromeAdded = ensureSiteChrome();
+            if (chromeAdded && typeof initMobileNavigation === 'function') {
+                initMobileNavigation();
+            }
+        }
+
         // Initialize language selector on all pages
         if (typeof initLanguageSelector === 'function') {
             initLanguageSelector();
@@ -3203,6 +3229,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // Ensure page still loads even if initialization fails
     }
 });
+
+(function loadSiteChrome() {
+    if (window.__siteChromeLoaded) return;
+    window.__siteChromeLoaded = true;
+    var script = document.createElement('script');
+    var base = 'js/';
+    if (document.currentScript && document.currentScript.src) {
+        base = document.currentScript.src.replace(/\/[^/]*$/, '/');
+    } else if (window.location.pathname.indexOf('/pages/') !== -1) {
+        base = '../js/';
+    }
+    script.src = base + 'site-chrome.js';
+    script.async = false;
+    document.head.appendChild(script);
+})();
 
 (function loadMobileNav() {
     if (window.__navMobileLoaded) return;
