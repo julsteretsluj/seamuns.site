@@ -350,7 +350,7 @@ window.MUN_CONFERENCES_DATA = [
 {
     id: 8,
     name: "SEAMUN I 2027 in Partnership with D-PREP",
-    organization: "SEAMUN",
+    organization: "SEAMUN Thailand",
     location: "D-PREP Secondary Campus, Samut Prakan, Thailand",
     countryCode: "TH",
     startDate: "2027-01-16",
