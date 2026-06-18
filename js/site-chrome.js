@@ -174,4 +174,19 @@
 
     global.ensureSiteChrome = ensureSiteChrome;
     global.__munJsPrefix = jsPrefix;
+
+    function bootSiteChrome() {
+        if (!document.body) return;
+        var changed = ensureSiteChrome();
+        if (changed && typeof global.initMobileNavigation === 'function') {
+            global.initMobileNavigation();
+        }
+        global.dispatchEvent(new CustomEvent('mun-site-chrome-ready', { detail: { changed: changed } }));
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bootSiteChrome);
+    } else {
+        bootSiteChrome();
+    }
 })(typeof window !== 'undefined' ? window : this);

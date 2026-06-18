@@ -47,7 +47,7 @@ window.SEAMUNS_ANNOUNCEMENTS = [
         date: '2026-04-06',
         icon: 'fas fa-star',
         title: 'SEAMUN I 2027 — on the conference tracker',
-        body: '<strong>SEAMUN</strong> — Bangkok (venue TBA), <strong>16–17 January 2027</strong>. Fifteen committees (UN bodies, crisis, FWC, F1, etc.). Policies with a Purpose; fees, schedule, awards, and Secretariat on the listing. Use the site for RoP, templates, and the chair application form linked from announcements.',
+        body: '<strong>SEAMUN Thailand</strong> in partnership with <strong>D-PREP</strong> — <strong>16–17 January 2027</strong> at D-PREP Secondary Campus, Samut Prakan. Ten committees (UN bodies, Press Corps, crisis UNSC &amp; FWC). Policies with a Purpose; fees, schedule, awards, and Secretariat on the listing.',
         linkText: 'Upcoming & previous MUNs →',
         linkHref: '../index.html'
     },

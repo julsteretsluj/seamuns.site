@@ -1086,7 +1086,7 @@ class MUNTracker {
                 website: "https://mun07.org",
                 registrationDeadline: "2026-02-07",
                 positionPaperDeadline: "2026-02-14",
-                status: "upcoming",
+                status: "previous",
                 size: "250+ attendees",
                 generalEmail: "mun07sta@gmail.com",
                 munAccount: "@mun07",

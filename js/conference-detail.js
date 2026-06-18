@@ -1975,6 +1975,7 @@ if (typeof window !== 'undefined') {
 // Returns true if the given deadline string is in the past (end of that day, local time).
 function isDeadlinePast(deadlineString) {
     if (deadlineString == null || String(deadlineString).trim() === '') return false;
+    if (/^tbd$/i.test(String(deadlineString).trim())) return false;
     try {
         const d = new Date(deadlineString);
         if (isNaN(d.getTime())) return false;
@@ -1983,6 +1984,18 @@ function isDeadlinePast(deadlineString) {
     } catch (e) {
         return false;
     }
+}
+
+function isHttpSignupLink(value) {
+    if (!value || typeof value !== 'string') return false;
+    const trimmed = value.trim();
+    return /^https?:\/\//i.test(trimmed);
+}
+
+function isRegistrationClosed(conf) {
+    if (!conf) return false;
+    if (conf.status === 'previous' || isConferencePast(conf)) return true;
+    return isDeadlinePast(conf.registrationDeadline);
 }
 
 // Populate conference details
@@ -2285,14 +2298,16 @@ function populateConferenceDetail(conf) {
             }
         }
         
-        const registrationClosed = isDeadlinePast(conf.registrationDeadline);
+        const registrationClosed = isRegistrationClosed(conf);
 
         const independentSignupEl = document.getElementById('independentSignup');
         if (independentSignupEl) {
             if (registrationClosed) {
                 independentSignupEl.innerHTML = '<p class="text-secondary" style="margin-top: 8px;">Registration has closed.</p>';
-            } else if (conf.independentDelsWelcome && conf.independentSignupLink) {
+            } else if (conf.independentDelsWelcome && isHttpSignupLink(conf.independentSignupLink)) {
                 independentSignupEl.innerHTML = `<a href="${conf.independentSignupLink}" class="btn btn-primary" style="width: 100%; margin-top: 12px;"><i class="fas fa-user-plus"></i> Sign Up as Independent Delegate</a>`;
+            } else if (conf.independentDelsWelcome && conf.independentSignupLink) {
+                independentSignupEl.innerHTML = `<p class="text-secondary" style="margin-top: 8px;">${conf.independentSignupLink}</p>`;
             } else {
                 independentSignupEl.innerHTML = '';
             }
@@ -2356,8 +2371,10 @@ function populateConferenceDetail(conf) {
         if (advisorSignupEl) {
             if (registrationClosed) {
                 advisorSignupEl.innerHTML = '<p class="text-secondary">Registration has closed.</p>';
-            } else if (conf.advisorSignupLink) {
+            } else if (isHttpSignupLink(conf.advisorSignupLink)) {
                 advisorSignupEl.innerHTML = `<a href="${conf.advisorSignupLink}" class="btn btn-primary" style="width: 100%;"><i class="fas fa-chalkboard-teacher"></i> Sign Up Your School</a>`;
+            } else if (conf.advisorSignupLink) {
+                advisorSignupEl.innerHTML = `<p class="text-secondary">${conf.advisorSignupLink}</p>`;
             } else {
                 advisorSignupEl.innerHTML = '';
                 const advisorTitle = advisorSignupEl.previousElementSibling;
@@ -2459,6 +2476,7 @@ function setupAttendanceButton(conference) {
 
 function updateAttendanceButton(status, conference) {
     const btn = document.getElementById('attendanceBtn');
+    if (!btn) return;
     const isPast = conference && isConferencePast(conference);
     
     switch (status) {
@@ -2889,15 +2907,19 @@ function displayFeedbackStats(feedback) {
     const recommendCount = feedback.filter(f => f.recommend).length;
     const recommendPercent = Math.round((recommendCount / feedback.length) * 100);
 
-    document.getElementById('avgRating').textContent = avgRating;
-    document.getElementById('totalReviews').textContent = feedback.length;
-    document.getElementById('recommendPercent').textContent = recommendPercent + '%';
+    const avgRatingEl = document.getElementById('avgRating');
+    const totalReviewsEl = document.getElementById('totalReviews');
+    const recommendPercentEl = document.getElementById('recommendPercent');
+    if (avgRatingEl) avgRatingEl.textContent = avgRating;
+    if (totalReviewsEl) totalReviewsEl.textContent = feedback.length;
+    if (recommendPercentEl) recommendPercentEl.textContent = recommendPercent + '%';
     const feedbackStats = document.getElementById('feedbackStats');
     if (feedbackStats) feedbackStats.style.display = 'grid';
 }
 
 function displayFeedbackList(feedback) {
     const feedbackList = document.getElementById('feedbackList');
+    if (!feedbackList) return;
     
     if (feedback.length === 0) {
         feedbackList.innerHTML = `
@@ -3037,11 +3059,6 @@ function handleFeedbackSubmit(e) {
     }
     feedbackData[conferenceId].push(feedback);
     localStorage.setItem('conferenceFeedback', JSON.stringify(feedbackData));
-
-    // Save to Firebase if available
-    if (typeof FirebaseDB !== 'undefined' && db) {
-        FirebaseDB.saveFeedback(feedback).catch(err => console.error('Firebase feedback save error:', err));
-    }
 
     // Close modal and reload feedback
     closeFeedbackModalHandler();
