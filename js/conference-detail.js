@@ -2286,7 +2286,9 @@ function populateConferenceDetail(conf) {
         // Independent Delegates
         const independentDelsWelcomeEl = document.getElementById('independentDelsWelcome');
         if (independentDelsWelcomeEl) {
-            if (typeof conf.independentDelsWelcome === 'boolean') {
+            if (typeof conf.independentDelsWelcome === 'string') {
+                independentDelsWelcomeEl.textContent = conf.independentDelsWelcome;
+            } else if (typeof conf.independentDelsWelcome === 'boolean') {
                 independentDelsWelcomeEl.textContent = conf.independentDelsWelcome ? 'Yes, independent delegates are welcome! Advisors are welcome but not necessary.' : 'Currently only accepting school delegations.';
             } else {
                 const independentContent = independentDelsWelcomeEl.closest('.detail-section-content');

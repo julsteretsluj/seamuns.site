@@ -4,7 +4,7 @@
 (function (global) {
     'use strict';
 
-    var MOBILE_MQ = '(max-width: 1024px)';
+    var MOBILE_MQ = '(max-width: 768px)';
 
     function isMobileNav() {
         return global.matchMedia(MOBILE_MQ).matches;

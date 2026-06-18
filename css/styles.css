@@ -90,6 +90,7 @@ html {
     --accent-color: var(--accent-blue);
     --accent-hover: var(--accent-purple);
     --header-top-padding: 5.5rem;
+    --nav-menu-offset: 9rem;
 }
 
 /* Dark Mode - White & Navy (dark navy background) */
@@ -1145,6 +1146,7 @@ body::before {
     gap: 8px;
     flex-wrap: wrap;
     justify-content: center;
+    row-gap: 6px;
 }
 
 .nav-item {
@@ -1325,12 +1327,43 @@ body.nav-menu-open {
     overflow: hidden;
 }
 
+@media (min-width: 769px) and (max-width: 1280px) {
+    .main-nav {
+        overflow: visible;
+    }
+
+    .nav-wrapper {
+        gap: 6px;
+        row-gap: 4px;
+    }
+
+    .nav-link {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+
+    .dropdown-content {
+        min-width: 260px;
+    }
+}
+
 @media (max-width: 1024px) {
     .main-nav {
         top: 64px;
         padding: 10px 12px;
         margin-bottom: 1.25rem;
         border-radius: 14px;
+    }
+
+    .nav-link {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-nav {
+        top: 56px;
     }
 
     .main-nav > .container {
@@ -1412,12 +1445,14 @@ body.nav-menu-open {
     }
     .main-nav.is-open .nav-wrapper {
         display: flex;
-        max-height: min(70vh, 560px);
+        max-height: min(2400px, calc(100dvh - var(--nav-menu-offset, 9rem)));
         overflow-y: auto;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
         opacity: 1;
         padding-top: 8px;
+        padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
         margin-top: 4px;
         border-top: 1px solid var(--border-color);
     }
@@ -1453,10 +1488,11 @@ body.nav-menu-open {
         opacity: 1 !important;
         visibility: visible !important;
         pointer-events: auto !important;
-        max-height: min(52vh, 360px);
+        max-height: min(1600px, calc(100dvh - var(--nav-menu-offset, 9rem) - 4rem));
         overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
     }
 
     .dropdown-content {
@@ -1492,9 +1528,17 @@ body.nav-menu-open {
     }
 }
 
-@media (max-width: 768px) {
-    .main-nav {
-        top: 56px;
+@media (max-width: 768px) and (orientation: landscape) {
+    :root {
+        --nav-menu-offset: 5.5rem;
+    }
+
+    .main-nav.is-open .nav-wrapper {
+        max-height: min(2400px, calc(100dvh - var(--nav-menu-offset)));
+    }
+
+    .nav-item.dropdown.active .dropdown-content {
+        max-height: min(1600px, calc(100dvh - var(--nav-menu-offset) - 3rem));
     }
 }
 
@@ -1509,16 +1553,13 @@ body.nav-menu-open {
         padding: 0 12px;
         font-size: 0.92rem;
     }
-    .main-nav.is-open .nav-wrapper {
-        max-height: min(65vh, 480px);
-    }
     .nav-link {
         padding: 10px 12px;
         font-size: 0.9rem;
     }
 }
 
-@media (max-width: 1024px) and (prefers-reduced-motion: reduce) {
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
     .nav-wrapper,
     .nav-backdrop,
     .nav-toggle__bars,
