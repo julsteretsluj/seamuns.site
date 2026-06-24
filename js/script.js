@@ -21,6 +21,16 @@
 function getConferenceDetailPath() {
     return (typeof window !== 'undefined' && window.location && window.location.pathname.indexOf('pages') !== -1) ? '' : 'pages/';
 }
+
+function getConferenceLogoPath(conference) {
+    const logo = String((conference && (conference.logo || conference.logoUrl)) || '').trim();
+    if (!logo) return '';
+    if (/^https?:\/\//i.test(logo)) return logo;
+    if (logo.startsWith('../')) {
+        return getConferenceDetailPath() === 'pages/' ? logo.slice(3) : logo;
+    }
+    return logo;
+}
 class MUNTracker {
     constructor() {
         this.conferences = [];
@@ -2288,14 +2298,18 @@ class MUNTracker {
 
             const cardClasses = `conference-card ${conference.status} ${conference.attendanceStatus || 'not-attending'}`;
             const flag = this.getCountryFlag(conference.countryCode);
+            const logoPath = getConferenceLogoPath(conference);
             
             console.log('Card data prepared, generating HTML...');
 
         return `
             <div class="${cardClasses}" data-conference-id="${conference.id}">
                 <div class="conference-header">
-                    <div>
-                        <h3 class="conference-title">${conference.name}</h3>
+                    <div class="conference-header-main">
+                        ${logoPath ? `<div class="conference-card-logo"><img src="${logoPath}" alt="${conference.name} logo"></div>` : ''}
+                        <div class="conference-header-text">
+                            <h3 class="conference-title">${conference.name}</h3>
+                        </div>
                     </div>
                     <div class="status-badges">
                         <span class="conference-status ${conference.status}">${this.getStatusLabel(conference.status)}</span>
