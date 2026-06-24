@@ -75,7 +75,7 @@
             '<div class="container">' +
             '<h1 style="display: flex; align-items: center; justify-content: center; gap: 12px;">' +
             '<a href="' + rootPrefix() + 'index.html" style="display: flex; align-items: center; gap: 12px; color: inherit; text-decoration: none;">' +
-            '<img src="' + rootPrefix() + 'assets/logo.png" alt="SEAMUNs Logo" style="height: 60px; width: auto;"><span>SEAMUNs</span></a></h1>' +
+            '<img src="' + rootPrefix() + 'assets/logo.png" alt="SEAMUNs Logo" class="site-logo"><span>SEAMUNs</span></a></h1>' +
             '<p>Track upcoming and previous Model United Nations conferences across South East Asia 🌏</p>' +
             '<div class="current-datetime" id="currentDateTime"><i class="fas fa-clock"></i><span id="dateTimeDisplay"></span></div>' +
             '</div>';

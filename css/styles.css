@@ -1055,6 +1055,13 @@ body::before {
     filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.3));
 }
 
+.header h1 img,
+.header h1 .site-logo {
+    height: 60px;
+    width: auto;
+    max-width: min(60px, 18vw);
+}
+
 .header p {
     font-size: 21px;
     color: var(--text-secondary);
@@ -5227,7 +5234,7 @@ body.nav-menu-open {
     height: 100%;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(20px);
-    z-index: 1000;
+    z-index: 1200;
     animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -7159,8 +7166,19 @@ form.profile-edit-form select:focus {
         font-size: 15px;
     }
     
-    /* Ensure Tap Targets are Large Enough */
-    a, button, .btn, .close-btn, .theme-toggle {
+    /* Ensure tap targets on interactive chrome — not all links in prose */
+    .auth-buttons .btn,
+    .user-menu .logout-btn,
+    .user-menu .edit-profile-btn,
+    .nav-link,
+    .nav-toggle,
+    .tab-btn,
+    .close-btn,
+    .theme-toggle,
+    .btn-signup-now,
+    .conference-actions .btn,
+    .form-actions button,
+    .copy-chip-btn {
         min-height: 44px;
         min-width: 44px;
         display: inline-flex;
@@ -9484,7 +9502,8 @@ form.archive-upload-form .form-actions {
         font-size: clamp(1.35rem, 5vw, 1.75rem) !important;
     }
 
-    .header h1 img {
+    .header h1 img,
+    .header h1 .site-logo {
         height: clamp(36px, 10vw, 48px) !important;
     }
 
@@ -9997,4 +10016,204 @@ form.archive-upload-form .form-actions {
 
 .committee-page-main {
     padding-top: 1.5rem;
+}
+
+/* =============================================================================
+   Mobile UX — overlap fixes, touch targets, interaction polish
+   ============================================================================= */
+
+.copy-chip-btn {
+    border: none;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 44px;
+    min-width: 44px;
+    vertical-align: middle;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.copy-chip-btn--instagram {
+    background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+.copy-chip-btn--email {
+    background: var(--accent-blue);
+}
+
+.copy-chip-btn:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+}
+
+body:has(.modal.show) .theme-controls,
+body:has(.modal.show) .auth-buttons,
+body:has(.modal.show) .user-menu {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+body.nav-menu-open .theme-controls,
+body.nav-menu-open .auth-buttons,
+body.nav-menu-open .user-menu {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+body.nav-menu-open .main-nav.is-open {
+    z-index: 110;
+}
+
+@media (pointer: coarse) {
+    .nav-item.dropdown:not(.active):hover .dropdown-content,
+    .nav-item.dropdown:not(.active) .dropdown-content:hover {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        position: relative;
+        top: auto;
+        margin-bottom: 1rem !important;
+    }
+
+    .header:hover {
+        transform: none;
+    }
+
+    .main-nav {
+        top: 0;
+    }
+
+    .theme-controls {
+        top: max(10px, env(safe-area-inset-top, 0px));
+        left: max(10px, env(safe-area-inset-left, 0px));
+        max-width: calc(100vw - max(10px, env(safe-area-inset-left, 0px)) - max(10px, env(safe-area-inset-right, 0px)));
+    }
+
+    .auth-buttons,
+    .user-menu {
+        top: max(10px, env(safe-area-inset-top, 0px));
+        right: max(10px, env(safe-area-inset-right, 0px));
+    }
+
+    .theme-selector {
+        flex-wrap: wrap;
+        row-gap: 6px;
+        max-width: min(100%, calc(100vw - 5.5rem));
+    }
+
+    .color-swatch {
+        width: 28px;
+        height: 28px;
+    }
+
+    .modal-content {
+        max-height: 100dvh;
+        height: 100dvh;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    .modal-header {
+        padding-top: max(16px, env(safe-area-inset-top, 0px));
+        padding-left: max(20px, env(safe-area-inset-left, 0px));
+        padding-right: max(20px, env(safe-area-inset-right, 0px));
+    }
+
+    .form-group input:focus:not([type="radio"]):not([type="checkbox"]):not([type="hidden"]),
+    .form-group textarea:focus,
+    .form-group select:focus {
+        transform: none;
+    }
+
+    .topic-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .conference-detail-info-cards-secondary {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-section,
+    #contact-section,
+    .conference-detail-main {
+        scroll-margin-top: 5rem;
+    }
+
+    .info-card-value,
+    .detail-section-content,
+    .detail-section-content p,
+    .conference-detail-key-bar-item,
+    .conference-detail-key-bar-value {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .conference-detail-hero-top {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .conference-detail-badges-row {
+        width: 100%;
+    }
+
+    .conference-detail-signup-cta {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    .conference-detail-reg-tags {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .detail-section-two-cols {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .form-actions {
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: var(--section-pad-x, 18px);
+        padding-right: var(--section-pad-x, 18px);
+        border-radius: 0;
+    }
+
+    .controls,
+    .stat-card {
+        overflow: visible;
+    }
+
+    img,
+    video,
+    iframe,
+    table {
+        max-width: 100%;
+    }
+
+    .template-pdf-preview-frame {
+        max-height: min(70dvh, 560px);
+    }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .modal-content {
+        max-height: 100dvh;
+        height: auto;
+        min-height: 100dvh;
+    }
 }

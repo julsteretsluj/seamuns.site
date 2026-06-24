@@ -1117,26 +1117,11 @@ function setContactInfoWithCopyButtons(elementId, contactInfo) {
                     <a href="${instagramUrl}" target="_blank" rel="noopener noreferrer" class="instagram-link" style="color: var(--accent-green);">${item.full}</a>
                     <button 
                         id="${buttonId}"
+                        class="copy-chip-btn copy-chip-btn--instagram"
                         onclick="copyInstagramHandle('${item.username}', '${buttonId}')"
-                        style="
-                            background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-                            border: none;
-                            color: white;
-                            padding: 2px 6px;
-                            border-radius: 6px;
-                            cursor: pointer;
-                            font-size: 0.75em;
-                            display: inline-flex;
-                            align-items: center;
-                            gap: 3px;
-                            transition: transform 0.2s ease;
-                            vertical-align: middle;
-                        "
-                        onmouseover="this.style.transform='scale(1.05)'"
-                        onmouseout="this.style.transform='scale(1)'"
                         title="Copy ${item.username}"
                     >
-                        <i class="fas fa-copy" style="font-size: 0.7em;"></i>
+                        <i class="fas fa-copy" style="font-size: 0.85em;"></i>
                     </button>
                 </span>
             `;
@@ -1148,26 +1133,11 @@ function setContactInfoWithCopyButtons(elementId, contactInfo) {
                     <a href="${mailto}" class="instagram-link" style="color: var(--accent-blue);">${escapeHtml(item.email)}</a>
                     <button 
                         id="${buttonId}"
+                        class="copy-chip-btn copy-chip-btn--email"
                         onclick="copyEmailAddress('${item.email}', '${buttonId}')"
-                        style="
-                            background: var(--accent-blue);
-                            border: none;
-                            color: white;
-                            padding: 2px 6px;
-                            border-radius: 6px;
-                            cursor: pointer;
-                            font-size: 0.75em;
-                            display: inline-flex;
-                            align-items: center;
-                            gap: 3px;
-                            transition: transform 0.2s ease, opacity 0.2s ease;
-                            vertical-align: middle;
-                        "
-                        onmouseover="this.style.transform='scale(1.05)'"
-                        onmouseout="this.style.transform='scale(1)'"
                         title="Copy ${item.email}"
                     >
-                        <i class="fas fa-copy" style="font-size: 0.7em;"></i>
+                        <i class="fas fa-copy" style="font-size: 0.85em;"></i>
                     </button>
                 </span>
             `;
