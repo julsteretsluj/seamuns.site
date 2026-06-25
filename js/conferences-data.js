@@ -754,7 +754,7 @@ window.MUN_CONFERENCES_DATA = [
         "UNSC - Combatting state-sponsored sexual violence in the Russo-Ukrainian war",
         "UN Women - Ensuring adequate maternity leave and healthcare protections for women in the workforce",
         "UNESCO - Preserving cultural identity and heritage in regions experiencing forced displacement and ethnic violence",
-        "ICJ - Military and Paramilitary Activities in and against Nicaragua (Nicaragua v. United States), 1986, ICJ 14 | Application of the Convention on the Prevention and Punishment of the Crime of Genocide (The Gambia v. Myanmar), 2019, ICJ 178",
+        "ICJ - Application of the Convention on the Prevention and Punishment of the Crime of Genocide (The Gambia v. Myanmar), 2019, ICJ 178",
         "HCC - Addressing the Conquest of Constantinople (1453) | Discussing the events of the Vietnam War (1955–75)",
         "FWC (Fantasy World Committee) - The Marley-Paradis conflict (Attack on Titan) | The Rumbling (Attack on Titan)"
     ],
@@ -769,7 +769,6 @@ window.MUN_CONFERENCES_DATA = [
         "Sexual violence in the Russo-Ukrainian war",
         "Maternity leave and workforce healthcare",
         "Cultural heritage amid displacement and ethnic violence",
-        "Nicaragua v. United States (1986)",
         "The Gambia v. Myanmar genocide case (2019)",
         "Conquest of Constantinople (1453)",
         "Vietnam War (1955–75)",
