@@ -2305,16 +2305,14 @@ class MUNTracker {
         return `
             <div class="${cardClasses}" data-conference-id="${conference.id}">
                 <div class="conference-header">
-                    <div class="conference-header-main">
+                    <div class="conference-card-top">
                         ${logoPath ? `<div class="conference-card-logo"><img src="${logoPath}" alt="${conference.name} logo"></div>` : ''}
-                        <div class="conference-header-text">
-                            <h3 class="conference-title">${conference.name}</h3>
+                        <div class="status-badges">
+                            <span class="conference-status ${conference.status}">${this.getStatusLabel(conference.status)}</span>
+                            <span class="attendance-status ${conference.attendanceStatus || 'not-attending'}"><i class="fas ${this.getAttendanceIcon(conference.attendanceStatus || 'not-attending')}" aria-hidden="true"></i> ${this.getAttendanceLabel(conference.attendanceStatus || 'not-attending')}</span>
                         </div>
                     </div>
-                    <div class="status-badges">
-                        <span class="conference-status ${conference.status}">${this.getStatusLabel(conference.status)}</span>
-                        <span class="attendance-status ${conference.attendanceStatus || 'not-attending'}"><i class="fas ${this.getAttendanceIcon(conference.attendanceStatus || 'not-attending')}" aria-hidden="true"></i> ${this.getAttendanceLabel(conference.attendanceStatus || 'not-attending')}</span>
-                    </div>
+                    <h3 class="conference-title">${conference.name}</h3>
                 </div>
                 
                 <div class="conference-info">

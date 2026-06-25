@@ -5036,9 +5036,15 @@ body.nav-menu-open {
 /* Conferences Grid */
 .conferences-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    grid-template-columns: 1fr;
     gap: 24px;
     position: relative;
+}
+
+@media (min-width: 720px) {
+    .conferences-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 .conference-card {
@@ -5107,28 +5113,30 @@ body.nav-menu-open {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    margin-left: auto;
 }
 
 .conference-header {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 10px;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
     position: relative;
     z-index: 3;
 }
 
-.conference-header-main {
+.conference-card-top {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
-    min-width: 0;
-    flex: 1;
+    min-height: 48px;
 }
 
-.conference-header-text {
-    min-width: 0;
+.conference-card-top:not(:has(.conference-card-logo)) .status-badges {
+    width: 100%;
 }
 
 .conference-card-logo {
@@ -5151,13 +5159,16 @@ body.nav-menu-open {
 }
 
 .conference-title {
-    font-size: 20px;
+    font-size: clamp(1.05rem, 2.2vw, 1.25rem);
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 6px;
-    line-height: 1.3;
+    margin: 0;
+    line-height: 1.35;
     letter-spacing: -0.003em;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
 }
 
 .conference-status {
@@ -5234,8 +5245,8 @@ body.nav-menu-open {
     line-height: 1.47;
     margin-bottom: 12px;
     display: -webkit-box;
-    d: 2;
-    line-clamp: 2;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     position: relative;
@@ -5783,8 +5794,11 @@ form.profile-edit-form select:focus {
     }
     
     .conference-header {
-        flex-direction: column;
         gap: 8px;
+    }
+
+    .conference-card-top {
+        min-height: 44px;
     }
     
     .auth-buttons {
@@ -6879,9 +6893,11 @@ form.profile-edit-form select:focus {
     }
     
     .conference-header {
-        flex-direction: column;
-        align-items: flex-start;
         gap: 8px;
+    }
+
+    .conference-card-top {
+        min-height: 44px;
     }
     
     .conference-info {

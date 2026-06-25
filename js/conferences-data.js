@@ -759,7 +759,9 @@ window.MUN_CONFERENCES_DATA = [
         "FWC (Fantasy World Committee) - The Marley-Paradis conflict (Attack on Titan) | The Rumbling (Attack on Titan)"
     ],
     committeeOverrides: {
-        UNSC: { type: "crisis" },
+        UNSC: { type: "traditional" },
+        "UN Women": { type: "traditional" },
+        UNESCO: { type: "traditional" },
         FWC: { type: "crisis" },
         HCC: { type: "historical" }
     },

@@ -933,7 +933,13 @@
     ],
     "committeeOverrides": {
       "UNSC": {
-        "type": "crisis"
+        "type": "traditional"
+      },
+      "UN Women": {
+        "type": "traditional"
+      },
+      "UNESCO": {
+        "type": "traditional"
       },
       "FWC": {
         "type": "crisis"
