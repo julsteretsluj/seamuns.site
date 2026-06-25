@@ -751,9 +751,9 @@ window.MUN_CONFERENCES_DATA = [
     disabledSuitable: false,
     sensorySuitable: false,
     committees: [
-        "UNSC - Combatting state-sponsored sexual violence in the Russo-Ukrainian war",
-        "UN Women - Ensuring adequate maternity leave and healthcare protections for women in the workforce",
-        "UNESCO - Preserving cultural identity and heritage in regions experiencing forced displacement and ethnic violence",
+        "UNSC - Combatting state-sponsored sexual violence in the Russo-Ukrainian war | Discussing the Israeli invasion of national sovereignty in Middle Eastern nations, such as Lebanon and Palestine",
+        "UN Women - Ensuring adequate maternity leave and healthcare protections for women in the workforce | Advancing gender equality through universal access to reproductive healthcare services, such as abortion",
+        "UNESCO - Preserving cultural identity and heritage in regions experiencing forced displacement and ethnic violence | Strengthening national and international commitments to quality universal education",
         "ICJ - Military and Paramilitary Activities in and against Nicaragua (Nicaragua v. United States), 1986, ICJ 14 | Application of the Convention on the Prevention and Punishment of the Crime of Genocide (The Gambia v. Myanmar), 2019, ICJ 178",
         "HCC - Addressing the Conquest of Constantinople (1453) | Discussing the events of the Vietnam War (1955–75)",
         "FWC (Fantasy World Committee) - The Marley-Paradis conflict (Attack on Titan) | The Rumbling (Attack on Titan)"
@@ -767,8 +767,11 @@ window.MUN_CONFERENCES_DATA = [
     },
     uniqueTopics: [
         "Sexual violence in the Russo-Ukrainian war",
+        "Israeli invasion of sovereignty in Lebanon and Palestine",
         "Maternity leave and workforce healthcare",
+        "Reproductive healthcare and abortion access",
         "Cultural heritage amid displacement and ethnic violence",
+        "Universal quality education",
         "Nicaragua v. United States (1986)",
         "The Gambia v. Myanmar genocide case (2019)",
         "Conquest of Constantinople (1453)",
