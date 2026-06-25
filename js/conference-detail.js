@@ -1717,6 +1717,28 @@ function buildCommitteeAllocationHTML(conf, committeeName, displayName, sizeInfo
     return '';
 }
 
+function looksLikeCommitteeTopicPart(text) {
+    const t = (text || '').trim();
+    if (!t) return false;
+    if (/^(The Question of|Topic\s*\d+\s*:)/i.test(t)) return true;
+    if (/\bv\.\s|\bv\s+\S/i.test(t)) return true;
+    if (/\bICJ\s+\d+/i.test(t)) return true;
+    if (/^(Application|Military|Discussing|Combatting|Ensuring|Advancing|Preserving|Strengthening|Addressing|The Marley|The Rumbling|Heroes of)/i.test(t)) return true;
+    return false;
+}
+
+function looksLikeCommitteeChairsPart(text) {
+    const t = (text || '').trim();
+    if (!t) return false;
+    const lower = t.toLowerCase();
+    if (t.includes('@')) return true;
+    if (t === 'TBD' || t === 'A, B') return true;
+    if (/^chairs?\s*:/i.test(t)) return true;
+    if (/head\s+chair|deputy\s+chair|president:|vice\s+president|editor\s+in\s+chief|deputy\s+editor/i.test(lower)) return true;
+    if (/^(head|deputy|president|vice president|editor)/i.test(t)) return true;
+    return false;
+}
+
 // Build HTML for one committee (used on conference detail and on standalone committee page). Exposed globally for committee.html.
 // options.view: 'list' (conference page — topics + link) | 'full' (committee detail page — all fields)
 // options.committeeHref: when set with view 'list', card navigates to the committee page
@@ -1755,9 +1777,8 @@ function buildCommitteeItemHTML(conf, c, index, options) {
             const mainParts = c.split(' | ');
             const mainContent = mainParts[0].trim();
             const lastPart = mainParts[mainParts.length - 1].trim();
-            const looksLikeTopic = /^(The Question of|Topic\s*\d*\s*:)/i.test(lastPart.trim());
-            const lastPartLower = lastPart.toLowerCase();
-            const looksLikeChairs = !looksLikeTopic && (lastPart.includes('@') || (lastPart.includes(',') && !lastPartLower.includes('topic')) || lastPartLower.includes('chair') || lastPartLower.includes('head chair') || lastPartLower.includes('deputy chair') || lastPartLower.includes('president') || lastPartLower.includes('vice president') || lastPartLower.includes('editor') || lastPartLower.includes('editor in chief') || lastPartLower.includes('deputy editor') || lastPart === 'TBD' || lastPart === 'A, B' || /^(head|deputy|president|vice president|editor)/i.test(lastPart.trim()));
+            const looksLikeTopic = looksLikeCommitteeTopicPart(lastPart);
+            const looksLikeChairs = !looksLikeTopic && looksLikeCommitteeChairsPart(lastPart);
             if (looksLikeChairs && mainParts.length > 1) {
                 chairInfo = lastPart;
                 const fullContent = mainParts.slice(0, -1).join(' | ');
