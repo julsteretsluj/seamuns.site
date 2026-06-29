@@ -15,6 +15,9 @@
         } else {
             document.documentElement.removeAttribute('data-color');
         }
+        if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.classList.add('motion-preload');
+        }
     } catch (e) { /* ignore */ }
 })();
 
@@ -3241,6 +3244,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // Ensure page still loads even if initialization fails
     }
 });
+
+(function loadPageTransitions() {
+    if (window.__pageTransitionsLoaded) return;
+    window.__pageTransitionsLoaded = true;
+    var script = document.createElement('script');
+    var base = 'js/';
+    if (document.currentScript && document.currentScript.src) {
+        base = document.currentScript.src.replace(/\/[^/]*$/, '/');
+    } else if (window.location.pathname.indexOf('/pages/') !== -1) {
+        base = '../js/';
+    }
+    script.src = base + 'page-transitions.js';
+    script.async = false;
+    document.head.appendChild(script);
+})();
 
 (function loadSiteChrome() {
     if (window.__siteChromeLoaded) return;

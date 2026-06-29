@@ -3435,7 +3435,7 @@ body.nav-menu-open {
     gap: 14px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
     transition: box-shadow 0.25s ease, transform 0.25s ease;
-    animation: fadeInUp 0.5s ease both;
+    animation: motionPageReveal 0.62s cubic-bezier(0.32, 0.72, 0, 1) both;
 }
 
 .info-card:nth-child(1) { animation-delay: 0.05s; }
@@ -3780,7 +3780,7 @@ body.nav-menu-open {
     padding: 20px 22px;
     box-shadow: 0 6px 14px rgba(30, 136, 229, 0.08);
     transition: box-shadow 0.25s ease, transform 0.25s ease;
-    animation: fadeInUp 0.5s ease both;
+    animation: motionPageReveal 0.62s cubic-bezier(0.32, 0.72, 0, 1) both;
 }
 
 .detail-section:nth-child(1) { animation-delay: 0.1s; }
@@ -5297,7 +5297,7 @@ body.nav-menu-open {
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: var(--shadow-hover);
-    animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: motionSheetEnter 0.42s cubic-bezier(0.32, 0.72, 0, 1);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -10263,5 +10263,198 @@ body.nav-menu-open .main-nav.is-open {
         max-height: 100dvh;
         height: auto;
         min-height: 100dvh;
+    }
+}
+
+/* ==========================================================================
+   Apple-inspired motion system (page transitions, stagger, view transitions)
+   ========================================================================== */
+
+:root {
+    --motion-ease-out: cubic-bezier(0.32, 0.72, 0, 1);
+    --motion-ease-in-out: cubic-bezier(0.45, 0.05, 0.15, 1);
+    --motion-duration-fast: 0.35s;
+    --motion-duration: 0.55s;
+    --motion-duration-slow: 0.7s;
+    --motion-stagger-step: 0.055s;
+    --motion-stagger-base: 0.04s;
+}
+
+@view-transition {
+    navigation: auto;
+}
+
+@keyframes motionPageReveal {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 18px, 0) scale(0.985);
+        filter: blur(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0);
+    }
+}
+
+@keyframes motionPageExit {
+    from {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0);
+    }
+    to {
+        opacity: 0;
+        transform: translate3d(0, -10px, 0) scale(0.99);
+        filter: blur(4px);
+    }
+}
+
+@keyframes motionSheetEnter {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 28px, 0) scale(0.94);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+@keyframes motionCrossFade {
+    from { opacity: 0.92; }
+    to { opacity: 1; }
+}
+
+/* Persistent chrome — morphs across same-origin navigations */
+.motion-chrome-header { view-transition-name: site-header; }
+.motion-chrome-nav { view-transition-name: site-nav; }
+.motion-chrome-theme { view-transition-name: site-theme; }
+.motion-chrome-auth { view-transition-name: site-auth; }
+.motion-page-main { view-transition-name: site-main; }
+
+::view-transition-group(site-header),
+::view-transition-group(site-nav),
+::view-transition-group(site-theme),
+::view-transition-group(site-auth) {
+    animation-duration: var(--motion-duration-fast);
+    animation-timing-function: var(--motion-ease-out);
+}
+
+::view-transition-old(site-main) {
+    animation: motionPageExit var(--motion-duration-fast) var(--motion-ease-in-out) both;
+    z-index: 1;
+}
+
+::view-transition-new(site-main) {
+    animation: motionPageReveal var(--motion-duration) var(--motion-ease-out) both;
+    z-index: 2;
+}
+
+::view-transition-old(site-header),
+::view-transition-new(site-header),
+::view-transition-old(site-nav),
+::view-transition-new(site-nav),
+::view-transition-old(site-theme),
+::view-transition-new(site-theme),
+::view-transition-old(site-auth),
+::view-transition-new(site-auth) {
+    animation: motionCrossFade var(--motion-duration-fast) var(--motion-ease-out) both;
+}
+
+/* Initial page load enter */
+html.motion-preload main {
+    opacity: 0;
+}
+
+html.motion-ready .motion-page-main {
+    animation: motionPageReveal var(--motion-duration) var(--motion-ease-out) both;
+}
+
+html.motion-ready .motion-page-main.motion-reenter {
+    animation: motionPageReveal var(--motion-duration) var(--motion-ease-out) both;
+}
+
+/* Staggered content blocks */
+.motion-stagger-item {
+    animation: motionPageReveal 0.62s var(--motion-ease-out) both;
+    animation-delay: calc(var(--motion-stagger-base) + var(--motion-i, 0) * var(--motion-stagger-step));
+}
+
+html.motion-ready .content-section,
+html.motion-ready .stat-card,
+html.motion-ready .conference-detail-hero {
+    animation: motionPageReveal 0.62s var(--motion-ease-out) both;
+}
+
+html.motion-ready .conferences-grid .conference-card:nth-child(1) { animation-delay: 0.05s; }
+html.motion-ready .conferences-grid .conference-card:nth-child(2) { animation-delay: 0.105s; }
+html.motion-ready .conferences-grid .conference-card:nth-child(3) { animation-delay: 0.16s; }
+html.motion-ready .conferences-grid .conference-card:nth-child(4) { animation-delay: 0.215s; }
+html.motion-ready .conferences-grid .conference-card:nth-child(5) { animation-delay: 0.27s; }
+html.motion-ready .conferences-grid .conference-card:nth-child(6) { animation-delay: 0.325s; }
+html.motion-ready .conferences-grid .conference-card:nth-child(7) { animation-delay: 0.38s; }
+html.motion-ready .conferences-grid .conference-card:nth-child(8) { animation-delay: 0.435s; }
+html.motion-ready .conferences-grid .conference-card:nth-child(9) { animation-delay: 0.49s; }
+html.motion-ready .conferences-grid .conference-card:nth-child(10) { animation-delay: 0.545s; }
+html.motion-ready .conferences-grid .conference-card:nth-child(11) { animation-delay: 0.6s; }
+html.motion-ready .conferences-grid .conference-card:nth-child(12) { animation-delay: 0.655s; }
+
+html.motion-ready .stats-grid .stat-card:nth-child(1) { animation-delay: 0.08s; }
+html.motion-ready .stats-grid .stat-card:nth-child(2) { animation-delay: 0.14s; }
+html.motion-ready .stats-grid .stat-card:nth-child(3) { animation-delay: 0.2s; }
+html.motion-ready .stats-grid .stat-card:nth-child(4) { animation-delay: 0.26s; }
+
+html.motion-ready main > .content-section:nth-of-type(1) { animation-delay: 0.06s; }
+html.motion-ready main > .content-section:nth-of-type(2) { animation-delay: 0.12s; }
+html.motion-ready main > .content-section:nth-of-type(3) { animation-delay: 0.18s; }
+html.motion-ready main > .content-section:nth-of-type(4) { animation-delay: 0.24s; }
+html.motion-ready main > .content-section:nth-of-type(5) { animation-delay: 0.3s; }
+html.motion-ready main > .content-section:nth-of-type(6) { animation-delay: 0.36s; }
+
+/* Slideshow / tab cross-fade */
+.step-slide.active {
+    animation: motionPageReveal 0.5s var(--motion-ease-out) both;
+}
+
+/* Refined press feedback */
+.btn,
+.nav-link,
+.conference-card,
+.stat-card,
+.color-swatch {
+    transition: transform 0.22s var(--motion-ease-out), box-shadow 0.22s var(--motion-ease-out), opacity 0.22s ease;
+}
+
+.btn:active,
+.nav-link:active {
+    transform: scale(0.97);
+    transition-duration: 0.1s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    @view-transition {
+        navigation: none;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    html.motion-preload main {
+        opacity: 1;
+    }
+
+    .motion-chrome-header,
+    .motion-chrome-nav,
+    .motion-chrome-theme,
+    .motion-chrome-auth,
+    .motion-page-main {
+        view-transition-name: none;
     }
 }
