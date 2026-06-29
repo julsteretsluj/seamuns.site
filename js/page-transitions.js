@@ -6,6 +6,7 @@
 
     var STAGGER_STEP_MS = 55;
     var STAGGER_BASE_MS = 40;
+    var headerCompact = false;
 
     function prefersReducedMotion() {
         return global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -95,6 +96,22 @@
         if (main) main.classList.add('motion-page-main');
     }
 
+    function compactThreshold() {
+        return global.matchMedia && global.matchMedia('(max-width: 768px)').matches ? 12 : 28;
+    }
+
+    function syncHeaderCompactOnScroll() {
+        var header = document.querySelector('.header');
+        if (!header) return;
+
+        var shouldCompact = (global.scrollY || global.pageYOffset || 0) > compactThreshold();
+        if (shouldCompact === headerCompact) return;
+
+        headerCompact = shouldCompact;
+        header.classList.toggle('is-scrolled', shouldCompact);
+        schedulePinnedLayout();
+    }
+
     function staggerChildren(root, selector) {
         if (!root || prefersReducedMotion()) return;
         var items = root.querySelectorAll(selector);
@@ -146,6 +163,7 @@
 
     function init() {
         markChrome();
+        syncHeaderCompactOnScroll();
         schedulePinnedLayout();
         observePinnedChrome();
         runPageEnter();
@@ -159,10 +177,12 @@
 
     global.addEventListener('resize', schedulePinnedLayout, { passive: true });
     global.addEventListener('orientationchange', schedulePinnedLayout);
+    global.addEventListener('scroll', syncHeaderCompactOnScroll, { passive: true });
     global.addEventListener('mun-site-chrome-ready', schedulePinnedLayout);
     global.addEventListener('mun-auth-state-ready', schedulePinnedLayout);
     global.addEventListener('mun-dynamic-content-ready', function () {
         reenterDynamicContent();
+        syncHeaderCompactOnScroll();
         schedulePinnedLayout();
     });
 
