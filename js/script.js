@@ -404,6 +404,9 @@ class MUNTracker {
         const userMenu = document.getElementById('userMenu');
         if (authButtons) authButtons.style.display = 'none';
         if (userMenu) userMenu.style.display = 'flex';
+        if (typeof window.MotionTransitions !== 'undefined' && window.MotionTransitions.updatePinnedLayout) {
+            window.MotionTransitions.updatePinnedLayout();
+        }
         
         const userEmailElement = document.getElementById('userEmail');
         
@@ -431,6 +434,9 @@ class MUNTracker {
         const userMenu = document.getElementById('userMenu');
         if (authButtons) authButtons.style.display = 'flex';
         if (userMenu) userMenu.style.display = 'none';
+        if (typeof window.MotionTransitions !== 'undefined' && window.MotionTransitions.updatePinnedLayout) {
+            window.MotionTransitions.updatePinnedLayout();
+        }
     }
 
     async login(email, password) {

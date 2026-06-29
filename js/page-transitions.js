@@ -11,6 +11,70 @@
         return global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }
 
+    function isVisible(el) {
+        if (!el) return false;
+        return global.getComputedStyle(el).display !== 'none' && global.getComputedStyle(el).visibility !== 'hidden';
+    }
+
+    function visibleAuthElement() {
+        var userMenu = document.getElementById('userMenu');
+        var auth = document.getElementById('authButtons');
+        if (isVisible(userMenu)) return userMenu;
+        if (isVisible(auth)) return auth;
+        return null;
+    }
+
+    function updatePinnedLayout() {
+        var root = document.documentElement;
+        var theme = document.querySelector('.theme-controls');
+        var auth = visibleAuthElement();
+        var chromeBottom = 0;
+        var themeWidth = 0;
+        var authWidth = 0;
+
+        if (theme) {
+            var themeRect = theme.getBoundingClientRect();
+            chromeBottom = Math.max(chromeBottom, themeRect.bottom);
+            themeWidth = themeRect.width;
+        }
+        if (auth) {
+            var authRect = auth.getBoundingClientRect();
+            chromeBottom = Math.max(chromeBottom, authRect.bottom);
+            authWidth = authRect.width;
+        }
+
+        root.style.setProperty('--site-chrome-h', Math.ceil(chromeBottom + 8) + 'px');
+        root.style.setProperty('--site-chrome-theme-w', Math.ceil(themeWidth + 16) + 'px');
+        root.style.setProperty('--site-chrome-auth-w', Math.ceil(authWidth + 16) + 'px');
+
+        var header = document.querySelector('.header');
+        if (header) {
+            root.style.setProperty('--header-sticky-h', Math.ceil(header.getBoundingClientRect().height) + 'px');
+        }
+    }
+
+    var pinnedLayoutQueued = false;
+    function schedulePinnedLayout() {
+        if (pinnedLayoutQueued) return;
+        pinnedLayoutQueued = true;
+        requestAnimationFrame(function () {
+            pinnedLayoutQueued = false;
+            markChrome();
+            updatePinnedLayout();
+        });
+    }
+
+    function observePinnedChrome() {
+        if (typeof ResizeObserver === 'undefined') return;
+        var observer = new ResizeObserver(schedulePinnedLayout);
+        var theme = document.querySelector('.theme-controls');
+        var auth = document.getElementById('authButtons');
+        var userMenu = document.getElementById('userMenu');
+        if (theme) observer.observe(theme);
+        if (auth) observer.observe(auth);
+        if (userMenu) observer.observe(userMenu);
+    }
+
     function markChrome() {
         var header = document.querySelector('.header');
         if (header) header.classList.add('motion-chrome-header');
@@ -22,7 +86,7 @@
         var userMenu = document.getElementById('userMenu');
         if (auth) auth.classList.remove('motion-chrome-auth');
         if (userMenu) userMenu.classList.remove('motion-chrome-auth');
-        if (userMenu && userMenu.offsetParent !== null) {
+        if (isVisible(userMenu)) {
             userMenu.classList.add('motion-chrome-auth');
         } else if (auth) {
             auth.classList.add('motion-chrome-auth');
@@ -82,6 +146,8 @@
 
     function init() {
         markChrome();
+        schedulePinnedLayout();
+        observePinnedChrome();
         runPageEnter();
     }
 
@@ -91,12 +157,19 @@
         init();
     }
 
-    global.addEventListener('mun-site-chrome-ready', markChrome);
-    global.addEventListener('mun-dynamic-content-ready', reenterDynamicContent);
+    global.addEventListener('resize', schedulePinnedLayout, { passive: true });
+    global.addEventListener('orientationchange', schedulePinnedLayout);
+    global.addEventListener('mun-site-chrome-ready', schedulePinnedLayout);
+    global.addEventListener('mun-auth-state-ready', schedulePinnedLayout);
+    global.addEventListener('mun-dynamic-content-ready', function () {
+        reenterDynamicContent();
+        schedulePinnedLayout();
+    });
 
     global.MotionTransitions = {
         markChrome: markChrome,
         staggerChildren: staggerChildren,
-        reenter: reenterDynamicContent
+        reenter: reenterDynamicContent,
+        updatePinnedLayout: schedulePinnedLayout
     };
 })(typeof window !== 'undefined' ? window : this);

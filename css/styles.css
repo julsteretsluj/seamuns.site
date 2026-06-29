@@ -91,6 +91,11 @@ html {
     --accent-hover: var(--accent-purple);
     --header-top-padding: 5.5rem;
     --nav-menu-offset: 9rem;
+    --site-chrome-h: 5.5rem;
+    --site-chrome-theme-w: 11rem;
+    --site-chrome-auth-w: 8rem;
+    --header-sticky-h: 9rem;
+    --chrome-side-inset: 24px;
 }
 
 /* Dark Mode - White & Navy (dark navy background) */
@@ -672,6 +677,9 @@ body::before {
     z-index: 1000;
     display: flex;
     gap: 12px;
+    max-width: calc(100vw - var(--site-chrome-theme-w) - var(--chrome-side-inset) * 2);
+    justify-content: flex-end;
+    flex-wrap: wrap;
 }
 
 .user-menu {
@@ -689,6 +697,7 @@ body::before {
     padding: 12px 20px;
     box-shadow: var(--shadow-glass);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    max-width: calc(100vw - var(--site-chrome-theme-w) - var(--chrome-side-inset) * 2);
 }
 
 .user-menu:hover {
@@ -829,11 +838,11 @@ body::before {
     z-index: 1000;
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 8px;
     row-gap: 10px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    max-width: calc(100vw - 48px);
+    max-width: calc(100vw - var(--site-chrome-auth-w) - var(--chrome-side-inset) * 2);
 }
 
 .theme-controls:hover {
@@ -898,6 +907,17 @@ body::before {
     display: flex;
     align-items: center;
     gap: 8px;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.theme-selector::-webkit-scrollbar {
+    display: none;
 }
 
 .theme-controls:hover .theme-selector {
@@ -958,6 +978,7 @@ body::before {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
 }
 
 .color-swatch:hover {
@@ -1025,7 +1046,7 @@ body::before {
     backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid var(--border-color);
     border-radius: 24px;
-    padding: var(--header-top-padding) 0 44px;
+    padding: max(var(--header-top-padding), var(--site-chrome-h)) 0 44px;
     text-align: center;
     margin-bottom: 24px;
     position: sticky;
@@ -1135,7 +1156,7 @@ body::before {
     box-shadow: var(--shadow-glass);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: sticky;
-    top: 80px;
+    top: var(--header-sticky-h);
     z-index: 90;
 }
 
@@ -1356,7 +1377,7 @@ body.nav-menu-open {
 
 @media (max-width: 1024px) {
     .main-nav {
-        top: 64px;
+        top: var(--header-sticky-h);
         padding: 10px 12px;
         margin-bottom: 1.25rem;
         border-radius: 14px;
@@ -1370,7 +1391,7 @@ body.nav-menu-open {
 
 @media (max-width: 768px) {
     .main-nav {
-        top: 56px;
+        top: var(--site-chrome-h);
     }
 
     .main-nav > .container {
@@ -1537,7 +1558,7 @@ body.nav-menu-open {
 
 @media (max-width: 768px) and (orientation: landscape) {
     :root {
-        --nav-menu-offset: 5.5rem;
+        --nav-menu-offset: var(--site-chrome-h);
     }
 
     .main-nav.is-open .nav-wrapper {
@@ -1551,7 +1572,7 @@ body.nav-menu-open {
 
 @media (max-width: 480px) {
     .main-nav {
-        top: 52px;
+        top: var(--site-chrome-h);
         padding: 8px 10px;
         margin-bottom: 1rem;
     }
@@ -6831,7 +6852,7 @@ form.profile-edit-form select:focus {
         flex-wrap: nowrap;
         border-radius: 40px;
         z-index: 1001;
-        max-width: calc(100vw - 70px); /* Leave space for theme toggle */
+        max-width: calc(100vw - var(--site-chrome-theme-w) - 20px);
     }
     
     .user-info {
@@ -9534,6 +9555,8 @@ form.archive-upload-form .form-actions {
         --section-pad-x: 18px;
         --card-radius: 16px;
         --header-top-padding: 6.25rem;
+        --chrome-side-inset: 16px;
+        --nav-menu-offset: var(--site-chrome-h);
     }
 
     .container {
@@ -9543,7 +9566,7 @@ form.archive-upload-form .form-actions {
 
     .header {
         margin-bottom: 72px;
-        padding: var(--header-top-padding) 0 12px;
+        padding: max(var(--header-top-padding), var(--site-chrome-h)) 0 12px;
     }
 
     .header h1 {
@@ -9704,6 +9727,7 @@ form.archive-upload-form .form-actions {
         --section-pad-x: 14px;
         --card-radius: 14px;
         --header-top-padding: 7rem;
+        --chrome-side-inset: 12px;
     }
 
     .header {
@@ -9729,12 +9753,16 @@ form.archive-upload-form .form-actions {
     }
 
     .theme-controls {
-        max-width: calc(100vw - var(--layout-gutter) * 2 - 100px);
+        max-width: calc(100vw - var(--site-chrome-auth-w) - var(--layout-gutter) * 2);
     }
 
     .theme-selector {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         max-width: 100%;
+    }
+
+    .theme-selector-label {
+        display: none;
     }
 }
 
@@ -10134,6 +10162,7 @@ body.nav-menu-open .main-nav.is-open {
         position: relative;
         top: auto;
         margin-bottom: 1rem !important;
+        padding: max(var(--header-top-padding), var(--site-chrome-h)) 0 12px;
     }
 
     .header:hover {
@@ -10141,25 +10170,26 @@ body.nav-menu-open .main-nav.is-open {
     }
 
     .main-nav {
-        top: 0;
+        top: var(--site-chrome-h);
     }
 
     .theme-controls {
         top: max(10px, env(safe-area-inset-top, 0px));
         left: max(10px, env(safe-area-inset-left, 0px));
-        max-width: calc(100vw - max(10px, env(safe-area-inset-left, 0px)) - max(10px, env(safe-area-inset-right, 0px)));
+        max-width: calc(100vw - var(--site-chrome-auth-w) - max(10px, env(safe-area-inset-left, 0px)) - max(10px, env(safe-area-inset-right, 0px)));
     }
 
     .auth-buttons,
     .user-menu {
         top: max(10px, env(safe-area-inset-top, 0px));
         right: max(10px, env(safe-area-inset-right, 0px));
+        max-width: calc(100vw - var(--site-chrome-theme-w) - max(10px, env(safe-area-inset-left, 0px)) - max(10px, env(safe-area-inset-right, 0px)));
     }
 
     .theme-selector {
-        flex-wrap: wrap;
-        row-gap: 6px;
-        max-width: min(100%, calc(100vw - 5.5rem));
+        flex-wrap: nowrap;
+        row-gap: 0;
+        max-width: 100%;
     }
 
     .color-swatch {
@@ -10196,7 +10226,7 @@ body.nav-menu-open .main-nav.is-open {
     .detail-section,
     #contact-section,
     .conference-detail-main {
-        scroll-margin-top: 5rem;
+        scroll-margin-top: var(--site-chrome-h);
     }
 
     .info-card-value,
