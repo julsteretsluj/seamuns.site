@@ -30,23 +30,20 @@
         var theme = document.querySelector('.theme-controls');
         var auth = visibleAuthElement();
         var chromeBottom = 0;
-        var themeWidth = 0;
-        var authWidth = 0;
 
         if (theme) {
             var themeRect = theme.getBoundingClientRect();
             chromeBottom = Math.max(chromeBottom, themeRect.bottom);
-            themeWidth = themeRect.width;
         }
         if (auth) {
             var authRect = auth.getBoundingClientRect();
             chromeBottom = Math.max(chromeBottom, authRect.bottom);
-            authWidth = authRect.width;
         }
 
+        var currentChrome = parseFloat(global.getComputedStyle(root).getPropertyValue('--site-chrome-h')) || 88;
+        if (!(chromeBottom > 0)) chromeBottom = currentChrome;
+
         root.style.setProperty('--site-chrome-h', Math.ceil(chromeBottom + 8) + 'px');
-        root.style.setProperty('--site-chrome-theme-w', Math.ceil(themeWidth + 16) + 'px');
-        root.style.setProperty('--site-chrome-auth-w', Math.ceil(authWidth + 16) + 'px');
 
         var header = document.querySelector('.header');
         if (header) {
@@ -66,14 +63,8 @@
     }
 
     function observePinnedChrome() {
-        if (typeof ResizeObserver === 'undefined') return;
-        var observer = new ResizeObserver(schedulePinnedLayout);
-        var theme = document.querySelector('.theme-controls');
-        var auth = document.getElementById('authButtons');
-        var userMenu = document.getElementById('userMenu');
-        if (theme) observer.observe(theme);
-        if (auth) observer.observe(auth);
-        if (userMenu) observer.observe(userMenu);
+        // Intentionally no ResizeObserver: observing measured fixed chrome created
+        // feedback loops on narrow screens and caused sticky jitter while scrolling.
     }
 
     function markChrome() {
