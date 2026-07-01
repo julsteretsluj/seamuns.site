@@ -992,5 +992,56 @@
     "schedule": "<p><strong>Day 1 — Friday, 3 October 2026</strong></p><ul style=\"margin: 0.5em 0; padding-left: 1.25em;\"><li>08:00–08:30 — Registration / Meet and Greet</li><li>08:30–09:00 — Opening Ceremony</li><li>09:00–10:30 — Committee Session #1</li><li>10:30–10:45 — Morning Break</li><li>10:45–12:30 — Committee Session #2</li><li>12:30–13:30 — Lunch Break</li><li>13:30–15:30 — General Assembly Session #1 *</li><li>15:30–15:45 — Afternoon Break</li><li>15:45–17:30 — General Assembly Session #2 *</li></ul><p><strong>Day 2 — Saturday, 4 October 2026</strong></p><ul style=\"margin: 0.5em 0; padding-left: 1.25em;\"><li>08:00–09:45 — Committee Session #1</li><li>09:45–10:00 — Morning Break</li><li>10:00–11:45 — Committee Session #2</li><li>11:45–12:45 — Lunch Break</li><li>12:45–14:45 — General Assembly Session #1 *</li><li>14:45–15:00 — Afternoon Break</li><li>15:00–17:00 — General Assembly Session #2 *</li><li>17:00–18:00 — Awards Ceremony and Farewell</li></ul><p style=\"margin-top: 0.75rem; font-size: 0.92em; color: var(--text-secondary);\">* <strong>Special committees</strong> (HCC, FWC, ICJ) continue committee sessions during General Assembly times instead of attending GA. UNSC, UN Women, and UNESCO attend GA.</p>",
     "venueGuide": "<p>Conference at <strong>Empress Convention Center</strong>, Chiang Mai, Thailand. <a href='https://www.google.com/maps/search/?api=1&amp;query=Empress%20Convention%20Center%20Chiang%20Mai%20Thailand' target='_blank' rel='noopener noreferrer'>View on Google Maps</a>.</p><p><strong>Accessibility:</strong> Wheelchair accessible. Not sensory-friendly.</p>",
     "extraNotes": "<p><strong>NTMUN II</strong> — student-led, Chiang Mai. <strong>Delegate fee:</strong> 1,800 THB (covers venue, lanyards, placards, food, notepads, and other supplies). <strong>Capacity:</strong> ~100 delegates. <strong>Delegate applications:</strong> <a href='https://docs.google.com/forms/d/1HwxblzGUnuXZuMYi8oKH3R1ICGWgNbVc7H_YbuyXcLs/viewform' target='_blank' rel='noopener noreferrer'>NTMUN II Delegate Application Form</a>. Follow <a href='https://www.instagram.com/ntmun.official/' target='_blank' rel='noopener noreferrer'>@ntmun.official</a> on Instagram for updates. <strong>Secretary-General:</strong> <a href='mailto:28ylvieschaffranek@lannaist.ac.th'>28ylvieschaffranek@lannaist.ac.th</a>.</p><p><strong>Independent delegates</strong> are very welcome; school delegations are also encouraged. <strong>Double delegates</strong> (pairs) may only apply to UNSC, UNESCO, or UN Women — not special committees (HCC, FWC, ICJ). Individual delegates may apply to any committee. Pairs should submit one shared application.</p><p><strong>Key dates &amp; timeline:</strong></p><ul style='margin: 0.5em 0; padding-left: 1.25em;'><li><strong>20 June</strong> — Chair applications open</li><li><strong>21 June</strong> — Delegate applications open</li><li><strong>31 July</strong> — Chair applications close</li><li><strong>3 August</strong> — Chairs announced</li><li><strong>10 August</strong> — Delegate applications close</li><li><strong>15 August</strong> — Full allocations released; Rules of Procedure &amp; master spreadsheet released</li><li><strong>30 August</strong> — Payments due</li><li><strong>31 August</strong> — Chair reports due</li><li><strong>1 September</strong> — Chair emails sent out</li><li><strong>23 September</strong> — Position papers due</li><li><strong>2 October</strong> — Chair dinner (details TBA)</li><li><strong>3–4 October</strong> — Conference days</li></ul><p><strong>Awards:</strong> Per committee — Best Delegate and Honorable Mention (×2) each day; Best Position Paper (one per committee). Overall — Best Delegate in Special Committees (HCC, FWC, ICJ), Best Delegate in GA (UNSC, UN Women, UNESCO), Best Chair in Special Committees, Best Chair in Traditional Committees, and Best Overall Position Paper.</p><p><strong>Committee format:</strong> Special committees (HCC, FWC, ICJ) continue committee sessions during GA blocks. UNSC attends General Assembly along with UN Women and UNESCO.</p><p><strong>Accessibility:</strong> Wheelchair accessible. Not sensory-friendly.</p>"
+  },
+  {
+    "id": 13,
+    "name": "SatriwithayaMUN I",
+    "organization": "Satriwithaya School",
+    "location": "Satriwithaya School, 82 Dinso Road, Wat Bowon Niwet, Phra Nakhon, Bangkok 10200",
+    "countryCode": "TH",
+    "startDate": "2026-11-21",
+    "endDate": "2026-11-21",
+    "description": "Satriwithaya School is hosting its first-ever MUN conference. Look forward to exciting and fun updates from @swmun_mun.",
+    "website": "",
+    "registrationDeadline": "2026-10-31",
+    "positionPaperDeadline": "",
+    "status": "upcoming",
+    "size": "TBD",
+    "generalEmail": "swmun@satriwit.ac.th",
+    "munAccount": "@swmun_mun",
+    "advisorAccount": "",
+    "secGenAccounts": "",
+    "parliamentarianAccounts": "",
+    "pricePerDelegate": "550 THB",
+    "independentDelsWelcome": "Yes — independent delegates are welcome.",
+    "independentSignupLink": "",
+    "advisorSignupLink": "",
+    "disabledSuitable": false,
+    "sensorySuitable": false,
+    "committees": [
+      "Committees and topics to be announced on 31 July 2026."
+    ],
+    "uniqueTopics": [
+      "TBA"
+    ],
+    "chairsPages": "<p>Chair applications open from <strong>31 July 2026</strong> to <strong>10 August 2026</strong>.</p>",
+    "forms": [],
+    "allocations": [
+      "TBA"
+    ],
+    "availableAwards": [
+      "Best Position Paper (per committee)",
+      "Best Delegate (per committee)",
+      "Honorable Mention (per committee)",
+      "Overall Best Position Paper",
+      "Overall Best Delegate",
+      "Honourable Chair",
+      "Best Chair",
+      "Best Chair Report"
+    ],
+    "previousWinners": [],
+    "schedule": "<p><strong>21 November 2026</strong> — conference schedule to be announced.</p>",
+    "venueGuide": "<p>Conference at <strong>Satriwithaya School</strong>, 82 Dinso Road, Wat Bowon Niwet, Phra Nakhon, Bangkok 10200. <a href='https://www.google.com/maps/search/?api=1&amp;query=Satriwithaya%20School%2082%20Dinso%20Road%20Wat%20Bowon%20Niwet%20Phra%20Nakhon%20Bangkok%2010200' target='_blank' rel='noopener noreferrer'>View on Google Maps</a>.</p><p><strong>Accessibility:</strong> Not wheelchair accessible. Not sensory-friendly.</p>",
+    "extraNotes": "<p><strong>SatriwithayaMUN I</strong> is the first-ever MUN conference hosted by Satriwithaya School. Follow <a href='https://www.instagram.com/swmun_mun/' target='_blank' rel='noopener noreferrer'>@swmun_mun</a> for updates or contact <a href='mailto:swmun@satriwit.ac.th'>swmun@satriwit.ac.th</a> for inquiries.</p><p><strong>Registration timeline:</strong> Form of Interest is open until <strong>30 July 2026</strong>. Chair and delegate forms open on <strong>31 July 2026</strong> and close on <strong>31 October 2026</strong> at 23:59 (GMT+7).</p><p><strong>Committees/topics:</strong> Announced on <strong>31 July 2026</strong>. <strong>Chair applications:</strong> 31 July 2026 to 10 August 2026. <strong>SMT:</strong> Not currently hiring SMT.</p>"
   }
 ]
