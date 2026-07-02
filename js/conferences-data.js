@@ -803,6 +803,7 @@ window.MUN_CONFERENCES_DATA = [
 {
     id: 13,
     name: "SatriwithayaMUN I",
+    logo: "../assets/conferences/satriwithaya-logo.png",
     organization: "Satriwithaya School",
     location: "Satriwithaya School, 82 Dinso Road, Wat Bowon Niwet, Phra Nakhon, Bangkok 10200",
     countryCode: "TH",
@@ -847,7 +848,7 @@ window.MUN_CONFERENCES_DATA = [
     previousWinners: [],
     schedule: "<p><strong>21 November 2026</strong> — conference schedule to be announced.</p>",
     venueGuide: "<p>Conference at <strong>Satriwithaya School</strong>, 82 Dinso Road, Wat Bowon Niwet, Phra Nakhon, Bangkok 10200. <a href='https://www.google.com/maps/search/?api=1&amp;query=Satriwithaya%20School%2082%20Dinso%20Road%20Wat%20Bowon%20Niwet%20Phra%20Nakhon%20Bangkok%2010200' target='_blank' rel='noopener noreferrer'>View on Google Maps</a>.</p><p><strong>Accessibility:</strong> Not wheelchair accessible. Not sensory-friendly.</p>",
-    extraNotes: "<p><strong>SatriwithayaMUN I</strong> is the first-ever MUN conference hosted by Satriwithaya School. Follow <a href='https://www.instagram.com/swmun_mun/' target='_blank' rel='noopener noreferrer'>@swmun_mun</a> for updates or contact <a href='mailto:swmun@satriwit.ac.th'>swmun@satriwit.ac.th</a> for inquiries.</p><p><strong>Registration timeline:</strong> Form of Interest is open until <strong>30 July 2026</strong>. Chair and delegate forms open on <strong>31 July 2026</strong> and close on <strong>31 October 2026</strong> at 23:59 (GMT+7).</p><p><strong>Committees/topics:</strong> Announced on <strong>31 July 2026</strong>. <strong>Chair applications:</strong> 31 July 2026 to 10 August 2026. <strong>SMT:</strong> Not currently hiring SMT.</p>"
+    extraNotes: "<p><strong>SatriwithayaMUN I</strong> is the first-ever MUN conference hosted by Satriwithaya School. Follow <a href='https://www.instagram.com/swmun_mun/' target='_blank' rel='noopener noreferrer'>@swmun_mun</a> for updates or contact <a href='mailto:swmun@satriwit.ac.th'>swmun@satriwit.ac.th</a> for inquiries.</p><p><strong>Registration timeline:</strong> Form of Interest is open until <strong>30 July 2026</strong>. Chair and delegate forms open on <strong>31 July 2026</strong>. <strong>Chair applications close on 10 August 2026</strong>. Delegate applications close on <strong>31 October 2026</strong> at 23:59 (GMT+7).</p><p><strong>Committees/topics:</strong> Announced on <strong>31 July 2026</strong>. <strong>Chair applications:</strong> 31 July 2026 to 10 August 2026. <strong>SMT:</strong> Not currently hiring SMT.</p>"
 }
 ];
 
