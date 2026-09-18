@@ -4,6 +4,15 @@
  */
 window.SEAMUNS_ANNOUNCEMENTS = [
     {
+        date: '2026-09-18',
+        icon: 'fas fa-users',
+        title: 'SEAMUNs Team Application',
+        body: 'Want to help build and run <strong>SEAMUNs</strong>? Apply to join the team via the application form. Also linked from <a href="about.html">About &amp; Contact</a>.',
+        linkText: 'Open team application →',
+        linkHref: 'https://forms.gle/JvyC8tBWX1gAhkHv8',
+        external: true
+    },
+    {
         date: '2026-04-06',
         icon: 'fas fa-file-word',
         title: 'Position Paper Archive',
