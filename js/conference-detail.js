@@ -920,6 +920,10 @@ function getAwardDescription(award) {
     
     // Try partial matching for variations
     const awardLower = award.toLowerCase();
+
+    if (awardLower.includes('verbal commendation') || awardLower.includes('verbal comm')) {
+        return descriptions['Verbal Commendation'];
+    }
     
     // Best Delegate variations
     if (awardLower.includes('best delegate') && (awardLower.includes('overall') || awardLower.includes('conference'))) {

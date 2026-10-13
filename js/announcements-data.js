@@ -150,12 +150,12 @@ window.SEAMUNS_ANNOUNCEMENTS = [
         external: true
     },
     {
-        date: '2026-05-19',
+        date: '2026-10-08',
         icon: 'fas fa-gavel',
-        title: 'Chair Application Form — SEAMUN I 2027',
-        body: 'Apply to chair a committee at <strong>SEAMUN I 2027</strong>. Review chair expectations and the chair report template on the conference listing before you apply.',
-        linkText: 'Open chair application →',
-        linkHref: 'https://forms.gle/yGK1r1WL76sLeESZ9',
+        title: 'Chair applications closed — SEAMUN I 2027',
+        body: 'Chair applications for <strong>SEAMUN I 2027</strong> are closed. Delegate and advisor registration remain on <a href="https://seamun.com/forms" target="_blank" rel="noopener noreferrer">seamun.com/forms</a>.',
+        linkText: 'Conference forms →',
+        linkHref: 'https://seamun.com/forms',
         external: true
     },
     {
