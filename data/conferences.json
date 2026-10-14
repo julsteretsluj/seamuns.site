@@ -1043,12 +1043,13 @@
   {
     "id": 14,
     "name": "YDAMUN I",
+    "logo": "../assets/conferences/ydamun-logo.jpg",
     "organization": "Youth Diplomatic Association",
     "location": "Australian International School Bangkok (AISB), Bangkok, Thailand",
     "countryCode": "TH",
     "startDate": "2027-02-06",
     "endDate": "2027-02-07",
-    "description": "YDAMUN I is hosted by the Youth Diplomatic Association at Australian International School Bangkok (AISB) on 6–7 February 2027. About 150–200 delegates. Delegate fee 800 THB. Independent delegates and school delegations are welcome.",
+    "description": "YDAMUN I is hosted by the Youth Diplomatic Association at Australian International School Bangkok (AISB) on 6–7 February 2027. Eleven committees from beginner to advanced (including crisis and special committees). About 150–200 delegates. Delegate fee 800 THB. Independent delegates and school delegations are welcome.",
     "website": "",
     "registrationDeadline": "2027-01-06",
     "positionPaperDeadline": "",
@@ -1057,24 +1058,106 @@
     "generalEmail": "",
     "munAccount": "",
     "advisorAccount": "",
-    "secGenAccounts": "",
-    "parliamentarianAccounts": "",
+    "secGenAccounts": "Samridh (Sam) Nibhani (Secretary-General, Grade 12, AISB); Miki Roex (Deputy Secretary-General, Year 11, NIST International School); Chloe Coombes (Deputy Secretary-General, Grade 11, AISB)",
+    "parliamentarianAccounts": "Arthicha (Puimek) Ourairat (Year 11, SBS)",
     "pricePerDelegate": "800 THB",
     "independentDelsWelcome": "Yes — independent delegates are welcome.",
     "independentSignupLink": "https://docs.google.com/forms/d/1N9trYIJQZGsy3EU8TKV66wBG0BEKByM_vw9ZxqA2OOY/viewform",
     "advisorSignupLink": "https://docs.google.com/forms/d/1dyiydSv4HKmq1tm3hwjq-TQcKOzWBcLUnU90h1xG-xc/viewform",
-    "smtRolesHtml": "<p>Secretariat (SMT) details are posted on Instagram: <a href='https://www.instagram.com/p/Dd4LNIPDzF2/?img_index=1' target='_blank' rel='noopener noreferrer'>YDAMUN I SMT info</a>.</p>",
+    "smtRolesHtml": "<p><strong>Secretariat (SMT)</strong> — also on <a href='https://www.instagram.com/p/Dd4LNIPDzF2/?img_index=1' target='_blank' rel='noopener noreferrer'>Instagram</a>.</p><ul style='margin: 0.5em 0; padding-left: 1.25em;'><li><strong>Crisis Director:</strong> Chinmaya Sharma</li><li><strong>Co-Heads of Finance &amp; Logistics:</strong> Daniel Rolston (Grade 12, AISB); Bussakorn (Korn) Hemvasdukij (Year 11)</li><li><strong>Marketing Officer:</strong> Sarana (Phil) Rattanakemakorn (Y13, Amnuaysilpa)</li></ul>",
     "disabledSuitable": false,
     "sensorySuitable": true,
     "committees": [
-      "Committees and topics are posted on Instagram — see Extra Notes."
+      "WHO (Beginner) - Day 1: The Question of Ensuring Access to Essential Medicines | Day 2: The Question of Regulating the Marketing of Ultra-Processed Foods",
+      "UNHRC (Beginner) - Day 1: The Question of Freedom of Expression in the Middle East | Day 2: The Question of Combating Human Trafficking and Modern Slavery",
+      "UNEP (Beginner) - Day 1: The Question of Combating Illegal Wildlife Poaching and Trafficking | Day 2: The Question of Addressing the Environmental Impact of Electronic Waste",
+      "ECOSOC (Beginner) - Day 1: The Question of Balancing Artificial Intelligence Innovation with Employment Protection | Day 2: The Question of Food Security and Restrictions on Agricultural Exports",
+      "EU (Intermediate) - Day 1: The Question of the Treatment and Integration of Migrants and Asylum Seekers in Europe | Day 2: The Question of Reducing EU Dependence on External Military Powers",
+      "UNODC (Intermediate) - Day 1: Addressing the Golden Triangle Drug Trafficking Ring | Day 2: Addressing Digital Extortion and AI Deepfakes",
+      "Press Corps (Intermediate) - The Question of Bias in State-Run and Private News Agencies",
+      "UNSC (Advanced) - Day 1: Preventing the Weaponization of Critical Resources in Central Africa | Day 2: The Question of Maintaining Peace and Security in the South China Sea",
+      "HCC (Advanced) - Day 1: The Chinese Civil War (1927-1949) | Day 2: The Cuban Missile Crisis (1962)",
+      "INTERPOL (Advanced) - Day 1: Combating Counterfeit Medicines | Day 2: Combating Maritime Piracy",
+      "UKPC (Advanced) - Day 1: Addressing the Rising Number of Asylum Seekers in the United Kingdom | Day 2: The Implications of Brexit on the British Economy, Relations and Trade"
     ],
-    "uniqueTopics": [],
+    "committeeOverrides": {
+      "WHO": {
+        "difficulty": "beginner"
+      },
+      "UNHRC": {
+        "difficulty": "beginner"
+      },
+      "UNEP": {
+        "difficulty": "beginner"
+      },
+      "ECOSOC": {
+        "difficulty": "beginner"
+      },
+      "EU": {
+        "difficulty": "intermediate",
+        "type": "specialized"
+      },
+      "UNODC": {
+        "difficulty": "intermediate"
+      },
+      "Press Corps": {
+        "difficulty": "intermediate"
+      },
+      "UNSC": {
+        "difficulty": "advanced"
+      },
+      "HCC": {
+        "difficulty": "advanced",
+        "type": "crisis"
+      },
+      "INTERPOL": {
+        "difficulty": "advanced"
+      },
+      "UKPC": {
+        "difficulty": "advanced",
+        "type": "crisis"
+      }
+    },
+    "uniqueTopics": [
+      "Access to essential medicines",
+      "Marketing of ultra-processed foods",
+      "Freedom of expression in the Middle East",
+      "Human trafficking and modern slavery",
+      "Illegal wildlife poaching and trafficking",
+      "Environmental impact of electronic waste",
+      "AI innovation and employment protection",
+      "Food security and agricultural export restrictions",
+      "Treatment and integration of migrants and asylum seekers in Europe",
+      "Reducing EU dependence on external military powers",
+      "Golden Triangle drug trafficking",
+      "Digital extortion and AI deepfakes",
+      "Bias in state-run and private news agencies",
+      "Weaponization of critical resources in Central Africa",
+      "Peace and security in the South China Sea",
+      "Chinese Civil War (1927–1949)",
+      "Cuban Missile Crisis (1962)",
+      "Counterfeit medicines",
+      "Maritime piracy",
+      "Asylum seekers in the United Kingdom",
+      "Brexit and the British economy, relations and trade"
+    ],
     "chairsPages": "<p><strong>Chair applications close 15 November 2026.</strong> Apply via the <a href='https://docs.google.com/forms/d/1Ou4x22w2XCOeVZnLWPixSy1cSnepEFsLwD3V9CYH3o0/viewform' target='_blank' rel='noopener noreferrer'>YDAMUN I Chair Application Form</a>.</p>",
     "forms": [
-      { "label": "Chair Application Form", "href": "https://docs.google.com/forms/d/1Ou4x22w2XCOeVZnLWPixSy1cSnepEFsLwD3V9CYH3o0/viewform", "icon": "fa-gavel" },
-      { "label": "Independent Delegate Sign-Up", "href": "https://docs.google.com/forms/d/1N9trYIJQZGsy3EU8TKV66wBG0BEKByM_vw9ZxqA2OOY/viewform", "icon": "fa-user-plus" },
-      { "label": "School Delegation Sign-Up", "href": "https://docs.google.com/forms/d/1dyiydSv4HKmq1tm3hwjq-TQcKOzWBcLUnU90h1xG-xc/viewform", "icon": "fa-school" }
+      {
+        "label": "Chair Application Form",
+        "href": "https://docs.google.com/forms/d/1Ou4x22w2XCOeVZnLWPixSy1cSnepEFsLwD3V9CYH3o0/viewform",
+        "icon": "fa-gavel"
+      },
+      {
+        "label": "Independent Delegate Sign-Up",
+        "href": "https://docs.google.com/forms/d/1N9trYIJQZGsy3EU8TKV66wBG0BEKByM_vw9ZxqA2OOY/viewform",
+        "icon": "fa-user-plus"
+      },
+      {
+        "label": "School Delegation Sign-Up",
+        "href": "https://docs.google.com/forms/d/1dyiydSv4HKmq1tm3hwjq-TQcKOzWBcLUnU90h1xG-xc/viewform",
+        "icon": "fa-school"
+      }
     ],
     "allocations": [],
     "availableAwards": [
@@ -1090,6 +1173,6 @@
     "previousWinners": [],
     "schedule": "",
     "venueGuide": "<p>Conference at <strong>Australian International School Bangkok (AISB)</strong>, Bangkok, Thailand. <a href='https://www.google.com/maps/search/?api=1&amp;query=Australian%20International%20School%20Bangkok' target='_blank' rel='noopener noreferrer'>View on Google Maps</a>.</p><p><strong>Accessibility:</strong> Not wheelchair accessible. Sensory-friendly.</p>",
-    "extraNotes": "<p><strong>YDAMUN I</strong> is hosted by the Youth Diplomatic Association at Australian International School Bangkok (AISB). <strong>Delegate fee:</strong> 800 THB. <strong>Size:</strong> 150–200. No conference website has been published yet.</p><p><strong>Registration deadlines:</strong> Chair applications close <strong>15 November 2026</strong>. Delegate registration closes <strong>6 January 2027</strong>.</p><p><strong>Sign-up:</strong> <a href='https://docs.google.com/forms/d/1Ou4x22w2XCOeVZnLWPixSy1cSnepEFsLwD3V9CYH3o0/viewform' target='_blank' rel='noopener noreferrer'>Chairs</a> · <a href='https://docs.google.com/forms/d/1N9trYIJQZGsy3EU8TKV66wBG0BEKByM_vw9ZxqA2OOY/viewform' target='_blank' rel='noopener noreferrer'>Independent delegates</a> · <a href='https://docs.google.com/forms/d/1dyiydSv4HKmq1tm3hwjq-TQcKOzWBcLUnU90h1xG-xc/viewform' target='_blank' rel='noopener noreferrer'>School delegations</a>.</p><p><strong>Committees and topics:</strong> <a href='https://www.instagram.com/p/Dd_5Q1hj4Rv/?img_index=1' target='_blank' rel='noopener noreferrer'>Instagram post</a>. <strong>SMT:</strong> <a href='https://www.instagram.com/p/Dd4LNIPDzF2/?img_index=1' target='_blank' rel='noopener noreferrer'>Instagram post</a>.</p><p><strong>Accessibility:</strong> Not accessible for disabled people. Accessible for sensory-sensitive individuals.</p>"
+    "extraNotes": "<p><strong>YDAMUN I</strong> is hosted by the Youth Diplomatic Association at Australian International School Bangkok (AISB). <strong>Delegate fee:</strong> 800 THB. <strong>Size:</strong> 150–200. Eleven committees (beginner–advanced, including crisis and special). No conference website has been published yet.</p><p><strong>Secretariat:</strong> Secretary-General Samridh (Sam) Nibhani; Deputy Secretaries-General Miki Roex and Chloe Coombes; Parliamentarian Arthicha (Puimek) Ourairat; Crisis Director Chinmaya Sharma; Co-Heads of Finance &amp; Logistics Daniel Rolston and Bussakorn (Korn) Hemvasdukij; Marketing Officer Sarana (Phil) Rattanakemakorn.</p><p><strong>Registration deadlines:</strong> Chair applications close <strong>15 November 2026</strong>. Delegate registration closes <strong>6 January 2027</strong>.</p><p><strong>Sign-up:</strong> <a href='https://docs.google.com/forms/d/1Ou4x22w2XCOeVZnLWPixSy1cSnepEFsLwD3V9CYH3o0/viewform' target='_blank' rel='noopener noreferrer'>Chairs</a> · <a href='https://docs.google.com/forms/d/1N9trYIJQZGsy3EU8TKV66wBG0BEKByM_vw9ZxqA2OOY/viewform' target='_blank' rel='noopener noreferrer'>Independent delegates</a> · <a href='https://docs.google.com/forms/d/1dyiydSv4HKmq1tm3hwjq-TQcKOzWBcLUnU90h1xG-xc/viewform' target='_blank' rel='noopener noreferrer'>School delegations</a>.</p><p><strong>Committee graphics:</strong> <a href='https://www.instagram.com/p/Dd_5Q1hj4Rv/?img_index=1' target='_blank' rel='noopener noreferrer'>Instagram</a>. <strong>SMT:</strong> <a href='https://www.instagram.com/p/Dd4LNIPDzF2/?img_index=1' target='_blank' rel='noopener noreferrer'>Instagram</a>.</p><p><strong>Accessibility:</strong> Not accessible for disabled people. Accessible for sensory-sensitive individuals.</p>"
   }
 ]
