@@ -939,6 +939,7 @@ window.MUN_CONFERENCES_DATA = [
         "Best Delegate (per committee)",
         "Overall Honorable Mention (Delegate)",
         "Overall Best Delegate",
+        "Overall Best Position Paper",
         "Overall Honorable Mention (Chairs)",
         "Overall Best Chairs"
     ],
